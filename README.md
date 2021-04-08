@@ -15,14 +15,14 @@
 >>> from tiktok_downloader import Tiktok
 >>> Tiktok("url").ssstik.get_info()
 [<[type:video]>, <[type:video]>]
->>> Tiktok("url").ssstik.get_info().download("result.mp4")
+>>> Tiktok("url").ssstik.get_info()[0].download("result.mp4")
 ```
 # snaptik
 ```python
 >>> from tiktok_downloader import Tiktok
 >>> Tiktok("url").snaptik.get_info()
 [<[type:video]>, <[type:video]>]
->>> Tiktok("url").snaptik.get_info().download("result.mp4")
+>>> Tiktok("url").snaptik.get_info()[0].download("result.mp4")
 ```
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
