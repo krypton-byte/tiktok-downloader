@@ -10,14 +10,14 @@
 > python3 -m pip install tiktok_downloader
 > python3 -m pip install git+https://github.com/krypton-byte/tiktok-downloader
 ```
-# sstik
+# ssstik
 ```python
 >>> from tiktok_downloader import Tiktok
 >>> Tiktok("url").ssstik.get_info()
 [<[type:video]>, <[type:video]>]
 >>> Tiktok("url").sstik.get_info().download("result.mp4")
 ```
-# sstik
+# snaptik
 ```python
 >>> from tiktok_downloader import Tiktok
 >>> Tiktok("url").snaptik.get_info()
