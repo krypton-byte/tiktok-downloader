@@ -2,4 +2,6 @@
 setup.py
 tiktok_downloader/Except.py
 tiktok_downloader/__init__.py
+tiktok_downloader/keeptiktok.py
 tiktok_downloader/scrapper.py
+tiktok_downloader/utils.py

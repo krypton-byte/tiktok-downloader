@@ -1,3 +1,4 @@
+from io import BytesIO
 class info_videotiktok:
     def __init__(self,  url, headers,request) -> None:
         self.json = url
