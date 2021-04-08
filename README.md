@@ -7,7 +7,8 @@
 
 # install
 ```bash
-> python3 -m pip install tiktok-downloader
+> python3 -m pip install tiktok_downloader
+> python3 -m pip install git+https://github.com/krypton-byte/tiktok-downloader
 ```
 # sstik
 ```python
