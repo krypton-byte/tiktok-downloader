@@ -1,1 +1,1 @@
-from tiktok_scrapper.scrapper import Tiktok
+from tiktok_downloader.scrapper import Tiktok

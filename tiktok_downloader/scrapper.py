@@ -2,7 +2,7 @@ from io import BytesIO
 from requests import Session
 from bs4 import BeautifulSoup
 import re
-from tiktok_scrapper.Except import InvalidUrl
+from tiktok_downloader.Except import InvalidUrl
 class info_videotiktok:
     def __init__(self,  url, headers,request) -> None:
         self.json = url
