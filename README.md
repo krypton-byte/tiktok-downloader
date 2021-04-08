@@ -24,6 +24,13 @@
 [<[type:video]>, <[type:video]>]
 >>> Tiktok("url").snaptik.get_info()[0].download("result.mp4")
 ```
+# keeptiktok
+```python
+>>> from tiktok_downloader import Tiktok
+>>> Tiktok("url").keeptiktok.get_info()
+[<[type:video]>, <[type:video]>]
+>>> Tiktok("url").keeptiktok.get_info()[0].download("result.mp4")
+```
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
 

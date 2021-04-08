@@ -5,7 +5,7 @@ base_dir = path.abspath(path.dirname(__file__))
 setup(
   name = 'tiktok_downloader',        
   packages = ['tiktok_downloader'],   
-  version = '0.0.2',    
+  version = '0.0.3',    
   license='MIT',     
   description = 'Tiktok Downloader&Scraper using bs4&requests', 
   author = 'Krypton Byte',                  
