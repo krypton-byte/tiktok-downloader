@@ -34,14 +34,14 @@
 # get info video
 ```python
 >>> from tiktok_downloader import Tiktok
->>> Tiktok("url").keeptiktok.info_video.caption 
->>> Tiktok("url").keeptiktok.info_video.created
->>> Tiktok("url").keeptiktok.info_video.id
->>> Tiktok("url").keeptiktok.info_video.music
->>> Tiktok("url").keeptiktok.info_video.account.username
->>> Tiktok("url").keeptiktok.info_video.account.created
->>> Tiktok("url").keeptiktok.info_video.account.signature
->>> Tiktok("url").keeptiktok.info_video.account.verified
+>>> Tiktok("url").info_video.caption 
+>>> Tiktok("url").info_video.created
+>>> Tiktok("url").info_video.id
+>>> Tiktok("url").info_video.music
+>>> Tiktok("url").info_video.account.username
+>>> Tiktok("url").info_video.account.created
+>>> Tiktok("url").info_video.account.signature
+>>> Tiktok("url").info_video.account.verified
 ```
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
