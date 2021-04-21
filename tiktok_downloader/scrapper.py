@@ -31,15 +31,6 @@ class Account:
         return f"<(OWNER:{self.username} VERIFIED:{self.verified})>"
     def __str__(self) -> str:
         return self.__repr__()
-class Tiktok:
-    info_video = info_post
-    ssstik = tiktok2
-    snaptik = tiktok2
-    keeptiktok = keeptiktok
-    def __str__(self) -> str:
-        return "<[ Tiktok Downloader No Watermark Scraper]>"
-    def __repr__(self) -> str:
-        return self.__str__()
 class tiktok:
     def __init__(self, url) -> None:
         self.request = Session()
@@ -79,5 +70,14 @@ class tiktok2:
             raise InvalidUrl("URL ERROR")
     def __str__(self) -> str:
         return "<[ Method: Snaptik.io ]>"
+    def __repr__(self) -> str:
+        return self.__str__()
+class Tiktok:
+    info_video = info_post
+    ssstik = tiktok2
+    snaptik = tiktok2
+    keeptiktok = keeptiktok
+    def __str__(self) -> str:
+        return "<[ Tiktok Downloader No Watermark Scraper]>"
     def __repr__(self) -> str:
         return self.__str__()
