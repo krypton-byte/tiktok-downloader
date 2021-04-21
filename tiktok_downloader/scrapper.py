@@ -32,12 +32,12 @@ class Account:
     def __str__(self) -> str:
         return self.__repr__()
 class Tiktok:
-    def __init__(self, url):
+    def __init__(self):
         self.none = None
-        self.info_video = info_post(url)
-        self.ssstik = tiktok2(url)
-        self.snaptik = tiktok2(url)
-        self.keeptiktok = keeptiktok(url)
+        self.info_video = info_post
+        self.ssstik = tiktok2
+        self.snaptik = tiktok2
+        self.keeptiktok = keeptiktok
     def __str__(self) -> str:
         return "<[ Tiktok Downloader No Watermark Scraper]>"
     def __repr__(self) -> str:

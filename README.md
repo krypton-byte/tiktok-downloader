@@ -13,35 +13,36 @@
 # ssstik
 ```python
 >>> from tiktok_downloader import Tiktok
->>> Tiktok("url").ssstik.get_info()
+>>> Tiktok.("url")ssstik.get_info()
 [<[type:video]>, <[type:video]>]
->>> Tiktok("url").ssstik.get_info()[0].download("result.mp4")
+>>> Tiktok.ssstik("url").get_info()[0].download("result.mp4")
 ```
 # snaptik
 ```python
 >>> from tiktok_downloader import Tiktok
->>> Tiktok("url").snaptik.get_info()
+>>> Tiktok.snaptik("url").get_info()
 [<[type:video]>, <[type:video]>]
->>> Tiktok("url").snaptik.get_info()[0].download("result.mp4")
+>>> Tiktok.snaptik("url").get_info()[0].download("result.mp4")
 ```
 # keeptiktok
 ```python
 >>> from tiktok_downloader import Tiktok
->>> Tiktok("url").keeptiktok.get_info()
+>>> Tiktok.keeptiktok("url").get_info()
 [<[type:video]>, <[type:video]>]
->>> Tiktok("url").keeptiktok.get_info()[0].download("result.mp4")
+>>> Tiktok.keeptiktok("url").get_info()[0].download("result.mp4")
 ```
 # get info video
 ```python
 >>> from tiktok_downloader import Tiktok
->>> Tiktok("url").info_video.caption 
->>> Tiktok("url").info_video.created
->>> Tiktok("url").info_video.id
->>> Tiktok("url").info_video.music
->>> Tiktok("url").info_video.account.username
->>> Tiktok("url").info_video.account.created
->>> Tiktok("url").info_video.account.signature
->>> Tiktok("url").info_video.account.verified
+>>> info=Tiktok.info_video("url")
+>>> info.caption
+>>> info.created
+>>> info.id
+>>> info.music
+>>> info.username
+>>> info.created
+>>> info.signature
+>>> info.verified
 ```
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
