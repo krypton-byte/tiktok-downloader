@@ -20,7 +20,7 @@
 # snaptik
 ```python
 >>> from tiktok_downloader import Tiktok
->>> Tiktok.snaptik("url").get_info()
+>>> Tiktok().snaptik("url").get_info()
 [<[type:video]>, <[type:video]>]
 >>> Tiktok.snaptik("url").get_info()[0].download("result.mp4")
 ```
