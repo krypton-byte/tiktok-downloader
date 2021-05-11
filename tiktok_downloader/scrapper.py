@@ -43,6 +43,7 @@ class tiktok:
         #self.tt      = re.search("tt\:\'(.*?)\'",self.key)[1]
         #self.ts      = re.search("ts\:([0-9]{5,15})",self.key)[1]
         self.url_vid = url
+        
     def get_info(self):
         try:
             data   = {"id": self.url_vid,"locale": "en","tt": 0,"ts": 0}
