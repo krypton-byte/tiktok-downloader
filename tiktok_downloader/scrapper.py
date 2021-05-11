@@ -16,17 +16,18 @@ class info_post:
         self.url = re.findall("\"canonicalHref\"\:\"(.*?)\"", self.html.text)[0]
         self.id, self.height, self.width, self.duration, self.ratio = re.findall("\"video\"\:\{\"id\"\:\"(.*?),\"height\":(.*?),\"width\"\:(.*?),\"duration\":(.*?),\"ratio\"\:\"(.*?)\",", self.html.text)[0]
     def __str__(self) -> str:
-        return f"<(ID:{self.id})>"
+        return ""
+        #return f"<(ID:{self.id})>"
     def __repr__(self) -> str:
         return self.__str__()
 class Account:
     def __init__(self, html) -> None:
         self.html =html
-        self.username = re.findall("\"uniqueId\"\:\"(.*?)\"", self.html.text)[0]
-        self.nickname = re.findall("\"nickname\"\:\"(.*?)\"", self.html.text)[0]
-        self.signature = re.findall("\"signature\"\:\"(.*?)\"", self.html.text)[0]
-        self.create = datetime.fromtimestamp(int(re.findall("\"createTime\"\:(.*?),", self.html.text)[1]))
-        self.verified = False if re.findall("\"verified\"\:(.*?),", self.html.text)[0] == "false" else True
+        self.username = re.findall("\"uniqueId\"\:\"(.*?)\"", self.html.text)[0] if re.findall("\"uniqueId\"\:\"(.*?)\"", self.html.text) else None
+        self.nickname = re.findall("\"nickname\"\:\"(.*?)\"", self.html.text)[0] if re.findall("\"nickname\"\:\"(.*?)\"", self.html.text) else None
+        self.signature = re.findall("\"signature\"\:\"(.*?)\"", self.html.text)[0] if re.findall("\"signature\"\:\"(.*?)\"", self.html.text) else None
+        self.create = datetime.fromtimestamp(int(re.findall("\"createTime\"\:(.*?),", self.html.text)[1])) if len(re.findall("\"createTime\"\:(.*?),", self.html.text))>=2 else None
+        self.verified = False if re.findall("\"verified\"\:(.*?),", self.html.text)[0]=="false" else True if re.findall("\"verified\"\:(.*?),", self.html.text) else None
     def __repr__(self) -> str:
         return f"<(OWNER:{self.username} VERIFIED:{self.verified})>"
     def __str__(self) -> str:
@@ -34,25 +35,26 @@ class Account:
 class tiktok:
     def __init__(self, url) -> None:
         self.request = Session()
-        self.url     = "https://ssstik.io"
-        self.html    = self.request.get(self.url).text
-        self.key     = BeautifulSoup(self.html, "html.parser").find_all("form",attrs={"data-hx-target":"#target"})[0].get("include-vals")
-        self.post    = BeautifulSoup(self.html, "html.parser").find_all("form",attrs={"data-hx-target":"#target"})[0].get("data-hx-post")
-        self.tt      = re.search("tt\:\'(.*?)\'",self.key)[1]
-        self.ts      = re.search("ts\:([0-9]{5,15})",self.key)[1]
-        self.url_vid = url
         self.header  = {"content-type": "application/x-www-form-urlencoded; charset=UTF-8","hx-active-element": "submit","hx-current-url": "https://ssstik.io/","hx-request": "true","hx-target": "target","origin": "https://ssstik.io","sec-fetch-dest": "","sec-fetch-mode": "cors","sec-fetch-site": "same-origin","user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36"}
+        self.url     = "https://ssstik.io"
+        self.html    = self.request.get(self.url, headers=self.header).text
+        #self.key     = BeautifulSoup(self.html, "html.parser").find_all("form",attrs={"data-hx-target":"#target"})[0].get("include-vals")
+        #self.post    = BeautifulSoup(self.html, "html.parser").find_all("form",attrs={"data-hx-target":"#target"})[0].get("data-hx-post")
+        #self.tt      = re.search("tt\:\'(.*?)\'",self.key)[1]
+        #self.ts      = re.search("ts\:([0-9]{5,15})",self.key)[1]
+        self.url_vid = url
     def get_info(self):
         try:
-            data   = {"id": self.url_vid,"locale": "en","tt": self.tt,"ts": int(self.ts)}
-            post   = self.request.post(f"{self.url}{self.post}", headers=self.header, data=data)
+            data   = {"id": self.url_vid,"locale": "en","tt": 0,"ts": 0}
+            post   = self.request.post(self.url+re.findall('data-hx-post=\"(.*?)\"',self.html)[0], headers=self.header, data=data)
             respon = BeautifulSoup(post.text, "html.parser")
-            self.hasil  = {"video":[f'{self.url}{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark")[0].get("href")}',f'{self.url}{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark_direct")[0].get("href")}'],"music":f'{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link music")[0].get("href")}'}
-            return [info_videotiktok(x, self.header, self.request) for x in self.hasil["video"]]
+            return post
+            #self.hasil  = {"video":[f'{self.url}{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark")[0].get("href")}',f'{self.url}{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark_direct")[0].get("href")}'],"music":f'{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link music")[0].get("href")}'}
+            #return [info_videotiktok(x, self.header, self.request) for x in self.hasil["video"]]
         except IndexError:
             raise InvalidUrl("URL ERROR")
     def __str__(self) -> str:
-        return "<[ Method: sstik.io ]>"
+        return "<[ Method: ssstik.io ]>"
     def __repr__(self) -> str:
         return self.__str__()
 class tiktok2:
@@ -63,7 +65,8 @@ class tiktok2:
     def get_info(self):
         try:
             self.request.post("https://snaptik.app/check_token.php", headers=self.header)
-            self.bs = BeautifulSoup(self.request.post("https://snaptik.app/action-2021.php", headers=self.header, data={"url":self.url}).text, "html.parser")
+            self.php = re.findall(', \"(.*?\.php)',requests.get("https://snaptik.app", headers=self.header).text)[0]
+            self.bs = BeautifulSoup(self.request.post(f"https://snaptik.app/{self.php}", headers=self.header, data={"url":self.url}).text, "html.parser")
             self.hasil=[self.request,{"title":self.bs('a', attrs={"title":""})[0].text,"date":self.bs("b", attrs={"class":"blur"})[0].text,"video":list(filter(lambda x:x, map(lambda x:x["href"] if "token" in x["href"] else None, self.bs("a", attrs={"class":"abutton is-success is-fullwidth"}))))}, self.header]
             return [info_videotiktok(x, self.header, self.request) for x in self.hasil[1]["video"]]
         except IndexError:
@@ -74,7 +77,7 @@ class tiktok2:
         return self.__str__()
 class Tiktok:
     info_video = info_post
-    ssstik = tiktok2
+    ssstik = tiktok
     snaptik = tiktok2
     keeptiktok = keeptiktok
     def __str__(self) -> str:
