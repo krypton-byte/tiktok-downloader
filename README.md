@@ -13,7 +13,7 @@
 # ssstik
 ```python
 >>> from tiktok_downloader import Tiktok
->>> Tiktok.("url")ssstik.get_info()
+>>> Tiktok.ssstik("url").get_info()
 [<[type:video]>, <[type:video]>]
 >>> Tiktok.ssstik("url").get_info()[0].download("result.mp4")
 ```
