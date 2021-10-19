@@ -40,7 +40,7 @@ class ssstik(Session):
         try:
             post = self.cf.post(self.BASE+re.findall('hx-post=\"(.*?)\"',self.html.text)[0], data={"id": url,"locale": "en","tt": 0,"ts": 0})
             respon = BeautifulSoup(post.text, "html.parser")
-            hasil  = [*[ info_videotiktok(url=i, Session=self.cf, type='video') for i in[ f'{self.BASE}{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark")[0].get("href")}',f'{self.BASE}{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark_direct")[0].get("href")}']],info_videotiktok(f'{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link music")[0].get("href")}', Session=self.cf, type='music')]
+            hasil  = [*[ info_videotiktok(url=i, Session=self.cf, type='video') for i in[ f'{self.BASE}{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark")[0].get("href")}',f'{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark_direct")[0].get("href")}']],info_videotiktok(f'{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link music")[0].get("href")}', Session=self.cf, type='music')]
             return hasil 
         except IndexError:
             raise InvalidURL()

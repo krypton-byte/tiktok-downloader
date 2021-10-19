@@ -7,7 +7,7 @@ from tiktok_downloader.Except import InvalidUrl
 from tiktok_downloader.keeptiktok import keeptiktok
 from tiktok_downloader.utils import info_videotiktok
 class info_post:
-    def __init__(self, url) -> None:
+    def __init__(self, url: str) -> None:
         '''
         :param url: video url(tiktok)
         '''
@@ -17,7 +17,7 @@ class info_post:
         self.caption = BeautifulSoup(self.html.text, "html.parser").title.text
         self.create = datetime.fromtimestamp(int(re.findall("\"createTime\"\:(.*?),", self.html.text)[0]))
         self.url = re.findall("\"canonicalHref\"\:\"(.*?)\"", self.html.text)[0]
-        self.id, self.height, self.width, self.duration, self.ratio = re.findall("\"video\"\:\{\"id\"\:\"(.*?),\"height\":(.*?),\"width\"\:(.*?),\"duration\":(.*?),\"ratio\"\:\"(.*?)\",", self.html.text)[0]
+        self.id, self.height, self.width, self.duration, self.ratio = re.findall("\"video\"\:\{\"id\"\:\"(.*?)\",\"height\":(.*?),\"width\"\:(.*?),\"duration\":(.*?),\"ratio\"\:\"(.*?)\",", self.html.text)[0]
     def __str__(self) -> str:
         return ""
         #return f"<(ID:{self.id})>"

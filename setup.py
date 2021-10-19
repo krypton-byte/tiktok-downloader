@@ -8,7 +8,7 @@ setup(
   include_package_data=True,
   long_description=open(path.join(base_dir, "README.md"), encoding="utf-8").read(),
   long_description_content_type='text/markdown',   
-  version = '0.0.7',    
+  version = '0.0.8',    
   license='MIT',     
   description = 'Tiktok Downloader&Scraper using bs4&requests', 
   author = 'Krypton Byte',                  

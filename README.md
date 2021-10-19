@@ -45,6 +45,69 @@
 >>> info.verified
 ```
 </ul>
+
+# Command line
+<ul>
+<li>sstik</li>
+
+```bash
+$ python3 -m tiktok_downloader --url=https://www.tiktok.com/@xxxx/video/xxxx --ssstik 2>/dev/null
+
+[
+    {
+        "type": "video",
+        "url": "https://ssstik.io/fe67718b?url=xxxxxx"
+    },
+    {
+        "type": "video",
+        "url": "https://v16m.tiktokcdn.com/xxxxxxxx"
+    },
+    {
+        "type": "music",
+        "url": "https://sf16-ies-music-sg.tiktokcdn.com/obj/tos-alisg-ve-xxxx/xxxxxx"
+    }
+]
+
+```
+
+<li>snaptik</li>
+
+```bash
+$ python3 -m tiktok_downloader --url=https://www.tiktok.com/@xxxx/video/xxxx --snaptik 2>/dev/null
+[
+    {
+        "type": "video",
+        "url": "https://tikcdn.net/file/xxxxxxxx.mp4"
+    },
+    {
+        "type": "video",
+        "url": "https://snapsave.info/dl.php?token=xxxxxxxxxxxxxxx"
+    }
+]
+
+```
+
+<li> post info</li>
+
+```bash
+$ python3 -m tiktok_downloader --url=https://www.tiktok.com/@xxxx/video/xxxx --info
+{
+    "account": {
+        "username": "",
+        "nickname": "",
+        "signatur": "",
+        "create": 0,
+        "verified": true
+    },
+    "music": "",
+    "caption": "",
+    "create": 0,
+    "url": "",
+    "id": ""
+}
+```
+</ul>
+
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
 
