@@ -28,7 +28,7 @@
 >>> from tiktok_downloader import snaptik
 >>>snaptik("url").get_media()
 [<[type:video]>, <[type:video]>]
->>> Tiktok.snaptik("url").get_media()[0].download("result.mp4")
+>>> snaptik("url").get_media()[0].download("result.mp4")
 ```
 <li><h2> get info </h2></li>
 
