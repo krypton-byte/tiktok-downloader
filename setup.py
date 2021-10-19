@@ -5,9 +5,7 @@ base_dir = path.abspath(path.dirname(__file__))
 setup(
   name = 'tiktok_downloader',        
   packages = ['tiktok_downloader'],
-  include_package_data=True,
-  long_description=open(path.join(base_dir, "README.md"), encoding="utf-8").read(),
-  long_description_content_type='text/markdown',   
+  include_package_data=True, 
   version = '0.0.8',    
   license='MIT',     
   description = 'Tiktok Downloader&Scraper using bs4&requests', 
