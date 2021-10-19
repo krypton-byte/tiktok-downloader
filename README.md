@@ -6,35 +6,35 @@
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
 # install
+
 ```bash
 > python3 -m pip install tiktok_downloader
 > python3 -m pip install git+https://github.com/krypton-byte/tiktok-downloader
 ```
-# ssstik
+
+<ul>
+<li><h2> ssstik</h2></li>
+
 ```python
->>> from tiktok_downloader import Tiktok
->>> Tiktok.ssstik("url").get_info()
-[<[type:video]>, <[type:video]>]
->>> Tiktok.ssstik("url").get_info()[0].download("result.mp4")
+>>> from tiktok_downloader import ssstik
+>>> ssstik().get_media("url")
+[<[type:video]>, <[type:music]>]
+>>> ssstik().get_media("url")[0].download("result.mp4")
 ```
-# snaptik
+
+<li><h2> snaptik</h2></li>
+
 ```python
->>> from tiktok_downloader import Tiktok
->>> Tiktok().snaptik("url").get_info()
+>>> from tiktok_downloader import snaptik
+>>>snaptik("url").get_media()
 [<[type:video]>, <[type:video]>]
->>> Tiktok.snaptik("url").get_info()[0].download("result.mp4")
+>>> Tiktok.snaptik("url").get_media()[0].download("result.mp4")
 ```
-# keeptiktok
+<li><h2> get info </h2></li>
+
 ```python
->>> from tiktok_downloader import Tiktok
->>> Tiktok.keeptiktok("url").get_info()
-[<[type:video]>, <[type:video]>]
->>> Tiktok.keeptiktok("url").get_info()[0].download("result.mp4")
-```
-# get info video
-```python
->>> from tiktok_downloader import Tiktok
->>> info=Tiktok.info_video("url")
+>>> from tiktok_downloader import info_video
+>>> info=info_video("url")
 >>> info.caption
 >>> info.created
 >>> info.id
@@ -44,6 +44,7 @@
 >>> info.signature
 >>> info.verified
 ```
+</ul>
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
 

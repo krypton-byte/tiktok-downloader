@@ -8,6 +8,9 @@ from tiktok_downloader.keeptiktok import keeptiktok
 from tiktok_downloader.utils import info_videotiktok
 class info_post:
     def __init__(self, url) -> None:
+        '''
+        :param url: video url(tiktok)
+        '''
         self.html = requests.get(url,headers={"sec-ch-ua": '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',"sec-ch-ua-mobile": "?0","sec-fetch-dest": "document","sec-fetch-mode": "navigate","sec-fetch-site": "none","sec-fetch-user": "?1","upgrade-insecure-requests": "1","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"})
         self.account = Account(self.html)
         self.music = re.findall("music\"\:.*?\"title\"\:\"(.*?)\"", self.html.text)[0]
@@ -49,9 +52,9 @@ class tiktok:
             data   = {"id": self.url_vid,"locale": "en","tt": 0,"ts": 0}
             post   = self.request.post(self.url+re.findall('data-hx-post=\"(.*?)\"',self.html)[0], headers=self.header, data=data)
             respon = BeautifulSoup(post.text, "html.parser")
-            return post
-            #self.hasil  = {"video":[f'{self.url}{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark")[0].get("href")}',f'{self.url}{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark_direct")[0].get("href")}'],"music":f'{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link music")[0].get("href")}'}
-            #return [info_videotiktok(x, self.header, self.request) for x in self.hasil["video"]]
+            #return post
+            self.hasil  = {"video":[f'{self.url}{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark")[0].get("href")}',f'{self.url}{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link without_watermark_direct")[0].get("href")}'],"music":f'{respon.find_all("a",class_="pure-button pure-button-primary is-center u-bl dl-button download_link music")[0].get("href")}'}
+            return [info_videotiktok(x, self.header, self.request) for x in self.hasil["video"]]
         except IndexError:
             raise InvalidUrl("URL ERROR")
     def __str__(self) -> str:
