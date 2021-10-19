@@ -8,7 +8,7 @@ arg.add_argument('--snaptik', action='store_true')
 arg.add_argument('--ssstik', action='store_true')
 arg.add_argument('--info', action='store_true')
 arg.add_argument('--url', required=True)
-arg.add_argument('--json')
+arg.add_argument('--json', action='store_true')
 arg.add_argument('--save')
 parse=arg.parse_args()
 if parse.snaptik or parse.ssstik:
@@ -30,7 +30,7 @@ elif parse.info:
             'account':{
                 'username':resp.account.username,
                 'nickname':resp.account.nickname,
-                'signatur':resp.account.signature,
+                'signature':resp.account.signature,
                 'create':resp.account.create.timestamp() if resp.account.create else 0,
                 'verified':resp.account.verified
             },
