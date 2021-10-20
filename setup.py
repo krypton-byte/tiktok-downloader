@@ -6,7 +6,7 @@ setup(
   name = 'tiktok_downloader',        
   packages = ['tiktok_downloader'],
   include_package_data=True, 
-  version = '0.1.4',    
+  version = '0.1.5',    
   license='MIT',     
   description = 'Tiktok Downloader&Scraper using bs4&requests', 
   author = 'Krypton Byte',                  
