@@ -1,7 +1,7 @@
 from flask import Flask, request,render_template
 from . import info_post, snaptik, ssstik
-import json
-app = Flask(__name__)
+import json, os
+app = Flask(__name__, template_folder=os.path.abspath('templates'), static_folder=os.path.abspath('static'))
 @app.route('/')
 def index():
     return render_template('index.html')
