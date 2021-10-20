@@ -1,36 +1,46 @@
 from requests import Session
-import requests
+import requests, json
 from datetime import datetime
 from bs4 import BeautifulSoup
 import re
 from tiktok_downloader.Except import InvalidUrl
 from tiktok_downloader.keeptiktok import keeptiktok
 from tiktok_downloader.utils import info_videotiktok
-class info_post:
+class info_post(requests.Session):
     def __init__(self, url: str) -> None:
+        super().__init__()
         '''
         :param url: video url(tiktok)
         '''
-        self.html = requests.get(url,headers={"sec-ch-ua": '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',"sec-ch-ua-mobile": "?0","sec-fetch-dest": "document","sec-fetch-mode": "navigate","sec-fetch-site": "none","sec-fetch-user": "?1","upgrade-insecure-requests": "1","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"})
-        self.account = Account(self.html)
-        self.music = re.findall("music\"\:.*?\"title\"\:\"(.*?)\"", self.html.text)[0]
-        self.caption = BeautifulSoup(self.html.text, "html.parser").title.text
-        self.create = datetime.fromtimestamp(int(re.findall("\"createTime\"\:(.*?),", self.html.text)[0]))
-        self.url = re.findall("\"canonicalHref\"\:\"(.*?)\"", self.html.text)[0]
-        self.id, self.height, self.width, self.duration, self.ratio = re.findall("\"video\"\:\{\"id\"\:\"(.*?)\",\"height\":(.*?),\"width\"\:(.*?),\"duration\":(.*?),\"ratio\"\:\"(.*?)\",", self.html.text)[0]
+        self.headers={"sec-ch-ua": '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',"sec-ch-ua-mobile": "?0","sec-ch-ua-platform": "Linux","sec-fetch-dest": "document","sec-fetch-mode": "navigate","sec-fetch-site": "none","sec-fetch-user": "?1","upgrade-insecure-requests": "1","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"}
+        self.html = self.get(url)
+        self.js = json.loads(re.search('\>(\{\"props\":.*?)\<\/script>',self.html.text).group(1))
+        self.account = Account(self.js['props']['pageProps']['itemInfo']['itemStruct']['author'])
+        self.video = self.js['props']['pageProps']['itemInfo']['itemStruct']
+        self.cover = self.video['video']['cover']
+        self.music = self.video['music']['title']
+        self.caption = self.video['desc']
+        self.create = datetime.fromtimestamp(self.video['createTime'])
+        self.url = url
+        self.id, self.height, self.width, self.duration, self.ratio,self.bitrate = self.video['video']['id'], self.video['video']['height'],self.video['video']['width'],self.video['video']['duration'],self.video['video']['ratio'],self.video['video']['bitrate']
+        self.tt_csrf_token=self.js['query']['$initialProps']['$csrfToken']
+        self.aftercsrf=self.js['query']['$initialProps']['$encryptedWebid']
+        self.tt_webid_v2=self.js['query']['$initialProps']['$logId']
+        self.headers.update({'Cookie':f'tt_webid_v2={self.tt_webid_v2}; tt_csrf_token={self.tt_csrf_token}; {self.aftercsrf}'})
     def __str__(self) -> str:
-        return ""
-        #return f"<(ID:{self.id})>"
+        return f"<(ID:{self.id})>"
     def __repr__(self) -> str:
         return self.__str__()
+
 class Account:
-    def __init__(self, html) -> None:
-        self.html =html
-        self.username = re.findall("\"uniqueId\"\:\"(.*?)\"", self.html.text)[0] if re.findall("\"uniqueId\"\:\"(.*?)\"", self.html.text) else None
-        self.nickname = re.findall("\"nickname\"\:\"(.*?)\"", self.html.text)[0] if re.findall("\"nickname\"\:\"(.*?)\"", self.html.text) else None
-        self.signature = re.findall("\"signature\"\:\"(.*?)\"", self.html.text)[0] if re.findall("\"signature\"\:\"(.*?)\"", self.html.text) else None
-        self.create = datetime.fromtimestamp(int(re.findall("\"createTime\"\:(.*?),", self.html.text)[1])) if len(re.findall("\"createTime\"\:(.*?),", self.html.text))>=2 else None
-        self.verified = False if re.findall("\"verified\"\:(.*?),", self.html.text)[0]=="false" else True if re.findall("\"verified\"\:(.*?),", self.html.text) else None
+    def __init__(self, js:dict) -> None:
+        self.avatar = js['avatarThumb']
+        self.username = js['uniqueId']
+        self.nickname = js['nickname']
+        self.signature = js['signature']
+        self.create = datetime.fromtimestamp(js['createTime'])
+        self.verified = js['verified']
+        self.private = js["privateAccount"]
     def __repr__(self) -> str:
         return f"<(OWNER:{self.username} VERIFIED:{self.verified})>"
     def __str__(self) -> str:

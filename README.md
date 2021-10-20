@@ -48,7 +48,7 @@
 
 # Command line
 <ul>
-<li>sstik</li>
+<li>ssstik</li>
 
 ```bash
 $ python3 -m tiktok_downloader --url=https://www.tiktok.com/@xxxx/video/xxxx --ssstik 2>/dev/null
@@ -108,6 +108,13 @@ $ python3 -m tiktok_downloader --url=https://www.tiktok.com/@xxxx/video/xxxx --i
 ```
 </ul>
 
+# Run as web
+
+```bash
+$ python3 -m tiktok_downloader --host=0.0.0.0 --port=8000 --server
+```
+## Preview
+<img src="image/web.png">
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
 
