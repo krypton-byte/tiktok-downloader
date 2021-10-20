@@ -1,5 +1,5 @@
 from flask import Flask, request,render_template
-from .. import info_post, snaptik, ssstik
+from . import info_post, snaptik, ssstik
 import json
 app = Flask(__name__)
 @app.route('/')
