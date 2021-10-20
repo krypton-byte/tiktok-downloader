@@ -6,7 +6,7 @@ setup(
   name = 'tiktok_downloader',        
   packages = ['tiktok_downloader'],
   include_package_data=True, 
-  version = '0.1.0',    
+  version = '0.1.1',    
   license='MIT',     
   description = 'Tiktok Downloader&Scraper using bs4&requests', 
   author = 'Krypton Byte',                  
@@ -18,6 +18,7 @@ setup(
           'bs4',
           'cloudscraper',
           'requests',
+          'py-mini-racer'
       ],
   classifiers=[
     'Development Status :: 3 - Alpha',      
