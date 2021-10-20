@@ -43,7 +43,14 @@
             if(!data.msg){
                 $.ajax({url:'/snaptik',data:{url:tiktok},success: function (datasx){
                   const datas = JSON.parse(datasx)
-                  let block = `
+                  if(datas.msg){
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: 'Server Sibuk'
+                    })
+                  }else{
+                    let block = `
                     <div class="row justify-content-center" id="downgrup" style="padding-bottom: 100px;">
                       <div class="card" style="width: 20 rem;">
                         <img src="${data.cover}" class="card-img-top" alt="..." style="padding-top:7px;">
@@ -58,6 +65,7 @@
                   </div>
                     `
                     $(".emptydiv").empty().append(block)
+                  }
                 }})
             }else{
               Swal.fire({
