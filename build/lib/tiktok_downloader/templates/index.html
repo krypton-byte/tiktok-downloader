@@ -1,0 +1,113 @@
+ <!-- krypton byte -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  
+    <title>Tiktok Downloader</title>
+  </head>
+  <body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <div class="col-lg-6 offset-lg-3 " id='frm'>
+        <div class="row justify-content-center">
+            <img src="{{ url_for('static', filename='tiktok.svg')}}" id="logo">
+            <input type="text" placeholder="Tiktok Url" id="tiktokurl">
+            <button class="btn btn-primary" id="submitter">Submit</button>
+        </div>
+        <div class="emptydiv">
+
+        </div>
+    </div>
+    <footer>
+      <p align="center"><a href='https://github.com/krypton-byte/tiktok-downloader'>@krypton-byte</a></p>
+    </footer>
+    <div class="modal"><!-- Place at bottom of page --></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+      $body = $("body");
+      $(document).on({
+          ajaxStart: function() { $body.addClass("loading");    },
+          ajaxStop: function() { $body.removeClass("loading"); }    
+      });
+      $(document).ready(function (){
+        $("#submitter").on("click", function(){
+          const tiktok = $("#tiktokurl").val()
+          $.ajax({'url':'/info', data:{url:tiktok},success:function (datax){
+            const data = JSON.parse(datax)
+            if(!data.msg){
+                $.ajax({url:'/snaptik',data:{url:tiktok},success: function (datasx){
+                  const datas = JSON.parse(datasx)
+                  let block = `
+                    <div class="row justify-content-center" id="downgrup" style="padding-bottom: 100px;">
+                      <div class="card" style="width: 20 rem;">
+                        <img src="${data.cover}" class="card-img-top" alt="..." style="padding-top:7px;">
+                        <div class="card-body">
+                          <h5 class="card-title">${data.account.nickname}</h5>
+                          <p class="card-text">${data.caption}</p>
+                        </div>
+                        ${datas.map((x)=>{
+                          return '<a href="'+x.url+'" class="btn btn-primary">'+x.type+' </a>&nbsp;'
+                        })}
+                      </div>
+                  </div>
+                    `
+                    $(".emptydiv").empty().append(block)
+                }})
+            }else{
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Invalid URL!'
+              })
+            }
+          }})
+        })
+      })
+    </script>
+    <style>
+      /* Start by setting display:none to make this hidden.
+      Then we position it in relation to the viewport window
+      with position:fixed. Width, height, top and left speak
+      for themselves. Background we set to 80% white with
+      our animation centered, and no-repeating */
+    .modal {
+        display:    none;
+        position:   fixed;
+        z-index:    1000;
+        top:        0;
+        left:       0;
+        height:     100%;
+        width:      100%;
+        background: rgba( 255, 255, 255, .8 ) 
+                    url("{{ url_for('static', filename='loading.svg')}}") 
+                    50% 50% 
+                    no-repeat;
+    }
+
+    /* When the body has the loading class, we turn
+      the scrollbar off with overflow:hidden */
+    body.loading .modal {
+        overflow: hidden;   
+    }
+
+    /* Anytime the body has the loading class, our
+      modal element will be visible */
+    body.loading .modal {
+        display: block;
+    }
+        #frm {
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+        #downgrup {
+            padding-top: 100px;
+        }
+    </style>
+  </body>
+</html>

@@ -1,7 +1,8 @@
 from flask import Flask, request,render_template
 from . import info_post, snaptik, ssstik
 import json, os
-app = Flask(__name__, template_folder=os.path.abspath('templates'), static_folder=os.path.abspath('static'))
+print(os.path.abspath(__file__+'/../static'))
+app = Flask(__name__, template_folder=os.path.abspath(__file__+'/../templates'), static_folder=os.path.abspath(__file__+'/../static'))
 @app.route('/')
 def index():
     return render_template('index.html')

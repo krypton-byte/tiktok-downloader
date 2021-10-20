@@ -1,5 +1,5 @@
 
-from distutils.core import setup
+from setuptools import setup
 from os import path
 base_dir = path.abspath(path.dirname(__file__))
 setup(
