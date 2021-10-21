@@ -4,9 +4,9 @@
 name: Upload Python Package
 
 on:
-  release:
-    types:
-      - created
+  push:
+    branches:
+    - master
 
 jobs:
   build:
@@ -17,16 +17,10 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
-    - name: Install dependencies
+    - name: Install Library
       run: |
         python -m pip install --upgrade pip
-        pip install setuptools wheel twine
-    - name: Build and publish
-      env:
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-    - name: "Publish to Pypi::${GIT_TAG_NAME}" 
+        python setup.py install --user
+    - name: Testing
       run: |
-        python resetup.py --version="${GIT_TAG_NAME}" > setup.py
-        python setup.py build sdist
-        twine upload dist/*
+        python -m tiktok_downloader.test

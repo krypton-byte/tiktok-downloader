@@ -1,5 +1,6 @@
 import argparse,json, os
 import json
+import sys, requests
 from .ssstik import ssstik
 from .snaptik import snaptik
 from .scrapper import info_post
@@ -32,6 +33,7 @@ elif parse.url:
         except Exception:
             stderr.write('Post Not Found\n')
             stderr.flush()
+            sys.exit(1)
     elif parse.info:
         try:
             resp=info_post(parse.url)
@@ -49,10 +51,14 @@ elif parse.url:
                 'create':resp.create.timestamp(),
                 'url':resp.url,
                 'id':resp.id    }, indent=4))
-        except Exception as e:
-            print(e)
+        except requests.exceptions.ConnectionError:
+            stderr.write('[x] offline\n')
+            stderr.flush()
+            sys.exit(1)
+        except KeyError or AttributeError:
             stderr.write('Post Not Found\n')
             stderr.flush()
+            sys.exit(1)
     else:
         os.system(f"python3 -m {os.path.dirname(__file__).split('/')[-1]} --help")
 else:
