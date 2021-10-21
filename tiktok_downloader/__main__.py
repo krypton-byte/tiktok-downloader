@@ -54,7 +54,7 @@ elif parse.url:
             stderr.write('[x] offline\n')
             stderr.flush()
             sys.exit(1)
-        except KeyError or AttributeError:
+        except (KeyError, AttributeError):
             stderr.write('Post Not Found\n')
             stderr.flush()
             sys.exit(1)
