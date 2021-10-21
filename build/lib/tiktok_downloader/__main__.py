@@ -1,5 +1,4 @@
 import argparse,json, os
-import json
 from .ssstik import ssstik
 from .snaptik import snaptik
 from .scrapper import info_post

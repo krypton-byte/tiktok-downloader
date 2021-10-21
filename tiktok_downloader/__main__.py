@@ -1,5 +1,4 @@
 import argparse,json, os
-import json
 import sys, requests
 from .ssstik import ssstik
 from .snaptik import snaptik
