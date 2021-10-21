@@ -16,14 +16,13 @@ jobs:
         python-version: '3.x'
     - name: Install dependencies
       run: |
-        echo ${{ github.ref }}
-        python resetup.py --version="${GIT_TAG_NAME}" > setup.py && python setup.py build sdist 
-        cat setup.py
         python -m pip install --upgrade pip
         pip install setuptools wheel twine
-    - name: "Publish to Pypi::${GIT_TAG_NAME}" 
+    - name: "Publish to Pypi::${{ github.ref }}"
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        ls&&ls *&& twine upload dist/*
+        python resetup.py --version="${{ github.ref }}" > setup.py
+        python setup.py build sdist 
+        twine upload dist/*
