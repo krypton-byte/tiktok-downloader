@@ -14,7 +14,7 @@ class info_post(requests.Session):
         '''
         self.headers={"sec-ch-ua": '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',"sec-ch-ua-mobile": "?0","sec-ch-ua-platform": "Linux","sec-fetch-dest": "document","sec-fetch-mode": "navigate","sec-fetch-site": "none","sec-fetch-user": "?1","upgrade-insecure-requests": "1","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"}
         self.html = self.get(url)
-        self.js = json.loads(re.search('\>(\{\"props\":.*?)\<\/script>',self.html.text).group(1))
+        self.js = json.loads(re.search(r'\>(\{\"props\":.*?)\<\/script>',self.html.text).group(1))
         self.account = Account(self.js['props']['pageProps']['itemInfo']['itemStruct']['author'])
         self.video = self.js['props']['pageProps']['itemInfo']['itemStruct']
         self.cover = self.video['video']['cover']
@@ -79,7 +79,7 @@ class tiktok2:
     def get_info(self):
         try:
             self.request.post("https://snaptik.app/check_token.php", headers=self.header)
-            self.php = re.findall(', \"(.*?\.php)',requests.get("https://snaptik.app", headers=self.header).text)[0]
+            self.php = re.findall(r', \"(.*?\.php)',requests.get("https://snaptik.app", headers=self.header).text)[0]
             self.bs = BeautifulSoup(self.request.post(f"https://snaptik.app/{self.php}", headers=self.header, data={"url":self.url}).text, "html.parser")
             self.hasil=[self.request,{"title":self.bs('a', attrs={"title":""})[0].text,"date":self.bs("b", attrs={"class":"blur"})[0].text,"video":list(filter(lambda x:x, map(lambda x:x["href"] if "token" in x["href"] else None, self.bs("a", attrs={"class":"abutton is-success is-fullwidth"}))))}, self.header]
             return [info_videotiktok(x, self.header, self.request) for x in self.hasil[1]["video"]]
