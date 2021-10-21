@@ -23,6 +23,4 @@ jobs:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        python resetup.py --version="${GIT_TAG_NAME}" > setup.py
-        python setup.py build sdist
-        twine upload dist/*
+        rm -rf dist build&& python resetup.py --version="${GIT_TAG_NAME}" > setup.py && python setup.py build sdist &&ls dist&& twine upload dist/*
