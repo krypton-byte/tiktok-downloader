@@ -1,5 +1,4 @@
 name: Upload to PyPi
-
 on:
   release:
     types:
@@ -9,7 +8,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: pypa/gh-action-pypi-publish@release/v1
+    - name: Install pypa/build
+      run: >-
+        python -m
+        pip install
+        build
+        --user
+    - name: Build a binary wheel and a source tarball
+      run: >-
+        python -m
+        build
+        --sdist
+        --wheel
+        --outdir dist/
+        .
+    - uses: pypa/gh-action-pypi-publish@master
     - name: "Publish to Pypi::  ${{ github.ref }}"
       with:
         username: __token__
