@@ -1,8 +1,10 @@
 name: Upload to PyPi
 
 on:
-  create
-
+  release:
+    types:
+      - published
+      - created
 jobs:
   build:
     runs-on: ubuntu-latest
