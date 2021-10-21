@@ -1,13 +1,12 @@
-Metadata-Version: 1.1
+Metadata-Version: 2.1
 Name: tiktok-downloader
-Version: 0.1.4
+Version: 0.1.6
 Summary: Tiktok Downloader&Scraper using bs4&requests
 Home-page: https://github.com/krypton-byte/tiktok_downloader
 Author: Krypton Byte
 Author-email: galaxyvplus6434@gmail.com
 License: MIT
-Download-URL: https://github.com/krypton-byte/tiktok_downloader/archive/0.0.7.tar.gz
-Description: UNKNOWN
+Download-URL: https://codeload.github.com/krypton-byte/tiktok-downloader/tar.gz/refs/tags/0.1.6
 Keywords: tiktok,downloader,scrapper,tikdok-scraper,tiktok-downloader
 Platform: UNKNOWN
 Classifier: Development Status :: 3 - Alpha
@@ -16,3 +15,6 @@ Classifier: Topic :: Software Development :: Build Tools
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
+
+UNKNOWN
+

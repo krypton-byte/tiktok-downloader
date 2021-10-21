@@ -1,4 +1,5 @@
 from sys import stderr
+from ast import literal_eval
 from .utils import info_videotiktok
 from py_mini_racer import MiniRacer
 from .Except import InvalidUrl
@@ -28,7 +29,7 @@ class snaptik(Session):
         ```
         '''
         stderr.flush()
-        d=eval(findall(r'\(\".*?,.*?,.*?,.*?,.*?.*?\)',self.resp.text)[0]).__str__()
+        d=literal_eval(findall(r'\(\".*?,.*?,.*?,.*?,.*?.*?\)',self.resp.text)[0]).__str__()
         dec = self.decoder.eval(f"decoder{d}")
         stderr.flush()
         return [info_videotiktok(i, self) for i in set(map(lambda x:x[0].strip('\\'),findall(r'\"(https?://(tikcdn\.net|snapsave\.info).*?)\"',dec)))]
