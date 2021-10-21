@@ -10,7 +10,7 @@ def index():
 def test():
     if request.args.get('s') == 't':
         return json.dumps([{'type':'music','url':''},{'type':'video','url':''}])
-    elif request.args.get('s') =='i':
+    if request.args.get('s') =='i':
         return json.dumps({
             "account": {
                 "avatar": "https://p16-sign-sg.tiktokcdn.com/aweme/100x100/tiktok-obj/0c8589b8821e646047ebd34103ae3aea.jpeg?x-expires=1634824800&x-signature=y8keUWmt6%2FBT8SkZXZfXeiV2bI8%3D",
@@ -26,8 +26,7 @@ def test():
             "url": "https://www.tiktok.com/@tribunsumselcom/video/7020708969563917595",
             "id": "7020708969563917595"
         })
-    else:
-        return json.dumps({'msg':'test'})
+    return json.dumps({'msg':'test'})
 @app.route('/<path:path>')
 def snapt(path):
     if path == 'info':
