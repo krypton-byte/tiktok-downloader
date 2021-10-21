@@ -12,7 +12,7 @@ setup(
   author = 'Krypton Byte',                  
   author_email = 'galaxyvplus6434@gmail.com',     
   url = 'https://github.com/krypton-byte/tiktok_downloader',   
-  download_url = 'https://github.com/krypton-byte/tiktok_downloader/archive/0.0.7.tar.gz',    
+  download_url = 'https://codeload.github.com/krypton-byte/tiktok-downloader/tar.gz/refs/tags/0.1.6',    
   keywords = ['tiktok', 'downloader', 'scrapper', 'tikdok-scraper', 'tiktok-downloader'], 
   install_requires=[           
           'bs4',
