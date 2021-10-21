@@ -28,7 +28,7 @@ elif parse.url:
             elif parse.save:
                 ok[0].download(parse.save)
             else:
-                os.system(f"python3 -m tiktok_downloader --help")
+                os.system("python3 -m tiktok_downloader --help")
         except Exception as e:
             stderr.write('Post Not Found\n')
             stderr.flush()
@@ -59,6 +59,6 @@ elif parse.url:
             stderr.flush()
             sys.exit(1)
     else:
-        os.system(f"python3 -m tiktok_downloader --help")
+        os.system("python3 -m tiktok_downloader --help")
 else:
-    os.system(f"python3 -m tiktok_downloader --help")
+    os.system("python3 -m tiktok_downloader --help")
