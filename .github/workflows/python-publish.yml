@@ -16,6 +16,7 @@ jobs:
         python-version: '3.x'
     - name: Install dependencies
       run: |
+        echo ${{ github.ref }}
         python resetup.py --version="${GIT_TAG_NAME}" > setup.py && python setup.py build sdist 
         cat setup.py
         python -m pip install --upgrade pip
