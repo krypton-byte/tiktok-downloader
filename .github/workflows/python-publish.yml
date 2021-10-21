@@ -22,7 +22,7 @@ jobs:
         --user
     - name: Test
       run: >-
-        python resetup.py --version="${{ github.ref }}" > setup.py
+        python resetup.py --version="${{ github.ref }}"
     - name: Build a binary wheel and a source tarball
       run: >-
         python -m
