@@ -28,7 +28,7 @@ class snaptik(Session):
         ```
         '''
         stderr.flush()
-        d=eval(findall('\(\".*?,.*?,.*?,.*?,.*?.*?\)',self.resp.text)[0]).__str__()
+        d=eval(findall(r'\(\".*?,.*?,.*?,.*?,.*?.*?\)',self.resp.text)[0]).__str__()
         dec = self.decoder.eval(f"decoder{d}")
         stderr.flush()
-        return [info_videotiktok(i, self) for i in set(map(lambda x:x[0].strip('\\'),findall('\"(https?://(tikcdn\.net|snapsave\.info).*?)\"',dec)))]
+        return [info_videotiktok(i, self) for i in set(map(lambda x:x[0].strip('\\'),findall(r'\"(https?://(tikcdn\.net|snapsave\.info).*?)\"',dec)))]
