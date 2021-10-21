@@ -1,4 +1,5 @@
 name: Upload to PyPi
+
 on:
   release:
     types:
@@ -27,8 +28,8 @@ jobs:
         --wheel
         --outdir dist/
         .
-    - uses: pypa/gh-action-pypi-publish@master
     - name: "Publish to Pypi::  ${{ github.ref }}"
+      uses: pypa/gh-action-pypi-publish@master
       with:
         username: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
