@@ -10,7 +10,7 @@ arg.add_argument('--ssstik', action='store_true')
 arg.add_argument('--info', action='store_true')
 arg.add_argument('--url')
 arg.add_argument('--server', action='store_true')
-arg.add_argument('--host', type=str, default='0.0.0.0')
+arg.add_argument('--host', type=str, default='127.0.0.1')
 arg.add_argument('--debug', action='store_true')
 arg.add_argument('--port', default=8000, type=int)
 arg.add_argument('--json', action='store_true')
@@ -28,8 +28,8 @@ elif parse.url:
             elif parse.save:
                 ok[0].download(parse.save)
             else:
-                os.system(f"python3 -m {os.path.dirname(__file__).split('/')[-1]} --help")
-        except Exception:
+                os.system(f"python3 -m tiktok_downloader --help")
+        except Exception as e:
             stderr.write('Post Not Found\n')
             stderr.flush()
             sys.exit(1)
@@ -59,6 +59,6 @@ elif parse.url:
             stderr.flush()
             sys.exit(1)
     else:
-        os.system(f"python3 -m {os.path.dirname(__file__).split('/')[-1]} --help")
+        os.system(f"python3 -m tiktok_downloader --help")
 else:
-    os.system(f"python3 -m {os.path.dirname(__file__).split('/')[-1]} --help")
+    os.system(f"python3 -m tiktok_downloader --help")
