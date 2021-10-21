@@ -25,5 +25,6 @@ jobs:
       run: |
         rm -rf dist build
         python resetup.py --version="${{ github.ref }}" > setup.py
+        cat setup.py
         python setup.py build sdist 
         twine upload dist/*
