@@ -28,6 +28,9 @@ jobs:
         --wheel
         --outdir dist/
         .
+    - name: Test
+      run: >-
+        python resetup.py --version="${{ github.ref }}" > setup.py
     - name: "Publish to Pypi::  ${{ github.ref }}"
       uses: pypa/gh-action-pypi-publish@master
       with:
