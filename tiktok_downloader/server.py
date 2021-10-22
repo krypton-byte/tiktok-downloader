@@ -53,9 +53,9 @@ def snapt(path):
             return js
         except Exception as e:
             print(e)
-            return json.dumps({
+            return Response(json.dumps({
                 'msg':'url tidak valid'
-            })
+            }), headers={'Content-Type':'application/json'})
     elif path not in ['snaptik', 'ssstik', 'tikmate','mdown']:
         return json.dumps({'msg':'path tidak ditemukan'})
     if request.args.get('url'):
@@ -72,8 +72,8 @@ def snapt(path):
             return Response(json.dumps([{'type':i.type,'url':i.json} for i in res],indent=4), headers={'Content-Type':'application/json'})
         except Exception as e:
             print(e)
-            return json.dumps({
+            return Response(json.dumps({
                 'msg':'url tidak valid'
-            })
+            }, indent=4),headers={'Content-Type':'application/json'})
     else:
         return json.dumps({'msg':'url parameter required'}, indent=4)
