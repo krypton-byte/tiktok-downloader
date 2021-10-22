@@ -19,6 +19,7 @@ setup(
           'flask',
           'cloudscraper',
           'requests',
+          'faker',
           'py-mini-racer'
       ],
   classifiers=[

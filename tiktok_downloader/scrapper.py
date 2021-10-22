@@ -1,14 +1,17 @@
+import faker
 import requests, json
 from datetime import datetime
 import re
 from tiktok_downloader.Except import InvalidUrl
+from faker import Faker
+fake = Faker()
 class info_post(requests.Session):
     '''
     :param url: video url(tiktok)
     '''
     def __init__(self, url: str) -> None:
         super().__init__()
-        self.headers={"sec-ch-ua": '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',"sec-ch-ua-mobile": "?0","sec-ch-ua-platform": "Linux","sec-fetch-dest": "document","sec-fetch-mode": "navigate","sec-fetch-site": "none","sec-fetch-user": "?1","upgrade-insecure-requests": "1","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"}
+        self.headers={"sec-ch-ua": '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',"sec-ch-ua-mobile": "?0","sec-ch-ua-platform": "Linux","sec-fetch-dest": "document","sec-fetch-mode": "navigate","sec-fetch-site": "none","sec-fetch-user": "?1","upgrade-insecure-requests": "1","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36", "X-Forwarded-For":fake.ipv4()}
         self.html = self.get(url)
         self.js = json.loads(re.search(r'\>(\{\"props\":.*?)\<\/script>',self.html.text).group(1))
         self.account = Account(self.js['props']['pageProps']['itemInfo']['itemStruct']['author'])
