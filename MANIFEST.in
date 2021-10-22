@@ -1,2 +1,4 @@
 include README.md
+include tiktok_downloader/static/*
+include tiktok_downloader/templates/*
 recursive-include templates static
