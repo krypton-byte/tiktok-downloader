@@ -21,7 +21,8 @@ jobs:
         build
         --user
     - name: Test
-      run: >-
+      run: |
+        rm -rf build dist *.egg-info
         python resetup.py --version="${{ github.ref }}"
     - name: Build a binary wheel and a source tarball
       run: >-
