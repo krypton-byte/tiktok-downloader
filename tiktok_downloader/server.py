@@ -1,5 +1,6 @@
+from tiktok_downloader.mdown import mdown
 from flask import Flask, request,render_template
-from . import info_post, snaptik, ssstik
+from . import info_post, snaptik, ssstik, tikmate
 import json, os
 app = Flask(__name__, template_folder=os.path.abspath(__file__+'/../templates'), static_folder=os.path.abspath(__file__+'/../static'))
 @app.route('/')
@@ -53,12 +54,20 @@ def snapt(path):
             return json.dumps({
                 'msg':'url tidak valid'
             })
-    elif path not in ['snaptik', 'ssstik']:
+    elif path not in ['snaptik', 'ssstik', 'tikmate','mdown']:
         return json.dumps({'msg':'path tidak ditemukan'})
     if request.args.get('url'):
         try:
-            ok=snaptik(request.args['url']).get_media() if path == 'snaptik' else ssstik().get_media(request.args['url'])
-            return json.dumps([{'type':i.type,'url':i.json} for i in ok],indent=4)
+            res=[]
+            if path == 'snaptik':
+                res = snaptik(request.args['url']).get_media()
+            elif path =='ssstik':
+                res = ssstik().get_media(request.args['url'])
+            elif path == 'tikmate':
+                res = tikmate().get_media(request.args['url'])
+            elif path == 'mdown':
+                res = mdown().get_media(request.args['url'])
+            return json.dumps([{'type':i.type,'url':i.json} for i in res],indent=4)
         except Exception as e:
             print(e)
             return json.dumps({

@@ -1,11 +1,7 @@
-from requests import Session
 import requests, json
 from datetime import datetime
-from bs4 import BeautifulSoup
 import re
 from tiktok_downloader.Except import InvalidUrl
-from tiktok_downloader.keeptiktok import keeptiktok
-from tiktok_downloader.utils import info_videotiktok
 class info_post(requests.Session):
     '''
     :param url: video url(tiktok)
