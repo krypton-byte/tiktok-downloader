@@ -1,5 +1,5 @@
 from tiktok_downloader.mdown import mdown
-from flask import Flask, request,render_template
+from flask import Flask, request,render_template,Response
 from . import info_post, snaptik, ssstik, tikmate
 import json, os
 app = Flask(__name__, template_folder=os.path.abspath(__file__+'/../templates'), static_folder=os.path.abspath(__file__+'/../static'))
@@ -34,7 +34,7 @@ def snapt(path):
             if not request.args.get('url'):
                 return json.dumps({'msg':'url parameter required'}, indent=4)
             resp=info_post(request.args['url'])
-            return json.dumps({
+            js=Response(json.dumps({
             'account':{
                 'avatar':resp.account.avatar,
                 'username':resp.account.username,
@@ -48,7 +48,9 @@ def snapt(path):
             'caption':resp.caption,
             'create':resp.create.timestamp(),
             'url':resp.url,
-            'id':resp.id    }, indent=4)
+            'id':resp.id    }, indent=4))
+            js.headers['Content-Type'] = 'application/json'
+            return js
         except Exception as e:
             print(e)
             return json.dumps({
@@ -67,7 +69,7 @@ def snapt(path):
                 res = tikmate().get_media(request.args['url'])
             elif path == 'mdown':
                 res = mdown().get_media(request.args['url'])
-            return json.dumps([{'type':i.type,'url':i.json} for i in res],indent=4)
+            return Response(json.dumps([{'type':i.type,'url':i.json} for i in res],indent=4), headers={'Content-Type':'application/json'})
         except Exception as e:
             print(e)
             return json.dumps({
