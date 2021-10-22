@@ -1,5 +1,5 @@
 bs4
-flask
 cloudscraper
-requests
+flask
 py-mini-racer
+requests
