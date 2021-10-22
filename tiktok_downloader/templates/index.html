@@ -38,11 +38,9 @@
       $(document).ready(function (){
         $("#submitter").on("click", function(){
           const tiktok = $("#tiktokurl").val()
-          $.ajax({'url':'/info', data:{url:tiktok},success:function (datax){
-            const data = JSON.parse(datax)
+          $.ajax({'url':'/info', data:{url:tiktok},success:function (data){
             if(!data.msg){
-                $.ajax({url:'/snaptik',data:{url:tiktok},success: function (datasx){
-                  const datas = JSON.parse(datasx)
+                $.ajax({url:'/snaptik',data:{url:tiktok},success: function (datas){
                   if(datas.msg){
                     Swal.fire({
                       icon: 'error',
