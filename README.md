@@ -1,9 +1,14 @@
 <p align="center">
-<img src="https://avatars.githubusercontent.com/u/52121207" width="25%"><br>
+<img src="tiktok_downloader/static/tiktok.svg"><br>
 <img src="https://img.shields.io/badge/AUTHOR-KRYPTON--BYTE-brightgreen">
 </p>
 
+[![Unittest](https://github.com/krypton-byte/tiktok-downloader/actions/workflows/unittest.yml/badge.svg)](https://github.com/krypton-byte/tiktok-downloader/actions/workflows/unittest.yml)
+
+[![Upload to PyPi](https://github.com/krypton-byte/tiktok-downloader/actions/workflows/python-publish.yml/badge.svg?branch=0.1.7&event=release)](https://github.com/krypton-byte/tiktok-downloader/actions/workflows/python-publish.yml)
+
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)&nbsp;
+
 [![Downloads](https://static.pepy.tech/personalized-badge/tiktok-downloader?period=total&units=none&left_color=black&right_color=orange&left_text=Downloads)](https://pepy.tech/project/tiktok-downloader)&nbsp;[![viitor](https://visitor-badge.glitch.me/badge?page_id=krypton-byte.tiktok-downloader)]()
 # install
 
@@ -115,6 +120,8 @@ $ python3 -m tiktok_downloader --host=0.0.0.0 --port=8000 --server
 ```
 ## Preview
 <img src="image/web.png">
+
+
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
 

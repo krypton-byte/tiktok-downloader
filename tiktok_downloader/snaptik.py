@@ -33,3 +33,5 @@ class snaptik(Session):
         dec = self.decoder.eval(f"decoder{d}")
         stderr.flush()
         return [info_videotiktok(i, self) for i in set(map(lambda x:x[0].strip('\\'),findall(r'\"(https?://(tikcdn\.net|snapsave\.info).*?)\"',dec)))]
+    def __iter__(self):
+        yield from self.get_media()

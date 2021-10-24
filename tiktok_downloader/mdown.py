@@ -1,3 +1,4 @@
+from typing import Generator
 from bs4 import BeautifulSoup
 import requests
 from requests.models import InvalidURL
@@ -7,7 +8,7 @@ class mdown(requests.Session):
     def __init__(self) -> None:
         super().__init__()
         self.headers={"user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"}
-    def get_media(self, url):
+    def get_media(self, url: str):
         bs=BeautifulSoup(self.get(self.BASE_URL).text,'html.parser')
         form = {i['name']:i['value'] for i in bs.find_all('input', attrs={'type':'hidden'})}
         form.update({bs.find('input', attrs={'type':'text'})['name']:url})
