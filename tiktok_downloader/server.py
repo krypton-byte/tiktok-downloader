@@ -30,29 +30,32 @@ def test():
 @app.route('/<path:path>')
 def snapt(path):
     if path == 'info':
-        try:
-            if not request.args.get('url'):
-                return json.dumps({'msg':'url parameter required'}, indent=4)
-            resp=info_post(request.args['url'])
-            js=Response(json.dumps({
-            'account':{
-                'avatar':resp.account.avatar,
-                'username':resp.account.username,
-                'nickname':resp.account.nickname,
-                'signature':resp.account.signature,
-                'create':resp.account.create.timestamp() if resp.account.create else 0,
-                'verified':resp.account.verified
-            },
-            'music':resp.music,
-            'cover':resp.cover,
-            'caption':resp.caption,
-            'create':resp.create.timestamp(),
-            'url':resp.url,
-            'id':resp.id    }, indent=4))
-            js.headers['Content-Type'] = 'application/json'
-            return js
-        except Exception as e:
-            print(e)
+        for i in range(10):
+            try:
+                if not request.args.get('url'):
+                    return json.dumps({'msg':'url parameter required'}, indent=4)
+                resp=info_post(request.args['url'])
+                js=Response(json.dumps({
+                'account':{
+                    'avatar':resp.account.avatar,
+                    'username':resp.account.username,
+                    'nickname':resp.account.nickname,
+                    'signature':resp.account.signature,
+                    'create':resp.account.create.timestamp() if resp.account.create else 0,
+                    'verified':resp.account.verified
+                },
+                'music':resp.music,
+                'cover':resp.cover,
+                'caption':resp.caption,
+                'create':resp.create.timestamp(),
+                'url':resp.url,
+                'id':resp.id    }, indent=4))
+                js.headers['Content-Type'] = 'application/json'
+                return js
+            except Exception as e:
+                print(e)
+                continue
+        else:
             return Response(json.dumps({
                 'msg':'url tidak valid'
             }), headers={'Content-Type':'application/json'})
