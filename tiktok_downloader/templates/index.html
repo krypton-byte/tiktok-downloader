@@ -46,13 +46,16 @@
                     Swal.fire({
                       icon: 'error',
                       title: 'Oops...',
-                      text: 'Server Sibuk'
+                      text: 'server is busy'
                     })
                   }else{
                     let block = `
                     <div class="row justify-content-center" id="downgrup" style="padding-bottom: 100px;">
                       <div class="card" style="width: 20 rem;">
-                        <img src="${data.cover}" class="card-img-top" alt="..." style="padding-top:7px;">
+                        <video class="card-img-top" alt="..." poster="${data.cover}" style="padding-top:7px;" controls>
+                          <source src="${datas[0].url}" type="video/mp4">
+                        </video>
+                        
                         <div class="card-body">
                           <h5 class="card-title">${data.account.nickname}</h5>
                           <p class="card-text">${data.caption}</p>
