@@ -121,7 +121,19 @@ $ python3 -m tiktok_downloader --host=0.0.0.0 --port=8000 --server
 ## Preview
 <img src="image/web.png">
 
+## Request API using curl & wget
 
+```bash
+$ wget -O result.mp4 $(curl -sG http://127.0.0.1:8000/snaptik -d url=https://vm.tiktok.com/xxxxxxxx/|jq .[0].url -r)
+```
+
+### Endpoint 
+| Name | Endpoint | Status|
+|----|---------|--------|
+| <a href="snaptik.app">Snaptik</a> | /snaptik | ✓
+| <a href="tikmate.online">Tikmate</a> | /tikmate |✓
+| <a href="musicaldown.com/">MusicalDown | /mdown|✓
+| <a href="ssstik.io">ssstik</a> | /ssstik | ✓
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
 
