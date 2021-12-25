@@ -1,6 +1,6 @@
 from requests.models import InvalidURL
-from . import snaptik
-from . import info_videotiktok
+from .snaptik import snaptik
+from .utils import info_videotiktok
 from ast import literal_eval
 import re
 import requests

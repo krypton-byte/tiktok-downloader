@@ -5,7 +5,7 @@ from cloudscraper import (
     Session
 )
 import re
-from . import info_videotiktok
+from .utils import info_videotiktok
 from requests.models import InvalidURL
 
 

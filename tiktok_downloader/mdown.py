@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from requests.models import InvalidURL
-from . import info_videotiktok
+from .utils import info_videotiktok
 
 
 class mdown(requests.Session):

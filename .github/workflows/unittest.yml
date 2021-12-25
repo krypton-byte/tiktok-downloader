@@ -21,7 +21,11 @@ jobs:
       run: |
         sudo apt-get install --only-upgrade openssl -y
         python -m pip install --upgrade pip
+        python -m pip install flake8
         python setup.py install --user
     - name: Testing
       run: |
         python -m tiktok_downloader.test
+    - name: PEP8
+      run: |
+        flake8

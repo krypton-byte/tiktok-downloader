@@ -1,10 +1,8 @@
-from typing import Any
 import requests
 import json
 from datetime import datetime
 import re
 from faker import Faker
-from requests.structures import CaseInsensitiveDict
 fake = Faker()
 
 
@@ -14,7 +12,7 @@ class info_post(requests.Session):
     '''
     def __init__(self, url: str) -> None:
         super().__init__()
-        self.headers:dict[str, Any] = {
+        self.headers = {
             "sec-ch-ua": '"Google Chrome";v="89", \
                 "Chromium";v="89", \
                 ";Not A Brand";v="99"',
