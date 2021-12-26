@@ -51,3 +51,7 @@ class tikmate(requests.Session):
                     decode
                 )
         ]
+
+
+def Tikmate(url: str):
+    return tikmate().get_media(url)

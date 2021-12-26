@@ -53,3 +53,7 @@ class mdown(requests.Session):
                 'html.parser'
             ).find_all('a', attrs={'target': '_blank'})
         ]
+
+
+def Mdown(url: str):
+    return mdown().get_media(url)

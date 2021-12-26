@@ -4,7 +4,6 @@ from .utils import info_videotiktok
 from .Except import InvalidUrl
 from requests import Session
 from re import findall
-from os.path import dirname
 from .decoder import decoder
 
 
@@ -46,7 +45,7 @@ class snaptik(Session):
                 self.resp.text
             )[0]
         ))
-        
+
         stderr.flush()
         return [
             info_videotiktok(
@@ -66,3 +65,7 @@ class snaptik(Session):
 
     def __iter__(self):
         yield from self.get_media()
+
+
+def Snaptik(url: str):
+    return snaptik(url).get_media()

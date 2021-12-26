@@ -101,3 +101,7 @@ class ssstik(Session):
             return hasil
         except IndexError:
             raise InvalidURL()
+
+
+def Ssstik(url: str, delay=10):
+    return ssstik(delay).get_media(url)

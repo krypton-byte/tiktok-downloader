@@ -1,18 +1,17 @@
-from . import mdown
 from flask import (
     Flask,
     request,
     render_template,
     Response
 )
-from . import (
-    info_post,
-    snaptik,
-    ssstik,
-    tikmate
-)
+from .mdown import Mdown
+from .snaptik import Snaptik
+from .ssstik import Ssstik
+from .tikmate import Tikmate
+from .scrapper import info_post
 import json
 import os
+
 
 app = Flask(
     __name__,
@@ -76,15 +75,13 @@ def snapt(path):
         return json.dumps({'msg': 'path tidak ditemukan'})
     if request.args.get('url'):
         try:
-            res = []
-            if path == 'snaptik':
-                res = snaptik(request.args['url']).get_media()
-            elif path == 'ssstik':
-                res = ssstik().get_media(request.args['url'])
-            elif path == 'tikmate':
-                res = tikmate().get_media(request.args['url'])
-            elif path == 'mdown':
-                res = mdown().get_media(request.args['url'])
+            service = ({
+                'snaptik': Snaptik,
+                'ssstik': Ssstik,
+                'tikmate': Tikmate,
+                'mdown': Mdown
+            }).get(path, Snaptik)
+            res = service(request.args['url'])
             return Response(
                 json.dumps(
                     [
