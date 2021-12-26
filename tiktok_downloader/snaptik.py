@@ -1,11 +1,11 @@
 from sys import stderr
 from ast import literal_eval
 from .utils import info_videotiktok
-from py_mini_racer import MiniRacer
 from .Except import InvalidUrl
 from requests import Session
 from re import findall
 from os.path import dirname
+from .decoder import decoder
 
 
 class snaptik(Session):
@@ -17,10 +17,6 @@ class snaptik(Session):
     [<[type:video]>, <[type:video]>]
     ```
     '''
-    decoder = MiniRacer()
-    decoder.eval(
-        open(dirname(__file__)+'/decoder.js', 'r').read()
-    )
 
     def __init__(self, tiktok_url: str) -> None:
         super().__init__()
@@ -44,13 +40,13 @@ class snaptik(Session):
         ```
         '''
         stderr.flush()
-        d = literal_eval(
+        dec = decoder(*literal_eval(
             findall(
                 r'\(\".*?,.*?,.*?,.*?,.*?.*?\)',
                 self.resp.text
             )[0]
-        ).__str__()
-        dec = self.decoder.eval(f"decoder{d}")
+        ))
+        
         stderr.flush()
         return [
             info_videotiktok(

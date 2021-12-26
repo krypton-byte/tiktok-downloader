@@ -16,7 +16,7 @@ arg = argparse.ArgumentParser(
 arg.add_argument('--snaptik', action='store_true')
 arg.add_argument('--ssstik', action='store_true')
 arg.add_argument('--info', action='store_true')
-arg.add_argument('--url')
+arg.add_argument('--url', type=str, required=True)
 arg.add_argument('--server', action='store_true')
 arg.add_argument('--host', type=str, default='127.0.0.1')
 arg.add_argument('--debug', action='store_true')
@@ -51,7 +51,8 @@ elif parse.url:
                 ok[0].download(parse.save)
             else:
                 os.system("python3 -m tiktok_downloader --help")
-        except Exception:
+        except Exception as e:
+            print(e)
             stderr.write('Post Not Found\n')
             stderr.flush()
             sys.exit(1)

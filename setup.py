@@ -24,8 +24,7 @@ setup(
           'flask',
           'cloudscraper',
           'requests',
-          'faker',
-          'py-mini-racer'
+          'faker'
       ],
   classifiers=[
     'Development Status :: 3 - Alpha',

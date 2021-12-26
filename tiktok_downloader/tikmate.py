@@ -1,5 +1,5 @@
 from requests.models import InvalidURL
-from .snaptik import snaptik
+from .decoder import decoder
 from .utils import info_videotiktok
 from ast import literal_eval
 import re
@@ -42,13 +42,12 @@ class tikmate(requests.Session):
         if "'error_api_get'" in media.text:
             raise InvalidURL()
         tt = re.findall(r'\(\".*?,.*?,.*?,.*?,.*?.*?\)', media.text)
-        d = literal_eval(tt[0]).__str__()
-        decode = snaptik.decoder.eval(f'decoder{d}')
+        decode = decoder(*literal_eval(tt[0]))
         return [
             info_videotiktok(
                 self.BASE_URL+x,
                 self) for x in re.findall(
-                    r'(download.php\?token.*?)\\\\\"',
+                    r'(download.php\?token.*?)\"',
                     decode
                 )
         ]
