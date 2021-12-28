@@ -118,6 +118,8 @@ $ python3 -m tiktok_downloader --url=https://www.tiktok.com/@xxxx/video/xxxx --i
 ```bash
 $ python3 -m tiktok_downloader --host=0.0.0.0 --port=8000 --server
 ```
+## Deploy Heroku
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/krypton-byte/tiktok-downloader/tree/master)
 ## Preview
 <img src="image/web.png">
 

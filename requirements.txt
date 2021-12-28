@@ -1,0 +1,5 @@
+bs4
+flask
+cloudscraper
+requests
+faker

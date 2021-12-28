@@ -1,0 +1,13 @@
+{
+    "name":"Tiktok Downloader",
+    "description":" Without Watermark Lightweight & No Ads (Open Source)",
+    "stack":"heroku-20",
+    "repository":"https://github.com/krypton-byte/titok-downloader",
+    "keywords":[
+        "tiktok-downloader",
+        "python",
+        "without",
+        "nowm",
+        "lightweigth"
+    ]
+}
