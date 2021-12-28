@@ -69,10 +69,14 @@ def snapt(path):
                 continue
         else:
             return Response(json.dumps({
-                'msg': 'url tidak valid'
+                'msg': 'Url is invalid'
             }), headers={'Content-Type': 'application/json'})
     elif path not in ['snaptik', 'ssstik', 'tikmate', 'mdown']:
-        return json.dumps({'msg': 'path tidak ditemukan'})
+        return Response(
+            json.dumps({'msg': 'Path Not Found'}, indent=4),
+            status=404,
+            content_type='application/json'
+        )
     if request.args.get('url'):
         try:
             service = ({
@@ -82,6 +86,13 @@ def snapt(path):
                 'mdown': Mdown
             }).get(path, Snaptik)
             res = service(request.args['url'])
+            if request.args.get('type') == 'embed':
+                for i in res:
+                    if i.type == 'video':
+                        return Response(
+                            i.download().getvalue(),
+                            content_type='video/mp4'
+                        )
             return Response(
                 json.dumps(
                     [
@@ -100,7 +111,7 @@ def snapt(path):
             print(e)
             return Response(
                 json.dumps({
-                    'msg': 'url tidak valid'
+                    'msg': 'Url is invalid'
                 }, indent=4),
                 headers={'Content-Type': 'application/json'}
             )
