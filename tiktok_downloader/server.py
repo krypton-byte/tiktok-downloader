@@ -1,16 +1,12 @@
-from tiktok_downloader.tikdown import TikDown
 from flask import (
     Flask,
     request,
     render_template,
     Response
 )
-from .mdown import Mdown
+from . import services
 from .snaptik import Snaptik
-from .ssstik import Ssstik
-from .tikmate import Tikmate
 from .scrapper import info_post
-from .ttdownloader import ttdownloader
 import json
 import os
 
@@ -20,14 +16,6 @@ app = Flask(
     template_folder=os.path.abspath(__file__+'/../templates'),
     static_folder=os.path.abspath(__file__+'/../static')
 )
-services = ({
-                'snaptik': Snaptik,
-                'ssstik': Ssstik,
-                'tikmate': Tikmate,
-                'mdown': Mdown,
-                'ttdownloader': ttdownloader,
-                'tikdown': TikDown
-            })
 
 
 @app.route('/')

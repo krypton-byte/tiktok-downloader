@@ -3,22 +3,22 @@ import json
 import os
 import sys
 import requests
-from .ssstik import Ssstik
+from . import services
 from .snaptik import Snaptik
-from .mdown import Mdown
-from .tikmate import Tikmate
 from .scrapper import info_post
 from sys import stderr
 
 
 arg = argparse.ArgumentParser(
     prog=f"python3 -m {os.path.dirname(__file__).split('/')[-1]}",
-    description='Wellcome Maker'
+    description='Tiktok Downloader [CLI]'
 )
-arg.add_argument('--snaptik', action='store_true')
-arg.add_argument('--ssstik', action='store_true')
-arg.add_argument('--mdown', action='store_true')
-arg.add_argument('--tikmate', action='store_true')
+
+# Services
+servgroup = arg.add_argument_group('list of services')
+for key in services.keys():
+    servgroup.add_argument(f'--{key}', action='store_true')
+
 arg.add_argument('--info', action='store_true')
 arg.add_argument('--url', type=str)
 arg.add_argument('--server', action='store_true')
@@ -32,17 +32,12 @@ if parse.server:
     from .server import app
     app.run(host=parse.host, port=parse.port, debug=bool(parse.debug))
 elif parse.url:
-    service = (
-        (
-            parse.snaptik and Snaptik
-        ) or (
-            parse.ssstik and Ssstik
-        ) or (
-            parse.tikmate and Tikmate
-        ) or (
-            parse.mdown and Mdown
-        ) or Snaptik
-    )
+    for key, val in services.items():
+        if getattr(parse, key):
+            service = val
+            break
+    else:
+        service = Snaptik
     try:
         ok = service(parse.url)
         if parse.json or not(parse.save):
@@ -51,7 +46,8 @@ elif parse.url:
                     [
                         {
                             'type': i.type,
-                            'url': i.json
+                            'url': i.json,
+                            'watermark': i.watermark
                         } for i in ok
                     ],
                     indent=4
