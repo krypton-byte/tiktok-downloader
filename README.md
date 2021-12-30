@@ -135,10 +135,11 @@ http://127.0.0.1:8000/snaptik?url=https://vm.tiktok.com/xxxxxxxx/&type=embed
 ### Endpoint 
 | Name | Endpoint | Status|
 |----|---------|--------|
-| <a href="snaptik.app">Snaptik</a> | /snaptik | ✓
-| <a href="tikmate.online">Tikmate</a> | /tikmate |✓
-| <a href="musicaldown.com/">MusicalDown | /mdown|✓
-| <a href="ssstik.io">ssstik</a> | /ssstik | ✓
+| <a href="https://snaptik.app">Snaptik</a> | /snaptik | ✓
+| <a href="https://tikmate.online">Tikmate</a> | /tikmate |✓
+| <a href="https://musicaldown.com/">MusicalDown | /mdown|✓
+| <a href="https://ssstik.io">ssstik</a> | /ssstik | ✓
+| <a href="https://ttdownloader.com/">ttdownloader</a> | /ttdownloader | ✓
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
 
