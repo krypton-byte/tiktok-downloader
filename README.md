@@ -128,7 +128,10 @@ $ python3 -m tiktok_downloader --host=0.0.0.0 --port=8000 --server
 ```bash
 $ wget -O result.mp4 $(curl -sG http://127.0.0.1:8000/snaptik -d url=https://vm.tiktok.com/xxxxxxxx/|jq .[0].url -r)
 ```
-
+## you can direct Download using browser or curl
+```
+http://127.0.0.1:8000/snaptik?url=https://vm.tiktok.com/xxxxxxxx/&type=embed
+```
 ### Endpoint 
 | Name | Endpoint | Status|
 |----|---------|--------|
