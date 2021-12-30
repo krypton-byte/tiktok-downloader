@@ -1,3 +1,4 @@
+from tiktok_downloader.tikdown import TikDown
 from flask import (
     Flask,
     request,
@@ -19,6 +20,14 @@ app = Flask(
     template_folder=os.path.abspath(__file__+'/../templates'),
     static_folder=os.path.abspath(__file__+'/../static')
 )
+services = ({
+                'snaptik': Snaptik,
+                'ssstik': Ssstik,
+                'tikmate': Tikmate,
+                'mdown': Mdown,
+                'ttdownloader': ttdownloader,
+                'tikdown': TikDown
+            })
 
 
 @app.route('/')
@@ -72,7 +81,7 @@ def snapt(path):
             return Response(json.dumps({
                 'msg': 'Url is invalid'
             }), headers={'Content-Type': 'application/json'})
-    elif path not in ['snaptik', 'ssstik', 'tikmate', 'mdown', 'ttdownloader']:
+    elif path not in services:
         return Response(
             json.dumps({'msg': 'Path Not Found'}, indent=4),
             status=404,
@@ -80,13 +89,7 @@ def snapt(path):
         )
     if request.args.get('url'):
         try:
-            service = ({
-                'snaptik': Snaptik,
-                'ssstik': Ssstik,
-                'tikmate': Tikmate,
-                'mdown': Mdown,
-                'ttdownloader': ttdownloader
-            }).get(path, Snaptik)
+            service = services.get(path, Snaptik)
             res = service(request.args['url'])
             if request.args.get('type') == 'embed':
                 for i in res:

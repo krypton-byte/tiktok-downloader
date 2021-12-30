@@ -5,6 +5,7 @@ from .tikmate import tikmate
 from .mdown import mdown
 from .Except import InvalidUrl
 from .ttdownloader import ttdownloader
+from .tikdown import TikDown
 
 __all__ = [
     'snaptik',
@@ -13,5 +14,6 @@ __all__ = [
     'tikmate',
     'mdown',
     'InvalidUrl',
-    'ttdownloader'
+    'ttdownloader',
+    'TikDown'
 ]

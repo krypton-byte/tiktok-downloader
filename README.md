@@ -140,6 +140,7 @@ http://127.0.0.1:8000/snaptik?url=https://vm.tiktok.com/xxxxxxxx/&type=embed
 | <a href="https://musicaldown.com/">MusicalDown | /mdown|✓
 | <a href="https://ssstik.io">ssstik</a> | /ssstik | ✓
 | <a href="https://ttdownloader.com/">ttdownloader</a> | /ttdownloader | ✓
+| <a href="https://tikdown.org/">tikdown</a> | /tikdown | ✓
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
 
