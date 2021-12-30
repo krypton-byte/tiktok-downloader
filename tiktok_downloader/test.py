@@ -7,9 +7,9 @@ from .mdown import mdown
 
 
 class TikTok(unittest.TestCase):
-    base_url = 'https://www.tiktok.com/\
-                    @tribunsumselcom/\
-                    video/7020708969563917595'
+    base_url = ('https://www.tiktok.com/' +
+                '@tribunsumselcom/' +
+                'video/7020708969563917595')
 
     def test_snaptk(self):
         self.assertTrue(snaptik(self.base_url).get_media())

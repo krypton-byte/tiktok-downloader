@@ -5,10 +5,17 @@ from requests import Session
 
 class info_videotiktok:
 
-    def __init__(self,  url, Session: Session, type='video') -> None:
+    def __init__(
+        self,
+        url: str,
+        Session: Session,
+        type='video',
+        watermark: bool = False
+    ) -> None:
         self.json = url
         self.type = type
         self.Session = Session
+        self.watermark = watermark
 
     def get_size(self) -> int:
         return int(
@@ -25,7 +32,10 @@ class info_videotiktok:
             return BytesIO(self.Session.get(self.json).content)
 
     def __str__(self) -> str:
-        return f"<[type:{self.type}]>"
+        f = (
+            self.type == 'video' and f' \
+watermark: {self.watermark}]>') or ']>'
+        return f"<[type: \"{self.type}\""+f
 
     def __repr__(self) -> str:
         return self.__str__()

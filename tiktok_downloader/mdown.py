@@ -10,8 +10,8 @@ class mdown(requests.Session):
     def __init__(self) -> None:
         super().__init__()
         self.headers = {
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 \
-                (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"
         }
 
     def get_media(self, url: str):
@@ -29,8 +29,8 @@ class mdown(requests.Session):
             headers={
                 "origin": "https://musicaldown.com",
                 "referer": "https://musicaldown.com/en/",
-                "sec-ch-ua": '"Chromium";v="94", "Google Chrome";v="94", \
-                    ";Not A Brand";v="99"',
+                "sec-ch-ua": '"Chromium";v="94", "Google Chrome";v="94", '
+                '";Not A Brand";v="99"',
                 "sec-ch-ua-mobile": "?0",
                 "sec-ch-ua-platform": "Linux",
                 "sec-fetch-dest": "document",
@@ -38,8 +38,9 @@ class mdown(requests.Session):
                 "sec-fetch-site": "same-origin",
                 "sec-fetch-user": "?1",
                 "upgrade-insecure-requests": "1",
-                "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 \
-                    (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"
+                "user-agent": "Mozilla/5.0 (X11; Linux x86_64) "
+                "AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"
             }
         )
         if 'err' in res.url:

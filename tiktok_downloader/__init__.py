@@ -4,6 +4,7 @@ from .scrapper import info_post
 from .tikmate import tikmate
 from .mdown import mdown
 from .Except import InvalidUrl
+from .ttdownloader import ttdownloader
 
 __all__ = [
     'snaptik',
@@ -11,5 +12,6 @@ __all__ = [
     'info_post',
     'tikmate',
     'mdown',
-    'InvalidUrl'
+    'InvalidUrl',
+    'ttdownloader'
 ]

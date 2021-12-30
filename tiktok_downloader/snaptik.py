@@ -23,9 +23,9 @@ class snaptik(Session):
             'https://snaptik.app/abc.php',
             params={'url': tiktok_url, 'lang': 'en'},
             headers={
-                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) \
-                    AppleWebKit/537.36 (KHTML, like Gecko) \
-                    Chrome/86.0.4240.111 Safari/537.36'
+                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
+                'AppleWebKit/537.36 (KHTML, like Gecko) '
+                'Chrome/86.0.4240.111 Safari/537.36'
             }
         )
         if 'error_api_web;' in self.resp.text or 'Error:' in self.resp.text:

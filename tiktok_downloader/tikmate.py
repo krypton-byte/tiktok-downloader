@@ -12,9 +12,9 @@ class tikmate(requests.Session):
     def __init__(self) -> None:
         super().__init__()
         self.headers = {
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) \
-                AppleWebKit/537.36 (KHTML, like Gecko) \
-                Chrome/86.0.4240.111 Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/86.0.4240.111 Safari/537.36'
         }
 
     def get_media(self, url: str) -> list[info_videotiktok]:
@@ -34,9 +34,9 @@ class tikmate(requests.Session):
                 "sec-fetch-site": "same-origin",
                 "sec-fetch-user": "?1",
                 "upgrade-insecure-requests": "1",
-                "user-agent": "Mozilla/5.0 (X11; Linux x86_64) \
-                    AppleWebKit/537.36 (KHTML, like Gecko) \
-                    Chrome/94.0.4606.81 Safari/537.36"
+                "user-agent": "Mozilla/5.0 (X11; Linux x86_64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/94.0.4606.81 Safari/537.36"
                 }
         )
         if "'error_api_get'" in media.text:

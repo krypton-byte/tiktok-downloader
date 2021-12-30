@@ -9,6 +9,7 @@ from .snaptik import Snaptik
 from .ssstik import Ssstik
 from .tikmate import Tikmate
 from .scrapper import info_post
+from .ttdownloader import ttdownloader
 import json
 import os
 
@@ -71,7 +72,7 @@ def snapt(path):
             return Response(json.dumps({
                 'msg': 'Url is invalid'
             }), headers={'Content-Type': 'application/json'})
-    elif path not in ['snaptik', 'ssstik', 'tikmate', 'mdown']:
+    elif path not in ['snaptik', 'ssstik', 'tikmate', 'mdown', 'ttdownloader']:
         return Response(
             json.dumps({'msg': 'Path Not Found'}, indent=4),
             status=404,
@@ -83,7 +84,8 @@ def snapt(path):
                 'snaptik': Snaptik,
                 'ssstik': Ssstik,
                 'tikmate': Tikmate,
-                'mdown': Mdown
+                'mdown': Mdown,
+                'ttdownloader': ttdownloader
             }).get(path, Snaptik)
             res = service(request.args['url'])
             if request.args.get('type') == 'embed':

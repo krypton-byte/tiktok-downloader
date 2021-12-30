@@ -13,9 +13,9 @@ class info_post(requests.Session):
     def __init__(self, url: str) -> None:
         super().__init__()
         self.headers = {
-            "sec-ch-ua": '"Google Chrome";v="89", \
-                "Chromium";v="89", \
-                ";Not A Brand";v="99"',
+            "sec-ch-ua": '"Google Chrome";v="89", '
+            '"Chromium";v="89", '
+            '";Not A Brand";v="99"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": "Linux",
             "sec-fetch-dest": "document",
@@ -23,9 +23,9 @@ class info_post(requests.Session):
             "sec-fetch-site": "none",
             "sec-fetch-user": "?1",
             "upgrade-insecure-requests": "1",
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) \
-                AppleWebKit/537.36 (KHTML, like Gecko) \
-                Chrome/89.0.4389.90 Safari/537.36",
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/89.0.4389.90 Safari/537.36",
             "X-Forwarded-For": fake.ipv4()
         }
         self.html = self.get(url)

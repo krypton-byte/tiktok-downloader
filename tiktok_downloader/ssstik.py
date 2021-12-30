@@ -29,8 +29,8 @@ class ssstik(Session):
         "sec-fetch-dest": "",
         "sec-fetch-mode": "cors",
         "sec-fetch-site": "same-origin",
-        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 \
-            (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36"}
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36"}
 
     def __init__(self, delay: int = 10, **kwargs) -> None:
         super().__init__(**kwargs)
