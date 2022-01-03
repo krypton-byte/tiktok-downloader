@@ -36,7 +36,7 @@ def pattern2(js: dict) -> dict[str, Any]:
 
 pattern = [
     (re.compile(i), f) for i, f in [
-        (r'\>(\{\"props\":.*?)\<\/script>', pattern2),
+        (r'\>(\{\"props\":.*?)\<\/script>', pattern1),
         (r'window\[\'SIGI_STATE\'\]\=(.*?\});', pattern2)
     ]
 ]
