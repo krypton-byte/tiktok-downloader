@@ -39,42 +39,32 @@
       $(document).ready(function (){
         $("#submitter").on("click", function(){
           const tiktok = $("#tiktokurl").val()
-          $.ajax({'url':'/info', data:{url:tiktok},success:function (data){
-            if(!data.msg){
-                $.ajax({url:'/snaptik',data:{url:tiktok},success: function (datas){
-                  if(datas.msg){
-                    Swal.fire({
+          $.ajax({'url':'/auto', data:{url:tiktok},success:function (data){
+            if(data.msg){
+                Swal.fire({
                       icon: 'error',
                       title: 'Oops...',
-                      text: 'server is busy'
-                    })
-                  }else{
-                    let block = `
-                    <div class="row justify-content-center" id="downgrup" style="padding-bottom: 100px;">
-                      <div class="card" style="width: 20 rem;">
-                        <video class="card-img-top" alt="..." poster="${data.cover}" style="padding-top:7px;" controls>
-                          <source src="${datas[0].url}" type="video/mp4">
-                        </video>
-                        
-                        <div class="card-body">
-                          <h5 class="card-title">${data.account.nickname}</h5>
-                          <p class="card-text">${data.caption}</p>
-                        </div>
-                        ${datas.map((x)=>{
-                          return '<a href="'+x.url+'" class="btn btn-primary">'+x.type+' </a>&nbsp;'
-                        })}
-                      </div>
-                  </div>
-                    `
-                    $(".emptydiv").empty().append(block)
-                  }
-                }})
+                      text: data.msg
+                })
             }else{
-              Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Invalid URL!'
-              })
+              let block = `
+              <div class="row justify-content-center" id="downgrup" style="padding-bottom: 100px;">
+                <div class="card" style="width: 20 rem;">
+                  <video class="card-img-top" alt="..." poster="${data.cover}" style="padding-top:7px;" controls>
+                    <source src="${data.video[0].url}" type="video/mp4">
+                  </video>
+                  
+                  <div class="card-body">
+                    <h5 class="card-title"><a href="https://www.tiktok.com/@${data.nickname}">${data.nickname}</a></h5>
+                    <p class="card-text">${data.caption}</p>
+                  </div>
+                  ${data.video.map((x)=>{
+                    return '<a href="'+x.url+'" class="btn btn-primary">'+x.type+' </a>&nbsp;'
+                  })}
+                </div>
+            </div>
+              `
+              $(".emptydiv").empty().append(block)
             }
           }})
         })
