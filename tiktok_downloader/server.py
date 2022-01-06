@@ -48,12 +48,16 @@ def auto():
                         b
                     ):
                         fvid = video.download()
-                        return Response(fvid.getvalue(), content_type='video/mp4')
+                        return Response(
+                            fvid.getvalue(),
+                            content_type='video/mp4'
+                        )
                 else:
                     return Response(
                         json.dumps(
                             {
-                                'account': {} if not('account' in dir(resp)) else {
+                                'account': {} if not(
+                                    'account' in dir(resp)) else {
                                     'avatar': resp.account.avatar,
                                     'username': resp.account.username,
                                     'nickname': resp.account.nickname,
@@ -67,28 +71,30 @@ def auto():
                                     'verified': resp.account.verified
                                 },
                                 'music': resp.music,
-                                'nickname':resp.nickname,
+                                'nickname': resp.nickname,
                                 'cover': resp.cover,
                                 'caption': resp.caption,
                                 'create': resp.create.timestamp(),
                                 'url': resp.url,
                                 'id': resp.id,
                                 'challenges': resp.video.get('challenges', []),
-                                'video':[
+                                'video': [
                                     {
                                         'type': i.type,
                                         'url': i.json
                                     } for i in b
                                 ],
-                                'videoOrigin': resp.video.get('video',[]),
-                                'authorStats': resp.video.get('authorStats', {}),
+                                'videoOrigin': resp.video.get('video', []),
+                                'authorStats': resp.video.get(
+                                    'authorStats',
+                                    {}
+                                ),
                                 'videoStats': resp.video.get('stats', {})
                             },
                             indent=4
                         ),
                         content_type='application/json'
                     )
-                    
             except Exception as e:
                 print(e)
                 continue
@@ -121,7 +127,8 @@ def snapt(path):
                 return Response(
                         json.dumps(
                             {
-                                'account': {} if not('account' in dir(resp)) else {
+                                'account': {} if not(
+                                    'account' in dir(resp)) else {
                                     'avatar': resp.account.avatar,
                                     'username': resp.account.username,
                                     'nickname': resp.account.nickname,
@@ -135,15 +142,16 @@ def snapt(path):
                                     'verified': resp.account.verified
                                 },
                                 'music': resp.music,
-                                'nickname':resp.nickname,
+                                'nickname': resp.nickname,
                                 'cover': resp.cover,
                                 'caption': resp.caption,
                                 'create': resp.create.timestamp(),
                                 'url': resp.url,
                                 'id': resp.id,
                                 'challenges': resp.video.get('challenges', []),
-                                'videoOrigin': resp.video.get('video',[]),
-                                'authorStats': resp.video.get('authorStats', {}),
+                                'videoOrigin': resp.video.get('video', []),
+                                'authorStats': resp.video.get(
+                                    'authorStats', {}),
                                 'videoStats': resp.video.get('stats', {})
                             },
                             indent=4

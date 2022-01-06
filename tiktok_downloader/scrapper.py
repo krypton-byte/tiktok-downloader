@@ -96,6 +96,7 @@ class info_post:
     :param url: video url(tiktok)
     '''
     BASE_URL = 'https://www.tiktok.com'
+
     @RequestTikTok
     def __init__(self, js: dict, full: dict) -> None:
         self.full = full
@@ -114,7 +115,11 @@ class info_post:
         self.video = self.js['props']['pageProps']['itemInfo']['itemStruct']
         self.cover = self.video['video']['cover']
         self.music = self.video['music']['title']
-        self.nickname = self.video.get('nickname', list(set(re.findall('"nickname"\:"([0-9A-Za-z]+)"', full.__str__())))[0])
+        self.nickname = self.video.get(
+            'nickname',
+            list(set(re.findall(
+                r'"nickname"\:"([0-9A-Za-z]+)"',
+                full.__str__())))[0])
         self.caption = self.video['desc']
         self.create = datetime.fromtimestamp(int(self.video['createTime']))
         (
