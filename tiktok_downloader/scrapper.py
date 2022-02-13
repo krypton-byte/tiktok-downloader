@@ -83,6 +83,7 @@ def RequestTikTok(
             "Chrome/89.0.4389.90 Safari/537.36"
         }
         html = requests.get(url, headers=headers)
+        open('anu.html','w').write(html.text)
         for pattern, rregex in regex(html.text).items():
             y = pattern.search(html.text)
             if y:
@@ -118,7 +119,7 @@ class info_post:
         self.nickname = self.video.get(
             'nickname',
             list(set(re.findall(
-                r'"nickname"\:"([0-9A-Za-z]+)"',
+                r'"nickname"\:".*?"',
                 full.__str__())))[0])
         self.caption = self.video['desc']
         self.create = datetime.fromtimestamp(int(self.video['createTime']))
