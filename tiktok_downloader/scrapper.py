@@ -51,7 +51,6 @@ def regex(inspect: str) -> Dict[Pattern, Dict]:
             except Exception:
                 continue
         else:
-            open('new_index.html', 'w').write(inspect)
             raise InvalidUrl()
     return loop(pattern)
 
