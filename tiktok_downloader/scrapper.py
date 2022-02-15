@@ -102,9 +102,8 @@ class info_post:
         self.full = full
         self.js = js
         if not self.js['props']['pageProps'].get('itemInfo'):
-            self.status_code = self.js['props']['pageProps'].get("statusCode")
-            self.id = "error_" + str(self.status_code)
-            raise InvalidUrl("error_" + str(self.status_code))
+            status_code = self.js['props']['pageProps'].get("statusCode", 0)
+            raise InvalidUrl("error_" + str(status_code))
         if not (
             self.js['props']['pageProps']
             ['itemInfo']['itemStruct'].get('challenges')
