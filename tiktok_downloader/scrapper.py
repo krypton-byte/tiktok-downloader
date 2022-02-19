@@ -82,7 +82,6 @@ def RequestTikTok(
             "Chrome/89.0.4389.90 Safari/537.36"
         }
         html = requests.get(url, headers=headers)
-        open('anu.html','w').write(html.text)
         for pattern, rregex in regex(html.text).items():
             y = pattern.search(html.text)
             if y:
@@ -105,7 +104,14 @@ class info_post:
             self.js['props']['pageProps']
             ['itemInfo']['itemStruct'].get('challenges')
         ):
-            self.account = Account(
+            print(self.js)
+            self.account = (self.js['props']
+                    ['pageProps']['itemInfo']
+                    ['itemStruct']['author']
+                ) if isinstance(self.js['props']
+                    ['pageProps']['itemInfo']
+                    ['itemStruct']['author'], str
+                ) else Account(
                 (
                     self.js['props']
                     ['pageProps']['itemInfo']
@@ -159,6 +165,7 @@ class info_post:
 class Account:
 
     def __init__(self, js: dict) -> None:
+        print(js)
         self.avatar = js['avatarThumb']
         self.username = js['uniqueId']
         self.nickname = js['nickname']
