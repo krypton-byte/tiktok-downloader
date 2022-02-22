@@ -100,6 +100,9 @@ class info_post:
     def __init__(self, js: dict, full: dict) -> None:
         self.full = full
         self.js = js
+        if not self.js['props']['pageProps'].get('itemInfo'):
+            status_code = self.js['props']['pageProps'].get("statusCode", 0)
+            raise InvalidUrl("error_" + str(status_code))
         if not (
             self.js['props']['pageProps']
             ['itemInfo']['itemStruct'].get('challenges')
@@ -115,7 +118,7 @@ class info_post:
                 (
                     self.js['props']
                     ['pageProps']['itemInfo']
-                    ['itemStruct']['author']
+                    ['itemStruct']
                 )
             )
         self.video = self.js['props']['pageProps']['itemInfo']['itemStruct']
@@ -165,14 +168,13 @@ class info_post:
 class Account:
 
     def __init__(self, js: dict) -> None:
-        print(js)
-        self.avatar = js['avatarThumb']
-        self.username = js['uniqueId']
-        self.nickname = js['nickname']
-        self.signature = js['signature']
-        self.create = datetime.fromtimestamp(int(js['createTime']))
-        self.verified = js['verified']
-        self.private = js["privateAccount"]
+        self.avatar = js.get('avatarThumb')
+        self.username = js.get('uniqueId')
+        self.nickname = js.get('nickname')
+        self.signature = js.get('signature')
+        self.create = datetime.fromtimestamp(int(js.get('createTime', 0)))
+        self.verified = js.get('verified')
+        self.private = js.get("privateAccount")
 
     def __repr__(self) -> str:
         return f"<(OWNER:{self.username} VERIFIED:{self.verified})>"
