@@ -25,11 +25,12 @@ class info_videotiktok:
             ).headers["Content-Length"]
         )
 
-    def download(self, out: Optional[str] = None) -> Union[None, BytesIO]:
-        if isinstance(out, str):
-            open(out, "wb").write(self.Session.get(self.json).content)
-        else:
-            return BytesIO(self.Session.get(self.json).content)
+    def download(self, out: Optional[str] = None, chunk_size = 1024) -> Union[None, BytesIO]:
+        request = self.Session.get(self.json, stream=True)
+        with (open(out,'wb') if isinstance(out, str) else BytesIO()) as stream:
+            for i in request.iter_content(chunk_size):
+                stream.write(i)
+            return None if isinstance(out, str) else stream
 
     def __str__(self) -> str:
         f = (

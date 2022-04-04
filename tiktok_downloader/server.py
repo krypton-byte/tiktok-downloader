@@ -54,50 +54,18 @@ def auto():
                         )
                 else:
                     return Response(
-                        json.dumps(
-                            {
-                                'account': {} if not(
-                                    'account' in dir(resp)) else {
-                                    'avatar': resp.account.avatar,
-                                    'username': resp.account.username,
-                                    'nickname': resp.account.nickname,
-                                    'signature': resp.account.signature,
-                                    'create': (
-                                        (
-                                            resp.account.create
-                                            and
-                                            resp.account.create.timestamp()
-                                        ) or 0),
-                                    'verified': resp.account.verified
-                                },
-                                'music': resp.music,
-                                'nickname': resp.nickname,
-                                'cover': resp.cover,
-                                'caption': resp.caption,
-                                'create': resp.create.timestamp(),
-                                'url': resp.url,
-                                'id': resp.id,
-                                'challenges': resp.video.get('challenges', []),
-                                'video': [
-                                    {
-                                        'type': i.type,
-                                        'url': i.json
-                                    } for i in b
-                                ],
-                                'videoOrigin': resp.video.get('video', []),
-                                'authorStats': resp.video.get(
-                                    'authorStats',
-                                    {}
-                                ),
-                                'videoStats': resp.video.get('stats', {})
-                            },
+                        json.dumps(list(map(lambda x:{"url":x.json, "type": x.type, "service": name, "watermark": x.watermark}, b)),
                             indent=4
                         ),
                         content_type='application/json'
                     )
             except Exception as e:
-                print(e)
-                continue
+                return Response(
+                        json.dumps({"error":str(e)},
+                            indent=4
+                        ),
+                        content_type='application/json'
+                    )
         return Response(json.dumps(
                 {'msg': 'server busy'},
                 indent=4
@@ -126,34 +94,7 @@ def snapt(path):
                 resp = info_post(request.args['url'])
                 return Response(
                         json.dumps(
-                            {
-                                'account': {} if not(
-                                    'account' in dir(resp)) else {
-                                    'avatar': resp.account.avatar,
-                                    'username': resp.account.username,
-                                    'nickname': resp.account.nickname,
-                                    'signature': resp.account.signature,
-                                    'create': (
-                                        (
-                                            resp.account.create
-                                            and
-                                            resp.account.create.timestamp()
-                                        ) or 0),
-                                    'verified': resp.account.verified
-                                },
-                                'music': resp.music,
-                                'nickname': resp.nickname,
-                                'cover': resp.cover,
-                                'caption': resp.caption,
-                                'create': resp.create.timestamp(),
-                                'url': resp.url,
-                                'id': resp.id,
-                                'challenges': resp.video.get('challenges', []),
-                                'videoOrigin': resp.video.get('video', []),
-                                'authorStats': resp.video.get(
-                                    'authorStats', {}),
-                                'videoStats': resp.video.get('stats', {})
-                            },
+                            resp.aweme,
                             indent=4
                         ),
                         content_type='application/json'
@@ -187,7 +128,8 @@ def snapt(path):
                     [
                         {
                             'type': i.type,
-                            'url': i.json
+                            'url': i.json,
+                            'watermark': i.watermark
                         } for i in res
                     ],
                     indent=4
