@@ -84,7 +84,6 @@ def auto():
 @app.route('/<path:path>')
 def snapt(path):
     if path == 'info':
-        for i in range(10):
             try:
                 if not request.args.get('url'):
                     return json.dumps(
@@ -101,9 +100,7 @@ def snapt(path):
                     )
             except Exception as e:
                 print(e)
-                continue
-        else:
-            return Response(json.dumps({
+                return Response(json.dumps({
                 'msg': 'Url is invalid'
             }), headers={'Content-Type': 'application/json'})
     elif path not in services:
@@ -139,7 +136,6 @@ def snapt(path):
                 }
             )
         except Exception as e:
-            print(e)
             return Response(
                 json.dumps({
                     'msg': 'Url is invalid'
