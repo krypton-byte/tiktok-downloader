@@ -53,17 +53,17 @@ class info_post(Session):
 
     def download(self, out:Optional = None, watermark:Optional[bool] = False,chunk_size: int = 1024) -> Union[None, BytesIO]:
         request = self.get(self.aweme['aweme_detail']['video'][['play_addr', 'download_addr'][watermark]]['url_list'][0], stream=True)
-        with (open(out,'wb') if isinstance(out, str) else BytesIO()) as stream:
-            for i in request.iter_content(chunk_size):
-                stream.write(i)
-            return None if isinstance(out, str) else stream
+        stream = open(out,'wb') if isinstance(out, str) else BytesIO()
+        for i in request.iter_content(chunk_size):
+            stream.write(i)
+        return None if isinstance(out, str) else stream
     
     def download_music(self, out:Optional = None, chunk_size: int = 1024) -> Union[None, BytesIO]:
         request = self.get(self.aweme['aweme_detail']['music']['play_url']['uri'], stream=True)
-        with (open(out,'wb') if isinstance(out, str) else BytesIO()) as stream:
-            for i in request.iter_content(chunk_size):
-                stream.write(i)
-            return None if isinstance(out, str) else stream
+        stream = open(out,'wb') if isinstance(out, str) else BytesIO()
+        for i in request.iter_content(chunk_size):
+            stream.write(i)
+        return None if isinstance(out, str) else stream
 
     def __repr__(self):
         return f'<[{self.id} {self.duration}s]>'
