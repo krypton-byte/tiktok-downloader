@@ -1,7 +1,19 @@
 from io import BytesIO
 from typing import Optional, Union
 from requests import Session
+from tqdm.rich import tqdm
+from warnings import simplefilter
+from time import sleep
+simplefilter('ignore')
 
+
+class Odummy:
+    def __init__(self):
+        pass
+    def f(self, *arg, **kwarg):
+        return None
+    def __getattr__(self, name):
+        return self.f
 
 class info_videotiktok:
 
@@ -25,11 +37,15 @@ class info_videotiktok:
             ).headers["Content-Length"]
         )
 
-    def download(self, out: Optional[str] = None, chunk_size = 1024) -> Union[None, BytesIO]:
+    def download(self, out: Optional[str] = None, chunk_size = 1024, bar=False) -> Union[None, BytesIO]:
         request = self.Session.get(self.json, stream=True)
         stream = open(out,'wb') if isinstance(out, str) else BytesIO()
-        for i in request.iter_content(chunk_size):
-            stream.write(i)
+        with tqdm(total=int(request.headers['Content-Length']), unit='iB', unit_scale=True) if bar else Odummy() as pbar:
+            for i in request.iter_content(chunk_size):
+                stream.write(i)
+                pbar.update(i.__len__())
+            pbar.update(int(request.headers['Content-Length']))
+            not isinstance(pbar, Odummy) and sleep(1)
         return None if isinstance(out, str) else stream
 
     def __str__(self) -> str:
