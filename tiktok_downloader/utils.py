@@ -4,6 +4,7 @@ from requests import Session
 from tqdm.rich import tqdm
 from warnings import simplefilter
 from time import sleep
+from _io import BufferedWriter
 simplefilter('ignore')
 
 
@@ -37,16 +38,16 @@ class info_videotiktok:
             ).headers["Content-Length"]
         )
 
-    def download(self, out: Optional[str] = None, chunk_size = 1024, bar=False) -> Union[None, BytesIO]:
+    def download(self, out: Optional[Union[str, BufferedWriter]] = None, chunk_size = 1024, bar=False) -> Union[None, BytesIO]:
         request = self.Session.get(self.json, stream=True)
-        stream = open(out,'wb') if isinstance(out, str) else BytesIO()
+        stream = out if isinstance(out, BufferedWriter) else (open(out,'wb') if isinstance(out, str) else BytesIO())
         with tqdm(total=int(request.headers['Content-Length']), unit='iB', unit_scale=True) if bar else Odummy() as pbar:
             for i in request.iter_content(chunk_size):
                 stream.write(i)
                 pbar.update(i.__len__())
             pbar.update(int(request.headers['Content-Length']))
             not isinstance(pbar, Odummy) and sleep(1)
-        return None if isinstance(out, str) else stream
+        return None if isinstance(out, (str, BufferedWriter)) else stream
 
     def __str__(self) -> str:
         f = (

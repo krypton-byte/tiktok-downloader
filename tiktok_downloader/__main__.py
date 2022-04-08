@@ -18,22 +18,32 @@ arg = argparse.ArgumentParser(
 )
 
 # Services
-servgroup = arg.add_argument_group('list of services')
+servgroup = arg.add_argument_group('List Of Services')
+serg = servgroup.add_mutually_exclusive_group()
 for key in services.keys():
-    servgroup.add_argument(f'--{key}', action='store_true')
+    serg.add_argument(f'--{key}', action='store_true')
 
 # Web Configuration
 servconf = arg.add_argument_group('Web Configuration')
-servconf.add_argument('--server', action='store_true')
-servconf.add_argument('--host', type=str, default='127.0.0.1')
-servconf.add_argument('--debug', action='store_true')
-servconf.add_argument('--port', default=8000, type=int)
+servconf.add_argument('--host', type=str, default='127.0.0.1', help='Set host to run this web')
+servconf.add_argument('--debug', action='store_true', help='Set flask mode to debug')
+servconf.add_argument('--port', default=8000, type=int, help='Set port')
+
+#Mode Server | CLI
+mod = arg.add_argument_group('Mode')
+mode = mod.add_mutually_exclusive_group(required=True)
+mode.add_argument('--server', action='store_true', help='Run as web application')
+mode.add_argument('--url', type=str, help='Video URL')
+
 # CLI
-cli = arg.add_argument_group('CLI params')
-cli.add_argument('--info', action='store_true')
-cli.add_argument('--url', type=str)
-cli.add_argument('--json', action='store_true')
-cli.add_argument('--save', type=argparse.FileType('w'))
+cli = arg.add_argument_group('Optional')
+cli.add_argument('--info', action='store_true', help='Print info video like author, id & etc')
+
+# Output
+outa = arg.add_argument_group('Output Type')
+out = outa.add_mutually_exclusive_group()
+out.add_argument('--json', action='store_true', help='Print result to json format')
+out.add_argument('--save', type=argparse.FileType('wb'), help='Write the result to file')
 parse = arg.parse_args()
 def info(url: str, js: Optional[bool] = False):
     infojson = info_post(url)
