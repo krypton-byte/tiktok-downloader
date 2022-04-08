@@ -55,11 +55,11 @@
                   </video>
                   
                   <div class="card-body">
-                    <h5 class="card-title"><a href="https://www.tiktok.com/@${data.aweme_detail.unique_id}">${data.aweme_detail.unique_id}</a></h5>
+                    <h5 class="card-title"><a href="https://www.tiktok.com/@${data.aweme_detail.author.unique_id}">${data.aweme_detail.author.unique_id}</a></h5>
                     <p class="card-text">${data.aweme_detail.desc}</p>
                   </div>
                   ${data.aweme_detail.video.play_addr.url_list.map((x)=>{
-                    return '<a href="'+x+'" target="_blank" class="btn btn-primary"> Video </a>';
+                    return '<a href="'+x+'" target="_blank" class="btn btn-primary"> Video </a>&nbsp;';
                   })}
                   <a href="${data.aweme_detail.music.play_url.uri}" target="_blank" class="btn btn-primary"> Music </a>
                 </div>
