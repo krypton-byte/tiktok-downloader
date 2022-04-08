@@ -4,6 +4,8 @@ from typing import Optional, Union
 from io import BytesIO
 from datetime import datetime
 from .Except import InvalidUrl
+from .utils import info_videotiktok
+
 class Author:
     def __init__(self, ascp: dict):
         self.username = ascp['unique_id']
@@ -51,8 +53,21 @@ class info_post(Session):
         self.music_duration = self.music_author = self.aweme['aweme_detail']['music']['duration']
         self.duration = int(self.aweme['aweme_detail']['video']['duration']/1000)
 
+    def utils(self) -> list[info_videotiktok]:
+        return [
+            info_videotiktok(self.downloadLink(False), self),
+            info_videotiktok(self.downloadLink(True), self, watermark=True),
+            info_videotiktok(self.aweme['aweme_detail']['music']['play_url']['uri'], self, "music")
+        ]
+    @classmethod
+    def service(cls, url: str) -> list[info_videotiktok]:
+        return cls(url).utils()
+
+    def downloadLink(self, watermark: Optional[bool] = False) -> str:
+        return self.aweme['aweme_detail']['video'][['play_addr', 'download_addr'][watermark]]['url_list'][0]
+
     def download(self, out:Optional = None, watermark:Optional[bool] = False,chunk_size: int = 1024) -> Union[None, BytesIO]:
-        request = self.get(self.aweme['aweme_detail']['video'][['play_addr', 'download_addr'][watermark]]['url_list'][0], stream=True)
+        request = self.get(self.downloadLink(watermark), stream=True)
         stream = open(out,'wb') if isinstance(out, str) else BytesIO()
         for i in request.iter_content(chunk_size):
             stream.write(i)

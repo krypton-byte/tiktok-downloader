@@ -23,5 +23,6 @@ services = {
     'tikmate': Tikmate,
     'mdown': Mdown,
     'ttdownloader': ttdownloader,
-    'tikdown': TikDown
+    'tikdown': TikDown,
+    'tiktok': info_post.service
 }

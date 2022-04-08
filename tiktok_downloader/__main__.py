@@ -30,7 +30,7 @@ arg.add_argument('--save')
 parse = arg.parse_args()
 if parse.server:
     from .server import app
-    app.run(host=parse.host, port=parse.port, debug=bool(parse.debug))
+    app.run(host=parse.host, port=parse.port, debug=parse.debug)
 elif parse.url:
     for key, val in services.items():
         if getattr(parse, key):
@@ -62,35 +62,6 @@ elif parse.url:
         stderr.write('Post Not Found\n')
         stderr.flush()
         sys.exit(1)
-elif parse.info:
-    try:
-        resp = info_post(parse.url)
-        print(
-            json.dumps(
-                {
-                    'account': {
-                        'avatar': resp.account.avatar,
-                        'username': resp.account.username,
-                        'nickname': resp.account.nickname,
-                        'signature': resp.account.signature,
-                        'create': (
-                            (
-                                resp.account.create
-                                and
-                                resp.account.create.timestamp()
-                            ) or 0),
-                        'verified': resp.account.verified
-                    },
-                    'music': resp.music,
-                    'cover': resp.cover,
-                    'caption': resp.caption,
-                    'create': resp.create.timestamp(),
-                    'url': resp.url,
-                    'id': resp.id
-                },
-                indent=4
-            )
-        )
     except requests.exceptions.ConnectionError:
         stderr.write('[x] offline\n')
         stderr.flush()

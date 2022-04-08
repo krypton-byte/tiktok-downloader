@@ -18,15 +18,15 @@
     <div class="col-lg-6 offset-lg-3 " id='frm'>
         <div class="row justify-content-center">
             <img src="{{ url_for('static', filename='tiktok.svg')}}" id="logo">
-            <input type="text" placeholder="Tiktok Url" id="tiktokurl">
-            <button class="btn btn-primary" id="submitter">Submit</button>
+            <input type="text" class="form-control" placeholder="Tiktok Url" id="tiktokurl">
+            <button class="btn btn-outline-primary my-1" id="submitter">Download</button>
         </div>
         <div class="emptydiv">
 
         </div>
     </div>
     <footer>
-      <p align="center"><a href='https://github.com/krypton-byte/tiktok-downloader'>@krypton-byte</a></p>
+      <p class="copy" align="center"><a href='https://github.com/krypton-byte/tiktok-downloader'>@krypton-byte</a></p>
     </footer>
     <div class="modal"><!-- Place at bottom of page --></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -39,7 +39,7 @@
       $(document).ready(function (){
         $("#submitter").on("click", function(){
           const tiktok = $("#tiktokurl").val()
-          $.ajax({'url':'/auto', data:{url:tiktok},success:function (data){
+          $.ajax({'url':'/info', data:{url:tiktok},success:function (data){
             if(data.msg){
                 Swal.fire({
                       icon: 'error',
@@ -50,17 +50,18 @@
               let block = `
               <div class="row justify-content-center" id="downgrup" style="padding-bottom: 100px;">
                 <div class="card" style="width: 20 rem;">
-                  <video class="card-img-top" alt="..." poster="${data.cover}" style="padding-top:7px;" controls>
-                    <source src="${data.video[0].url}" type="video/mp4">
+                  <video class="card-img-top" alt="..." poster="${data.aweme_detail.video.origin_cover.url_list[0]}" style="padding-top:7px;" controls>
+                    <source src="${data.aweme_detail.video.play_addr.url_list[0]}" type="video/mp4">
                   </video>
                   
                   <div class="card-body">
-                    <h5 class="card-title"><a href="https://www.tiktok.com/@${data.nickname}">${data.nickname}</a></h5>
-                    <p class="card-text">${data.caption}</p>
+                    <h5 class="card-title"><a href="https://www.tiktok.com/@${data.aweme_detail.unique_id}">${data.aweme_detail.unique_id}</a></h5>
+                    <p class="card-text">${data.aweme_detail.desc}</p>
                   </div>
-                  ${data.video.map((x)=>{
-                    return '<a href="'+x.url+'" class="btn btn-primary">'+x.type+' </a>&nbsp;'
+                  ${data.aweme_detail.video.play_addr.url_list.map((x)=>{
+                    return '<a href="'+x+'" target="_blank" class="btn btn-primary"> Video </a>';
                   })}
+                  <a href="${data.aweme_detail.music.play_url.uri}" target="_blank" class="btn btn-primary"> Music </a>
                 </div>
             </div>
               `
@@ -101,13 +102,25 @@
     body.loading .modal {
         display: block;
     }
-        #frm {
-            padding-left: 50px;
-            padding-right: 50px;
-        }
-        #downgrup {
-            padding-top: 100px;
-        }
+    #frm {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+    #downgrup {
+        padding-top: 100px;
+    }
+    footer {
+      position: relative;
+      height: 400px;
+      width: 100%;
+    }
+    footer > .copy {
+        position: absolute;
+        width: 100%;
+        line-height: 40px;
+        text-align: center;
+        bottom:0;
+    }
     </style>
   </body>
 </html>
