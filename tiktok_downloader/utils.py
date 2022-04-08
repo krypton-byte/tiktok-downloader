@@ -13,6 +13,10 @@ class Odummy:
         pass
     def f(self, *arg, **kwarg):
         return None
+    def __enter__(self):
+        return self
+    def __exit__(self, type, val, trace):
+        return False
     def __getattr__(self, name):
         return self.f
 

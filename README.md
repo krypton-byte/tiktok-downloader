@@ -18,107 +18,156 @@
 > python3 -m pip install git+https://github.com/krypton-byte/tiktok-downloader
 ```
 
-<ul>
-<li><h2> ssstik</h2></li>
+# Library
+<details>
+<summary>Tikmate</summary>
 
 ```python
->>> from tiktok_downloader import ssstik
->>> ssstik().get_media("url")
-[<[type:video]>, <[type:music]>]
->>> ssstik().get_media("url")[0].download("result.mp4")
+>>> from tiktok_downloader import Tikmate
+>>> d=Tikmate("url")
+[<[type: "video" watermark: False]>, <[type: "video" watermark: False]>]
+>>> d[0].download('video.mp4')
 ```
 
-<li><h2> snaptik</h2></li>
+</details>
 
-```python
->>> from tiktok_downloader import snaptik
->>>snaptik("url").get_media()
-[<[type:video]>, <[type:video]>]
->>> snaptik("url").get_media()[0].download("result.mp4")
-```
-<li><h2> get info </h2></li>
+<details>
+<summary>Snaptik</summary>
 
 ```python
->>> from tiktok_downloader import info_video
->>> info=info_video("url")
->>> info.caption
->>> info.created
->>> info.id
->>> info.music
->>> info.username
->>> info.created
->>> info.signature
->>> info.verified
+>>> from tiktok_downloader import Snaptik
+>>> d=Snaptik('https://vt.tiktok.com/xxxxxx/')
+>>> d
+[<[type: "video" watermark: False]>]
+>>> d[0].download('video.mp4')
 ```
-</ul>
+</details>
+
+<details>
+<summary>Musically Down</summary>
+
+```python
+>>> from tiktok_downloader import Mdown
+>>> d=Mdown('https://vt.tiktok.com/xxxxxx/')
+>>> d
+[<[type: "video" watermark: False]>]
+>>> d[0].download('video.mp4')
+```
+</details>
+
+<details>
+<summary>Tikdown</summary>
+
+```python
+>>> from tiktok_downloader import TikDown
+>>> d=TikDown('https://vt.tiktok.com/xxxxxx/')
+>>> d
+[<[type: "video" watermark: False]>]
+>>> d[0].download('video.mp4')
+```
+</details>
+
+<details>
+<summary>TTDownloader</summary>
+
+```python
+>>> from tiktok_downloader import ttdownloader
+>>> d=ttdownloader'https://vt.tiktok.com/xxxxxx/')
+>>> d
+[<[type: "video" watermark: False]>]
+>>> d[0].download('video.mp4')
+```
+</details>
+
+<details>
+<summary>Tiktok</summary>
+
+```python
+>>> from tiktok_downloader import info_post
+>>> d=info_post.service('https://vt.tiktok.com/xxxxxx/')
+>>> d
+[<[type: "video" watermark: False]>]
+>>> d[0].download('video.mp4')
+```
+</details>
+
+<details>
+<summary>Get Info</summary>
+
+```python
+>>> from tiktok_downloader import info_post
+>>> info_post('https://vt.tiktok.com/xxxxxx/')
+```
+</details>
 
 # Command line
-<ul>
-<li>ssstik</li>
-
-```bash
-$ python3 -m tiktok_downloader --url=https://www.tiktok.com/@xxxx/video/xxxx --ssstik 2>/dev/null
-
-[
-    {
-        "type": "video",
-        "url": "https://ssstik.io/fe67718b?url=xxxxxx"
-    },
-    {
-        "type": "video",
-        "url": "https://v16m.tiktokcdn.com/xxxxxxxx"
-    },
-    {
-        "type": "music",
-        "url": "https://sf16-ies-music-sg.tiktokcdn.com/obj/tos-alisg-ve-xxxx/xxxxxx"
-    }
-]
 
 ```
+usage: python3 -m tiktok_downloader [-h] [--snaptik | --ssstik | --tikmate | --mdown | --ttdownloader | --tikdown | --tiktok] [--host HOST] [--debug] [--port PORT] (--server | --url URL) [--info] [--json | --save SAVE]
 
-<li>snaptik</li>
+Tiktok Downloader [CLI]
+
+options:
+  -h, --help      show this help message and exit
+
+List Of Services:
+  --snaptik
+  --ssstik
+  --tikmate
+  --mdown
+  --ttdownloader
+  --tikdown
+  --tiktok
+
+Web Configuration:
+  --host HOST     Set host to run this web
+  --debug         Set flask mode to debug
+  --port PORT     Set port
+
+Mode:
+  --server        Run as web application
+  --url URL       Video URL
+
+Optional:
+  --info          Print info video like author, id & etc
+
+Output Type:
+  --json          Print result to json format
+  --save SAVE     Write the result to file
+```
+## Example CLI
+
+<details>
+<summary>Download</summary>
 
 ```bash
-$ python3 -m tiktok_downloader --url=https://www.tiktok.com/@xxxx/video/xxxx --snaptik 2>/dev/null
-[
-    {
-        "type": "video",
-        "url": "https://tikcdn.net/file/xxxxxxxx.mp4"
-    },
-    {
-        "type": "video",
-        "url": "https://snapsave.info/dl.php?token=xxxxxxxxxxxxxxx"
-    }
-]
-
+$ python3 -m tiktok_downloader --url https://vt.tiktok.com/lorem --snaptik --save tiktok.mp4
 ```
 
-<li> post info</li>
+</details>
+
+<details>
+<summary>Json</summary>
 
 ```bash
-$ python3 -m tiktok_downloader --url=https://www.tiktok.com/@xxxx/video/xxxx --info
-{
-    "account": {
-        "username": "",
-        "nickname": "",
-        "signatur": "",
-        "create": 0,
-        "verified": true
-    },
-    "music": "",
-    "caption": "",
-    "create": 0,
-    "url": "",
-    "id": ""
-}
+$ python3 -m tiktok_downloader --url https://vt.tiktok.com/lorem --snaptik --json
 ```
-</ul>
 
-# Run as web
+</details>
+
+<details><summary>Run as web</summary>
 
 ```bash
 $ python3 -m tiktok_downloader --host=0.0.0.0 --port=8000 --server
+ * Serving Flask app 'tiktok_downloader.server' (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ```
+</details>
+
 ## Deploy Heroku
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/krypton-byte/tiktok-downloader/tree/master)
 ## Preview
@@ -139,9 +188,10 @@ http://127.0.0.1:8000/snaptik?url=https://vm.tiktok.com/xxxxxxxx/&type=embed
 | <a href="https://snaptik.app">Snaptik</a> | /snaptik | ✓
 | <a href="https://tikmate.online">Tikmate</a> | /tikmate |✓
 | <a href="https://musicaldown.com/">MusicalDown | /mdown|✓
-| <a href="https://ssstik.io">ssstik</a> | /ssstik | ✓
+| <a href="https://ssstik.io">ssstik</a> | /ssstik | x
 | <a href="https://ttdownloader.com/">ttdownloader</a> | /ttdownloader | ✓
 | <a href="https://tikdown.org/">tikdown</a> | /tikdown | ✓
+| <a href="https://tiktok.com/">tiktok</a> | /tiktok | ✓
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
 
