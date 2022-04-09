@@ -14,9 +14,6 @@ class TikTok(unittest.TestCase):
     def test_snaptk(self):
         self.assertTrue(snaptik(self.base_url).get_media())
 
-    def test_sstkio(self):
-        self.assertTrue(ssstik().get_media(self.base_url))
-
     def test_info(self):
         self.assertTrue(info_post(self.base_url).js)
 
