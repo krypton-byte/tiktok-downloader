@@ -1,7 +1,6 @@
 import unittest
 from .scrapper import info_post
 from .snaptik import snaptik
-from .ssstik import ssstik
 from .tikmate import tikmate
 from .mdown import mdown
 

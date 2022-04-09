@@ -26,7 +26,13 @@ class snaptik(Session):
             }
         self.resp = self.get(
             'https://snaptik.app/abc.php',
-            params={'url': tiktok_url, 'lang': 'en',**dict(findall('name="(token)" value="(.*?)"', self.get('https://snaptik.app/en').text))},
+            params={
+                'url': tiktok_url,
+                'lang': 'en',
+                **dict(
+                    findall(
+                        'name="(token)" value="(.*?)"',
+                        self.get('https://snaptik.app/en').text))},
         )
         if 'error_api_web;' in self.resp.text or 'Error:' in self.resp.text:
             raise InvalidUrl()

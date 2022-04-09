@@ -38,7 +38,6 @@ def auto():
                 ),
                 content_type='application/json'
             )
-        resp = info_post(request.args.get('url'))
         for name, service in serv.items():
             try:
                 b: List[info_videotiktok] = service(request.args.get('url'))
@@ -54,16 +53,23 @@ def auto():
                         )
                 else:
                     return Response(
-                        json.dumps(list(map(lambda x:{"url":x.json, "type": x.type, "service": name, "watermark": x.watermark}, b)),
+                        json.dumps(
+                            list(
+                                map(lambda x: {
+                                    "url": x.json,
+                                    "type": x.type,
+                                    "service": name,
+                                    "watermark": x.watermark
+                                }, b)),
                             indent=4
                         ),
                         content_type='application/json'
                     )
             except Exception as e:
                 return Response(
-                        json.dumps({"error":str(e)},
-                            indent=4
-                        ),
+                        json.dumps(
+                            {"error": str(e)},
+                            indent=4),
                         content_type='application/json'
                     )
         return Response(json.dumps(
@@ -84,23 +90,23 @@ def auto():
 @app.route('/<path:path>')
 def snapt(path):
     if path == 'info':
-            try:
-                if not request.args.get('url'):
-                    return json.dumps(
-                        {'msg': 'url parameter required'},
+        try:
+            if not request.args.get('url'):
+                return json.dumps(
+                    {'msg': 'url parameter required'},
+                    indent=4
+                )
+            resp = info_post(request.args['url'])
+            return Response(
+                    json.dumps(
+                        resp.aweme,
                         indent=4
-                    )
-                resp = info_post(request.args['url'])
-                return Response(
-                        json.dumps(
-                            resp.aweme,
-                            indent=4
-                        ),
-                        content_type='application/json'
-                    )
-            except Exception as e:
-                print(e)
-                return Response(json.dumps({
+                    ),
+                    content_type='application/json'
+                )
+        except Exception as e:
+            print(e)
+            return Response(json.dumps({
                 'msg': 'Url is invalid'
             }), headers={'Content-Type': 'application/json'})
     elif path not in services:
@@ -135,7 +141,7 @@ def snapt(path):
                     'Content-Type': 'application/json'
                 }
             )
-        except Exception as e:
+        except Exception:
             return Response(
                 json.dumps({
                     'msg': 'Url is invalid'
