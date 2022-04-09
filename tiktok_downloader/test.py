@@ -15,7 +15,7 @@ class TikTok(unittest.TestCase):
         self.assertTrue(snaptik(self.base_url).get_media())
 
     def test_info(self):
-        self.assertTrue(info_post(self.base_url).js)
+        self.assertTrue(bool(info_post(self.base_url)))
 
     def tikmat(self):
         self.assertTrue(tikmate().get_media(self.base_url))
