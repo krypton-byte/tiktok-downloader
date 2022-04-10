@@ -42,7 +42,7 @@
                   </div>
                   ${data.aweme_detail.video.play_addr.url_list.map(function(x){
                     return '<a href="'+x+'" target="_blank" class="btn btn-primary"> Video </a>&nbsp;';
-                  })}
+                  }).join('')}
                   <a href="${data.aweme_detail.music.play_url.uri}" target="_blank" class="btn btn-primary mb-3"> Music </a>
                 </div>
             </div>
