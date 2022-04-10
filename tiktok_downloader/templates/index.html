@@ -31,23 +31,14 @@
     <div class="modal"><!-- Place at bottom of page --></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script>
-      $body = $("body");
-      $(document).on({
-          ajaxStart: function() { $body.addClass("loading");    },
-          ajaxStop: function() { $body.removeClass("loading"); }    
-      });
-      $(document).ready(function (){
-        $("#submitter").on("click", function(){
-          const tiktok = $("#tiktokurl").val()
-          $.ajax({'url':'/info', data:{url:tiktok},success:function (data){
-            if(data.msg){
-                Swal.fire({
-                      icon: 'error',
-                      title: 'Oops...',
-                      text: data.msg
-                })
-            }else{
-              let block = `
+      document.getElementById('submitter').onclick = function(){
+        $('body').addClass("loading");
+        fetch('info?'+(new URLSearchParams({url: document.getElementById('tiktokurl').value})), {
+          method: 'GET'
+        }).then(async function (response){
+          const data = await response.json();
+          data.msg && Swal.fire({ icon: 'error', title: 'Oops...', text: data.msg })
+          $(".emptydiv").empty().append(`
               <div class="row justify-content-center" id="downgrup" style="padding-bottom: 100px;">
                 <div class="card" style="width: 20 rem;">
                   <video class="card-img-top" alt="..." poster="${data.aweme_detail.video.origin_cover.url_list[0]}" style="padding-top:7px;" controls>
@@ -58,18 +49,18 @@
                     <h5 class="card-title"><a href="https://www.tiktok.com/@${data.aweme_detail.author.unique_id}">${data.aweme_detail.author.unique_id}</a></h5>
                     <p class="card-text">${data.aweme_detail.desc}</p>
                   </div>
-                  ${data.aweme_detail.video.play_addr.url_list.map((x)=>{
+                  ${data.aweme_detail.video.play_addr.url_list.map(function(x){
                     return '<a href="'+x+'" target="_blank" class="btn btn-primary"> Video </a>&nbsp;';
                   })}
                   <a href="${data.aweme_detail.music.play_url.uri}" target="_blank" class="btn btn-primary"> Music </a>
                 </div>
             </div>
-              `
-              $(".emptydiv").empty().append(block)
-            }
-          }})
+          `)
+          $("body").removeClass("loading");
+        }).catch(function (err){
+          $("body").removeClass("loading");
         })
-      })
+      }
     </script>
     <style>
       /* Start by setting display:none to make this hidden.
