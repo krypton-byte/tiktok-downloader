@@ -8,15 +8,17 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Tiktok Downloader</title>
   </head>
   <body>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
     <div class="col-lg-6 offset-lg-3 " id='frm'>
         <div class="row justify-content-center">
+          <div class="col-12" id="wrapMode">
+            <i id="mode"></i>
+          </div>
             <img src="{{ url_for('static', filename='tiktok.svg')}}" id="logo">
             <input type="text" class="form-control" placeholder="Tiktok Url" id="tiktokurl">
             <button class="btn btn-outline-primary my-1" id="submitter">Download</button>
@@ -30,38 +32,7 @@
     </footer>
     <div class="modal"><!-- Place at bottom of page --></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script>
-      document.getElementById('submitter').onclick = function(){
-        $('body').addClass("loading");
-        fetch('info?'+(new URLSearchParams({url: document.getElementById('tiktokurl').value})), {
-          method: 'GET'
-        }).then(async function (response){
-          const data = await response.json();
-          data.msg && Swal.fire({ icon: 'error', title: 'Oops...', text: data.msg })
-          $(".emptydiv").empty().append(`
-              <div class="row justify-content-center" id="downgrup" style="padding-bottom: 100px;">
-                <div class="card" style="width: 20 rem;">
-                  <video class="card-img-top" alt="..." poster="${data.aweme_detail.video.origin_cover.url_list[0]}" style="padding-top:7px;" controls>
-                    <source src="${data.aweme_detail.video.play_addr.url_list[0]}" type="video/mp4">
-                  </video>
-                  
-                  <div class="card-body">
-                    <h5 class="card-title"><a href="https://www.tiktok.com/@${data.aweme_detail.author.unique_id}">${data.aweme_detail.author.unique_id}</a></h5>
-                    <p class="card-text">${data.aweme_detail.desc}</p>
-                  </div>
-                  ${data.aweme_detail.video.play_addr.url_list.map(function(x){
-                    return '<a href="'+x+'" target="_blank" class="btn btn-primary"> Video </a>&nbsp;';
-                  })}
-                  <a href="${data.aweme_detail.music.play_url.uri}" target="_blank" class="btn btn-primary"> Music </a>
-                </div>
-            </div>
-          `)
-          $("body").removeClass("loading");
-        }).catch(function (err){
-          $("body").removeClass("loading");
-        })
-      }
-    </script>
+    <script src="{{ url_for('static', filename='script.js')}}"></script>
     <style>
       /* Start by setting display:none to make this hidden.
       Then we position it in relation to the viewport window
@@ -81,13 +52,17 @@
                     50% 50% 
                     no-repeat;
     }
-
     /* When the body has the loading class, we turn
       the scrollbar off with overflow:hidden */
     body.loading .modal {
         overflow: hidden;   
     }
-
+    #mode {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 30px;
+    }
     /* Anytime the body has the loading class, our
       modal element will be visible */
     body.loading .modal {
