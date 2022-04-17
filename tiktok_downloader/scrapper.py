@@ -26,7 +26,7 @@ class Author:
 class info_post(Session):
     def __init__(self, url: str):
         super().__init__()
-        if 'vt.tiktok.com' in url:
+        if '.tiktok.com' in url:
             url = self.get(
                 url,
                 headers=self.headers,
