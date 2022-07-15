@@ -1,11 +1,27 @@
-from requests import Session
+from __future__ import annotations
+from requests import Session, get
 from re import findall
-from typing import Optional, Union
+from typing import Callable, Optional, Union
 from io import BytesIO
 from datetime import datetime
 from .Except import InvalidUrl
 from .utils import info_videotiktok
+import re
 
+def extract_id(initf: Callable[[info_post, str], None]):
+    subdo_redirect = ['vt', 'vm']
+    def regex(url: str) -> str:
+        if not findall(r'[0-9]{19}', url):
+            raise InvalidUrl()
+        return findall(r'[0-9]{19}', url)[0]
+    def apply(cls: info_post, url: str):
+        subdo = re.findall(r'://(\w+)\.', url)
+        if subdo in subdo_redirect:
+            url = get(
+                url,
+                allow_redirects=False).text
+        initf(cls, regex(url))
+    return apply
 
 class Author:
     def __init__(self, ascp: dict):
@@ -24,16 +40,11 @@ class Author:
 
 
 class info_post(Session):
-    def __init__(self, url: str):
+    @extract_id
+    def __init__(self, id: str):
         super().__init__()
-        if '.tiktok.com' in url:
-            url = self.get(
-                url,
-                headers=self.headers,
-                allow_redirects=False).text
-        if not findall(r'[0-9]{19}', url):
-            raise InvalidUrl()
-        self.id = findall(r'[0-9]{19}', url)[0]
+
+        self.id = findall(r'[0-9]{19}', id)[0]
         self.aweme = self.get(
             'https://api.tiktokv.com/aweme/v1/aweme/detail/',
             params={'aweme_id': self.id}).json()
@@ -83,7 +94,7 @@ class info_post(Session):
 
     def download(
         self,
-        out: Optional = None,
+        out: Optional[str] = None,
         watermark: Optional[bool] = False,
         chunk_size: int = 1024
     ) -> Union[None, BytesIO]:
@@ -95,7 +106,7 @@ class info_post(Session):
 
     def download_music(
         self,
-        out: Optional = None,
+        out: Optional[str] = None,
         chunk_size: int = 1024
     ) -> Union[None, BytesIO]:
         request = self.get(

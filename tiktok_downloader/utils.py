@@ -4,8 +4,9 @@ from requests import Session
 from tqdm.rich import tqdm
 from warnings import simplefilter
 from time import sleep
-from _io import BufferedWriter
+from io import BufferedWriter
 simplefilter('ignore')
+
 
 
 class Odummy:
@@ -52,7 +53,7 @@ class info_videotiktok:
         out: Optional[Union[str, BufferedWriter]] = None,
         chunk_size=1024,
         bar=False
-    ) -> Union[None, BytesIO]:
+    ) -> Union[None, BytesIO, BufferedWriter]:
         request = self.Session.get(self.json, stream=True)
         stream = out if isinstance(
             out,
@@ -68,7 +69,8 @@ class info_videotiktok:
                 stream.write(i)
                 pbar.update(i.__len__())
             pbar.update(int(request.headers['Content-Length']))
-            not isinstance(pbar, Odummy) and sleep(1)
+            if not isinstance(pbar, Odummy):
+                sleep(1)
         return None if isinstance(out, (str, BufferedWriter)) else stream
 
     def __str__(self) -> str:
