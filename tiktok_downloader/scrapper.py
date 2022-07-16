@@ -16,7 +16,7 @@ def extract_id(initf: Callable[[info_post, str], None]):
         return findall(r'[0-9]{19}', url)[0]
     def apply(cls: info_post, url: str):
         subdo = re.findall(r'://(\w+)\.', url)
-        if subdo in subdo_redirect:
+        if subdo and subdo[0] in subdo_redirect:
             url = get(
                 url,
                 allow_redirects=False).text
@@ -43,7 +43,6 @@ class info_post(Session):
     @extract_id
     def __init__(self, id: str):
         super().__init__()
-
         self.id = findall(r'[0-9]{19}', id)[0]
         self.aweme = self.get(
             'https://api.tiktokv.com/aweme/v1/aweme/detail/',
