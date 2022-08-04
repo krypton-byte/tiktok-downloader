@@ -1,5 +1,0 @@
-bs4
-cloudscraper
-flask
-py-mini-racer
-requests

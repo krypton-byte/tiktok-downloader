@@ -8,7 +8,7 @@ from .Except import InvalidUrl
 from .utils import info_videotiktok
 import re
 
-def extract_id(initf: Callable[[info_post, str], None]):
+def extract_id(initf: Callable[[info_post, str], None])->Callable[[info_post, str], None]:
     subdo_redirect = ['vt', 'vm']
     def regex(url: str) -> str:
         if not findall(r'[0-9]{19}', url):

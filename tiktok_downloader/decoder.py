@@ -6,7 +6,7 @@ from typing import Union
 alpha = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/"
 
 
-def search(d: Union[str, list], q: Union[str, int]):
+def search(d: Union[str, list], q: str):
     try:
         return d.index(q)
     except Exception:
@@ -30,7 +30,7 @@ def main(d, e, f):
     return int(k) or 0
 
 
-def reduces(function, iterable, initializer=None):
+def reduces(function, iterable, initializer=None) -> int:
     """
     [!] modified reduce function like js
     :https://www.geeksforgeeks.org/reduce-in-python/
