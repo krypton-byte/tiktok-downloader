@@ -8,12 +8,17 @@ from .Except import InvalidUrl
 from .utils import info_videotiktok
 import re
 
-def extract_id(initf: Callable[[info_post, str], None])->Callable[[info_post, str], None]:
+
+def extract_id(
+    initf: Callable[[info_post, str], None]
+) -> Callable[[info_post, str], None]:
     subdo_redirect = ['vt', 'vm']
+
     def regex(url: str) -> str:
         if not findall(r'[0-9]{19}', url):
             raise InvalidUrl()
         return findall(r'[0-9]{19}', url)[0]
+
     def apply(cls: info_post, url: str):
         subdo = re.findall(r'://(\w+)\.', url)
         if subdo and subdo[0] in subdo_redirect:
@@ -22,6 +27,7 @@ def extract_id(initf: Callable[[info_post, str], None])->Callable[[info_post, st
                 allow_redirects=False).text
         initf(cls, regex(url))
     return apply
+
 
 class Author:
     def __init__(self, ascp: dict):

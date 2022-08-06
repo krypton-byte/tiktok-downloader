@@ -8,7 +8,6 @@ from io import BufferedWriter
 simplefilter('ignore')
 
 
-
 class Odummy:
     def __init__(self):
         pass
@@ -61,16 +60,19 @@ class info_videotiktok:
                 open(out, 'wb') if isinstance(
                     out,
                     str) else BytesIO())
-        with tqdm(
-            total=int(request.headers['Content-Length']),
-            unit='iB',
-                unit_scale=True) if bar else Odummy() as pbar:
-            for i in request.iter_content(chunk_size):
-                stream.write(i)
-                pbar.update(i.__len__())
-            pbar.update(int(request.headers['Content-Length']))
-            if not isinstance(pbar, Odummy):
-                sleep(1)
+        if request.headers.get('content-length'):
+            with tqdm(
+                total=int(request.headers['Content-Length']),
+                unit='iB',
+                    unit_scale=True) if bar else Odummy() as pbar:
+                for i in request.iter_content(chunk_size):
+                    stream.write(i)
+                    pbar.update(i.__len__())
+                pbar.update(int(request.headers['Content-Length']))
+                if not isinstance(pbar, Odummy):
+                    sleep(1)
+        else:
+            stream.write(request.content)
         return None if isinstance(out, (str, BufferedWriter)) else stream
 
     def __str__(self) -> str:

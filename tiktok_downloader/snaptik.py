@@ -58,15 +58,13 @@ class snaptik(Session):
                 i,
                 self
             )
-            for i in set(
-                map(
-                    lambda x:x[0].strip('\\'),
-                    findall(
-                        r'\"(https?://(tikcdn\.net|snapsave\.info).*?)\"',
-                        dec
-                    )
-                )
-            )
+            for i in set(['https://snaptik.app'+x.strip('\\') for x in findall(
+                r'(/file.php?.*?)\"',
+                dec
+            )] + [i.strip('\\') for i in findall(
+                r'\"(https?://snapxcdn.*?)\"',
+                dec
+            )])
         ]
 
     def __iter__(self):
