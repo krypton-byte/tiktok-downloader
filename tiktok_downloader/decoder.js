@@ -1,6 +1,6 @@
 /*
   kalo mau ngedec obfuscate snaptik/tikmate pake javascript/nodejs tinggal panggil fungsi decoder
-  jangan lupa kasih star repo saya :v
+  jangan lupa kasih star reponya :v
 */
 var _0xc38e = [
   "",
