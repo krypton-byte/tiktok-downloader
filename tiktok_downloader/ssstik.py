@@ -1,107 +1,96 @@
-import time
-from bs4 import BeautifulSoup
-from cloudscraper import (
-    create_scraper,
-    Session
-)
+from httpx import AsyncClient
+from requests import Session
 import re
-from .utils import info_videotiktok
-from requests.models import InvalidURL
+from .utils import info_videotiktok, info_videotiktokAsync
+from base64 import b64decode
 
 
-class ssstik(Session):
-    '''
-    :param delay:
-    ```python
-    >>> tik=ssstik()
-    >>> tik.get_media('....')
-    [<[type:video]>, <[type:video]>, <[type:music]>]
-    ```
-    '''
-    BASE = "https://ssstik.io"
-    HEADERS = {
-        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "hx-active-element": "submit",
-        "hx-current-url": "https://ssstik.io/",
-        "hx-request": "true",
-        "hx-target": "target",
-        "origin": "https://ssstik.io",
-        "sec-fetch-dest": "",
-        "sec-fetch-mode": "cors",
-        "sec-fetch-site": "same-origin",
-        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36"}
-
-    def __init__(self, delay: int = 10, **kwargs) -> None:
-        super().__init__(**kwargs)
-        self.headers = self.HEADERS
-        self.cf = create_scraper(delay=delay)
-        self.html = self.cf.get(self.BASE)
-        while True:
-            if self.html.status_code == 403:
-                print('retrying request')
-                self.cf = create_scraper(delay=delay)
-                self.html = self.cf.get(self.BASE)
-                time.sleep(5)
-            else:
-                break
-
+class SsstikIO(Session):
     def get_media(self, url: str) -> list[info_videotiktok]:
-        '''
-        :param url:
-        ```python
-        >>> <ssstik object>.get_media('....')
-        [<[type:video]>, <[type:video]>]
-        ```
-        '''
-        try:
-            post = self.cf.post(
-                self.BASE+re.findall(
-                    'hx-post=\"(.*?)\"',
-                    self.html.text
-                )[0],
-                data={
-                    "id": url,
-                    "locale": "en",
-                    "tt": 0,
-                    "ts": 0
+        self.get('https://ssstik.io')
+        resp = self.post(
+            'https://ssstik.io/abc?url=dl', data={
+                'id': url,
+                'locale': 'id',
+                'gc': 0,
+                'tt': 0,
+                'ts': 0
+            },
+            headers={
+                'hx-current-url': 'https://ssstik.io/id',
+                'hx-request': 'true',
+                'hx-target': 'target',
+                'hx-trigger': '_gcaptcha_pt',
+                'origin': 'https://ssstik.io',
+                'pragma': 'no-cache',
+                'referer': 'https://ssstik.io/id',
+                'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="102", '
+                '"Google Chrome";v="102"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': "Linux",
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-origin',
+                'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_13) '
+                'AppleWebKit/537.36 (KHTML, like Gecko)'
+                ' Chrome/102.0.5059.159 Safari/537.36'
                 }
-            )
-            respon = BeautifulSoup(post.text, "html.parser")
-            hasil = [
-                *[
-                    info_videotiktok(
-                        url=i,
-                        Session=self.cf,
-                        type='video'
-                    )
-                    for i in [
-                        self.BASE+respon.find_all(
-                            "a",
-                            class_="pure-button pure-button-primary \
-                                is-center u-bl dl-button download_link \
-                                without_watermark")[0].get("href"),
-                        respon.find_all(
-                            "a",
-                            class_="pure-button pure-button-primary \
-                                is-center u-bl dl-button download_link \
-                                without_watermark_direct")[0].get("href")
-                        ]
-                ],
-                info_videotiktok(
-                    respon.find_all(
-                        "a",
-                        class_="pure-button pure-button-primary is-center \
-                            u-bl dl-button download_link music"
-                    )[0].get("href"),
-                    Session=self.cf,
-                    type='music'
-                )
-            ]
-            return hasil
-        except IndexError:
-            raise InvalidURL()
+        )
+        return [info_videotiktok(
+            res, self, [
+                'video', 'music']['music' in res]
+                ) for res in [(b64decode(
+                    '/'.join(x.split('/')[5:])
+                    ).decode() if 'ssscdn.io' in x else x
+                    ) for x in set(re.findall('href="(.*?)"', resp.text))]]
 
 
-def Ssstik(url: str, delay=10):
-    return ssstik(delay).get_media(url)
+class SsstikAIO(AsyncClient):
+    async def get_media(self, url: str):
+        await self.get('https://ssstik.io')
+        resp = await self.post(
+            'https://ssstik.io/abc?url=dl', data={
+                'id': url,
+                'locale': 'id',
+                'gc': 0,
+                'tt': 0,
+                'ts': 0
+            },
+            headers={
+                'hx-current-url': 'https://ssstik.io/id',
+                'hx-request': 'true',
+                'hx-target': 'target',
+                'hx-trigger': '_gcaptcha_pt',
+                'origin': 'https://ssstik.io',
+                'pragma': 'no-cache',
+                'referer': 'https://ssstik.io/id',
+                'sec-ch-ua': '" Not A;Brand";v="99", '
+                '"Chromium";v="102", "Google Chrome";v="102"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': "Linux",
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-origin',
+                'user-agent': (
+                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_13) '
+                    'AppleWebKit/537.36 (KHTML, like Gecko) '
+                    'Chrome/102.0.5059.159Safari/537.36')
+                }
+        )
+        return [info_videotiktokAsync(
+            res,
+            self,
+            ['video', 'music']['music' in res]) for res in [(
+                b64decode(
+                    '/'.join(
+                        x.split('/')[5:])).decode() if 'ssscdn.io' in x else x
+                        ) for x in set(
+                            re.findall('href="(.*?)"', resp.text))]]
+
+
+def Ssstik(url: str):
+    return SsstikIO().get_media(url)
+
+
+async def SsstikAsync(url: str):
+    return await SsstikAIO().get_media(url)

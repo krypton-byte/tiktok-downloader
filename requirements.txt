@@ -4,3 +4,5 @@ cloudscraper
 requests
 tqdm
 rich
+httpx
+aiohttp

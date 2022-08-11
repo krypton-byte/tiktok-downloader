@@ -2,7 +2,7 @@ from __future__ import annotations
 from requests import Session, get
 from re import findall
 from typing import Callable, Optional, Union
-from io import BytesIO
+from io import BufferedWriter, BytesIO
 from datetime import datetime
 from .Except import InvalidUrl
 from .utils import info_videotiktok
@@ -92,7 +92,7 @@ class info_post(Session):
     def service(cls, url: str) -> list[info_videotiktok]:
         return cls(url).utils()
 
-    def downloadLink(self, watermark: Optional[bool] = False) -> str:
+    def downloadLink(self, watermark: bool = False) -> str:
         return self.aweme['aweme_detail']['video'][
             ['play_addr', 'download_addr'][watermark]
         ]['url_list'][0]
@@ -100,9 +100,9 @@ class info_post(Session):
     def download(
         self,
         out: Optional[str] = None,
-        watermark: Optional[bool] = False,
+        watermark: bool = False,
         chunk_size: int = 1024
-    ) -> Union[None, BytesIO]:
+    ) -> Union[None, BytesIO, BufferedWriter]:
         request = self.get(self.downloadLink(watermark), stream=True)
         stream = open(out, 'wb') if isinstance(out, str) else BytesIO()
         for i in request.iter_content(chunk_size):
@@ -113,7 +113,7 @@ class info_post(Session):
         self,
         out: Optional[str] = None,
         chunk_size: int = 1024
-    ) -> Union[None, BytesIO]:
+    ) -> Union[None, BytesIO, BufferedWriter]:
         request = self.get(
             self.aweme['aweme_detail']['music']['play_url']['uri'],
             stream=True)

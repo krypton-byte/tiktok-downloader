@@ -1,9 +1,23 @@
+from typing import Generator
+from httpx import AsyncClient
 from requests.models import InvalidURL
 from .decoder import decoder
-from .utils import info_videotiktok
+from .utils import info_videotiktok, info_videotiktokAsync
 from ast import literal_eval
 import re
+from base64 import b64decode
 import requests
+import json
+import aiohttp
+
+
+def decodeJWT(resp: str) -> Generator[dict[str, str], None, None]:
+    reg = re.compile(b'(.*?})')
+    yield from (
+        json.loads(d) for d in set([x[0].decode() for x in [
+            reg.findall(b64decode(
+                i.split('.')[1] + '==========')) for i in re.findall(
+                    'token=(.*?)&', resp)] if x]))
 
 
 class tikmate(requests.Session):
@@ -11,7 +25,7 @@ class tikmate(requests.Session):
 
     def __init__(self) -> None:
         super().__init__()
-        self.headers = {
+        self.headers: dict[str, str] = {
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
             'AppleWebKit/537.36 (KHTML, like Gecko) '
             'Chrome/86.0.4240.111 Safari/537.36'
@@ -20,7 +34,9 @@ class tikmate(requests.Session):
     def get_media(self, url: str) -> list[info_videotiktok]:
         media = self.post(
             self.BASE_URL+'abc.php',
-            data={'url': url},
+            data={'url': url, **dict(re.findall(
+                'name="(token)" value="(.*?)"', self.get(
+                    'https://tikmate.online/?lang=id').text))},
             headers={
                 "origin": "https://tikmate.online",
                 "referer": "https://tikmate.online/",
@@ -42,16 +58,66 @@ class tikmate(requests.Session):
         if "'error_api_get'" in media.text:
             raise InvalidURL()
         tt = re.findall(r'\(\".*?,.*?,.*?,.*?,.*?.*?\)', media.text)
-        decode = decoder(*literal_eval(tt[0]))
+        decode = decodeJWT(decoder(*literal_eval(tt[0])))
         return [
             info_videotiktok(
-                self.BASE_URL+x,
-                self) for x in re.findall(
-                    r'(download.php\?token.*?)\"',
-                    decode
-                )
+                x['url'],
+                self,
+                type=(['video', 'music'][x['filename'].endswith(
+                    '.mp3')])) for x in decode
         ]
+
+
+class tikmateAsync(AsyncClient):
+    BASE_URL = 'https://tikmate.online/'
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.headers: dict[str, str] = {
+            "referer": "https://tikmate.online/",
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/94.0.4606.81 Safari/537.36"
+        }
+
+    async def get_media(self, url: str) -> list[info_videotiktokAsync]:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                self.BASE_URL+'abc.php',
+                data={'url': url, **dict(re.findall(
+                    'name="(token)" value="(.*?)"', (
+                        await self.get(self.BASE_URL)).text))},
+                headers={
+                    "Origin": "https://tikmate.online",
+                    "sec-ch-ua-mobile": "?0",
+                    "sec-ch-ua-platform": "Linux",
+                    "sec-fetch-dest": "iframe",
+                    "sec-fetch-site": "same-origin",
+                    "sec-fetch-user": "?1",
+                    "upgrade-insecure-requests": "1",
+                    'sec-fetch-mode': 'cors',
+                    'sec-fetch-site': 'same-origin',
+                    'x-requested-with': 'XMLHttpRequest',
+                    **self.headers
+                }
+            ) as media:
+                text = await media.text()
+                if "'error_api_get'" in text:
+                    raise InvalidURL()
+                tt = re.findall(r'\(\".*?,.*?,.*?,.*?,.*?.*?\)', text)
+                decode = decodeJWT(decoder(*literal_eval(tt[0])))
+                return [
+                    info_videotiktokAsync(
+                        x['url'],
+                        self,
+                        type=(['video', 'music'][x['filename'].endswith(
+                            '.mp3')])) for x in decode
+                ]
 
 
 def Tikmate(url: str):
     return tikmate().get_media(url)
+
+
+async def TikmateAsync(url: str):
+    return await tikmateAsync().get_media(url)

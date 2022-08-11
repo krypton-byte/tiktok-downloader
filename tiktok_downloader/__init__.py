@@ -1,5 +1,5 @@
 from .snaptik import snaptik, Snaptik
-from .ssstik import ssstik, Ssstik
+from .ssstik import Ssstik
 from .scrapper import info_post
 from .tikmate import tikmate, Tikmate
 from .mdown import mdown, Mdown

@@ -25,7 +25,9 @@ setup(
           'cloudscraper',
           'requests',
           'rich',
-          'tqdm'
+          'tqdm',
+          'httpx',
+          'aiohttp'
       ],
   classifiers=[
     'Development Status :: 3 - Alpha',

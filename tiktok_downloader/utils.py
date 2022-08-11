@@ -1,28 +1,95 @@
+from __future__ import annotations
+import httpx
 from io import BytesIO
 from typing import Optional, Union
 from requests import Session
-from tqdm.rich import tqdm
 from warnings import simplefilter
-from time import sleep
 from io import BufferedWriter
 simplefilter('ignore')
 
 
-class Odummy:
-    def __init__(self):
-        pass
+class DownloadCB:
+    def __init__(self) -> None:
+        self.finished = False
 
-    def f(self, *arg, **kwarg):
-        return None
+    async def on_open(
+        self,
+        client: httpx.AsyncClient,
+        response: httpx.Response,
+        info: info_videotiktokAsync
+    ):
+        raise NotImplementedError()
 
-    def __enter__(self):
-        return self
+    async def on_progress(self, binaries: bytes):
+        raise NotImplementedError()
 
-    def __exit__(self, type, val, trace):
-        return False
+    async def on_finish(
+        self,
+        client: httpx.AsyncClient,
+        response: httpx.Response
+    ):
+        raise NotImplementedError()
 
-    def __getattr__(self, name):
-        return self.f
+
+class info_videotiktokAsync:
+
+    def __init__(
+        self,
+        url: str,
+        Session: httpx.AsyncClient,
+        type='video',
+        watermark: bool = False
+    ) -> None:
+        self.json = url
+        self.type = type
+        self.Session = Session
+        self.watermark = watermark
+
+    async def get_size(self) -> int:
+        return int((
+            await self.Session.stream(
+                'GET',
+                self.json
+            ).__aenter__()
+        ).headers["Content-Length"])
+
+    async def download(
+        self,
+        out: Optional[Union[str, BufferedWriter, DownloadCB]] = None,
+        chunk_size=1024
+    ) -> Union[None, BytesIO, BufferedWriter, DownloadCB]:
+        async with self.Session.stream('GET', self.json) as request:
+            if isinstance(out, DownloadCB):
+                await out.on_open(self.Session, request, self)
+            stream = out if isinstance(
+                out,
+                BufferedWriter) else (
+                    open(out, 'wb') if isinstance(
+                        out,
+                        str) else BytesIO())
+            if isinstance(out, DownloadCB):
+                async for i in request.aiter_bytes(chunk_size):
+                    await out.on_progress(i)
+            else:
+                async for i in request.aiter_bytes(chunk_size):
+                    stream.write(i)
+            if isinstance(out, DownloadCB):
+                out.finished = True
+            return None if isinstance(
+                out, (
+                    str,
+                    BufferedWriter
+                    )) else out if isinstance(
+                        out, DownloadCB) else stream
+
+    def __str__(self) -> str:
+        f = (
+            self.type == 'video' and f' \
+watermark: {self.watermark}]>') or ']>'
+        return f"<[type: \"{self.type}\""+f
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class info_videotiktok:
@@ -60,19 +127,8 @@ class info_videotiktok:
                 open(out, 'wb') if isinstance(
                     out,
                     str) else BytesIO())
-        if request.headers.get('content-length'):
-            with tqdm(
-                total=int(request.headers['Content-Length']),
-                unit='iB',
-                    unit_scale=True) if bar else Odummy() as pbar:
-                for i in request.iter_content(chunk_size):
-                    stream.write(i)
-                    pbar.update(i.__len__())
-                pbar.update(int(request.headers['Content-Length']))
-                if not isinstance(pbar, Odummy):
-                    sleep(1)
-        else:
-            stream.write(request.content)
+        for i in request.iter_content(chunk_size):
+            stream.write(i)
         return None if isinstance(out, (str, BufferedWriter)) else stream
 
     def __str__(self) -> str:

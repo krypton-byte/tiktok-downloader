@@ -11,16 +11,16 @@ class TikTok(unittest.TestCase):
                 'video/7020708969563917595')
 
     def test_snaptk(self):
-        self.assertTrue(snaptik(self.base_url).get_media())
+        self.assertTrue(bool(snaptik(self.base_url).get_media()))
 
     def test_info(self):
         self.assertTrue(bool(info_post(self.base_url)))
 
     def tikmat(self):
-        self.assertTrue(tikmate().get_media(self.base_url))
+        self.assertTrue(bool(tikmate().get_media(self.base_url)))
 
     def mdown(self):
-        self.assertTrue(mdown().get_media(self.base_url))
+        self.assertTrue(bool(mdown().get_media(self.base_url)))
 
 
 if __name__ == '__main__':
