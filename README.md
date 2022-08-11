@@ -188,7 +188,7 @@ http://127.0.0.1:8000/snaptik?url=https://vm.tiktok.com/xxxxxxxx/&type=embed
 | <a href="https://snaptik.app">Snaptik</a> | /snaptik | ✓
 | <a href="https://tikmate.online">Tikmate</a> | /tikmate |✓
 | <a href="https://musicaldown.com/">MusicalDown | /mdown|✓
-| <a href="https://ssstik.io">ssstik</a> | /ssstik | x
+| <a href="https://ssstik.io">ssstik</a> | /ssstik | ✓
 | <a href="https://ttdownloader.com/">ttdownloader</a> | /ttdownloader | ✓
 | <a href="https://tikdown.org/">tikdown</a> | /tikdown | ✓
 | <a href="https://tiktok.com/">tiktok</a> | /tiktok | ✓
