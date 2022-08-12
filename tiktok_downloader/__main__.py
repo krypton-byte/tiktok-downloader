@@ -97,7 +97,7 @@ elif parse.url:
             service = val
             try:
                 ok = service(parse.url)
-                if parse.json or not(parse.save):
+                if parse.json or not parse.save:
                     print(
                         json.dumps(
                             [
