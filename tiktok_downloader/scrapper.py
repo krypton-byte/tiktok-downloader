@@ -98,7 +98,7 @@ class VideoInfoAsync(AsyncClient):
             ['play_addr', 'download_addr'][watermark]
         ]['url_list'][0]
 
-    async def utils(self) -> list[DownloadAsync]:
+    def utils(self) -> list[DownloadAsync]:
         return [
             DownloadAsync(
                 self.downloadLink(False), self),
