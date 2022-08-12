@@ -1,4 +1,5 @@
 from __future__ import annotations
+import asyncio
 import httpx
 from io import BytesIO
 from typing import Optional, Union
@@ -56,7 +57,7 @@ class DownloadAsync:
     async def download(
         self,
         out: Optional[Union[str, BufferedWriter, DownloadCallback]] = None,
-        chunk_size=1024
+        chunk_size=1024 * 1024
     ) -> Union[None, BytesIO, BufferedWriter, DownloadCallback]:
         async with self.Session.stream('GET', self.json) as request:
             if isinstance(out, DownloadCallback):
@@ -68,8 +69,10 @@ class DownloadAsync:
                         out,
                         str) else BytesIO())
             if isinstance(out, DownloadCallback):
+                tasks = []
                 async for i in request.aiter_bytes(chunk_size):
-                    await out.on_progress(i)
+                    tasks.append(asyncio.ensure_future(out.on_progress(i)))
+                await asyncio.gather(*tasks)
             else:
                 async for i in request.aiter_bytes(chunk_size):
                     stream.write(i)
