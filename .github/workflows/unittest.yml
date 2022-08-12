@@ -21,7 +21,7 @@ jobs:
       run: |
         sudo apt-get install --only-upgrade openssl -y
         python -m pip install --upgrade pip
-        python -m pip install flake8
+        python -m pip install flake8 aiohttp
         python setup.py install --user
     - name: Testing
       run: |
