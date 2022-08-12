@@ -9,13 +9,16 @@ from .tikdown import tikdown, Tikdown
 
 __all__ = [
     'snaptik',
+    'Snaptik',
     'ssstik',
     'VideoInfo',
     'tikmate',
+    'Tikmate',
     'mdown',
+    'Mdown',
     'InvalidUrl',
     'ttdownloader',
-    'Tikown',
+    'Tikdown',
     'TTDownloader'
 ]
 services = {

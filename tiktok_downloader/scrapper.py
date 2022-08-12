@@ -10,6 +10,7 @@ from .Except import InvalidUrl
 from .utils import Download, DownloadAsync
 import re
 
+
 def extract_id(
     initf: Callable[[VideoInfo, str], VideoInfo]
 ) -> Callable[[VideoInfo, str], VideoInfo]:
@@ -45,6 +46,7 @@ class Author:
     def __repr__(self):
         return f"<[ @{self.username} ]>"
 
+
 class VideoInfoAsync(AsyncClient):
     def __init__(self, js: dict, id: str):
         super().__init__()
@@ -71,7 +73,7 @@ class VideoInfoAsync(AsyncClient):
         self.music_duration = js['aweme_detail']['music']['duration']
         self.duration = int(
             js['aweme_detail']['video']['duration']/1000)
-    
+
     @classmethod
     async def url_to_id(cls, url: str, client: AsyncClient):
         url_ = (await client.get(url, follow_redirects=True)).url.__str__()
@@ -79,6 +81,7 @@ class VideoInfoAsync(AsyncClient):
         if ids:
             return ids[0]
         raise InvalidUrl()
+
     @classmethod
     async def get_info(cls, url: str):
         client = AsyncClient()
@@ -107,6 +110,7 @@ class VideoInfoAsync(AsyncClient):
 
     def __repr__(self):
         return f'<[{self.id} {self.duration}s]>'
+
 
 class VideoInfo(Session):
     def __init__(self, js: dict, id: str):
@@ -141,6 +145,7 @@ class VideoInfo(Session):
         return cls((requests.get(
             'https://api.tiktokv.com/aweme/v1/aweme/detail/',
             params={'aweme_id': id})).json(), id)
+
     def utils(self) -> list[Download]:
         return [
             Download(

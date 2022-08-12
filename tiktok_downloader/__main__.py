@@ -66,7 +66,7 @@ parse = arg.parse_args()
 
 
 def info(url: str, js: Optional[bool] = False):
-    infojson = VideoInfo(url)
+    infojson = VideoInfo.get_info(url)
     if js:
         print(json.dumps({
             "id": infojson.id,
