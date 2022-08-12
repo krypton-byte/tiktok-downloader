@@ -28,4 +28,4 @@ jobs:
         python -m tiktok_downloader.test
     - name: PEP8
       run: |
-        flake8
+        flake8 tiktok-downloader
