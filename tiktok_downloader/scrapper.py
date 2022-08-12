@@ -76,6 +76,9 @@ class VideoInfoAsync(AsyncClient):
 
     @classmethod
     async def url_to_id(cls, url: str, client: AsyncClient):
+        ids = findall(r'[0-9]{19}', url)
+        if ids:
+            return ids[0]
         url_ = (await client.get(url, follow_redirects=True)).url.__str__()
         ids = findall(r'[0-9]{19}', url_)
         if ids:
