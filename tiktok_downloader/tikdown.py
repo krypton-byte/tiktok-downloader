@@ -1,10 +1,10 @@
 from httpx import AsyncClient
 from requests import Session
 import re
-from .utils import info_videotiktok, info_videotiktokAsync
+from .utils import DownloadAsync, Download
 
 
-class TKDown(Session):
+class Tikdown(Session):
     BASE_URL = 'https://tikdown.org/'
     headers: dict[str, str] = {
         "origin": 'https://tikdown.org',
@@ -26,7 +26,7 @@ class TKDown(Session):
         super().__init__()
         self.url = url
 
-    def get_media(self) -> list[info_videotiktok]:
+    def get_media(self) -> list[Download]:
         res = self.get(self.BASE_URL)
         _token = re.findall(
             r'type\="hidden".*?value\="([0-9a-zA-Z]+)"',
@@ -42,11 +42,11 @@ class TKDown(Session):
                 r'\"(https?://.*?\.mp4)\"',
                 js['html']
             )[0]
-            return [info_videotiktok(video, self)]
+            return [Download(video, self)]
         return []
 
 
-class TKDownAsync(AsyncClient):
+class TikdownAsync(AsyncClient):
     BASE_URL = 'https://tikdown.org/'
     headers: dict[str, str] = {
         "origin": 'https://tikdown.org',
@@ -68,7 +68,7 @@ class TKDownAsync(AsyncClient):
         super().__init__()
         self.url = url
 
-    async def get_media(self) -> list[info_videotiktokAsync]:
+    async def get_media(self) -> list[DownloadAsync]:
         res = await self.get(self.BASE_URL)
         _token = re.findall(
             r'type\="hidden".*?value\="([0-9a-zA-Z]+)"',
@@ -84,13 +84,13 @@ class TKDownAsync(AsyncClient):
                 r'\"(https?://.*?\.mp4)\"',
                 js['html']
             )[0]
-            return [info_videotiktokAsync(video, self)]
+            return [DownloadAsync(video, self)]
         return []
 
 
-def TikDown(url: str):
-    return TKDown(url).get_media()
+def tikdown(url: str):
+    return Tikdown(url).get_media()
 
 
-async def TikDownAsync(url: str):
-    return await TKDownAsync(url).get_media()
+async def tikdown_async(url: str):
+    return await TikdownAsync(url).get_media()

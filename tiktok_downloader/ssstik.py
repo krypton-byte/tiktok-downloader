@@ -1,12 +1,12 @@
 from httpx import AsyncClient
 from requests import Session
 import re
-from .utils import info_videotiktok, info_videotiktokAsync
+from .utils import Download, DownloadAsync
 from base64 import b64decode
 
 
 class SsstikIO(Session):
-    def get_media(self, url: str) -> list[info_videotiktok]:
+    def get_media(self, url: str) -> list[Download]:
         self.get('https://ssstik.io')
         resp = self.post(
             'https://ssstik.io/abc?url=dl', data={
@@ -36,7 +36,7 @@ class SsstikIO(Session):
                 ' Chrome/102.0.5059.159 Safari/537.36'
                 }
         )
-        return [info_videotiktok(
+        return [Download(
             res, self, [
                 'video', 'music']['music' in res]
                 ) for res in [(b64decode(
@@ -77,7 +77,7 @@ class SsstikAIO(AsyncClient):
                     'Chrome/102.0.5059.159Safari/537.36')
                 }
         )
-        return [info_videotiktokAsync(
+        return [DownloadAsync(
             res,
             self,
             ['video', 'music']['music' in res]) for res in [(
@@ -88,9 +88,9 @@ class SsstikAIO(AsyncClient):
                             re.findall('href="(.*?)"', resp.text))]]
 
 
-def Ssstik(url: str):
+def ssstik(url: str):
     return SsstikIO().get_media(url)
 
 
-async def SsstikAsync(url: str):
+async def ssstik_async(url: str):
     return await SsstikAIO().get_media(url)

@@ -2,10 +2,10 @@ from httpx import AsyncClient
 from bs4 import BeautifulSoup
 import requests
 from requests.models import InvalidURL
-from .utils import info_videotiktok, info_videotiktokAsync
+from .utils import Download, DownloadAsync
 
 
-class mdown(requests.Session):
+class Mdown(requests.Session):
     BASE_URL = 'https://musicaldown.com/'
 
     def __init__(self) -> None:
@@ -47,7 +47,7 @@ class mdown(requests.Session):
         if 'err' in res.url:
             raise InvalidURL()
         return [
-            info_videotiktok(
+            Download(
                 i['href'],
                 self
             ) for i in BeautifulSoup(
@@ -57,7 +57,7 @@ class mdown(requests.Session):
         ]
 
 
-class mdownAsync(AsyncClient):
+class MdownAsync(AsyncClient):
     BASE_URL = 'https://musicaldown.com/'
 
     def __init__(self) -> None:
@@ -100,7 +100,7 @@ class mdownAsync(AsyncClient):
         if 'err' in res.url.path:
             raise InvalidURL()
         return [
-            info_videotiktokAsync(
+            DownloadAsync(
                 i['href'],
                 self
             ) for i in BeautifulSoup(
@@ -110,9 +110,9 @@ class mdownAsync(AsyncClient):
         ]
 
 
-def Mdown(url: str):
-    return mdown().get_media(url)
+def mdown(url: str):
+    return Mdown().get_media(url)
 
 
-async def MdownAsync(url: str):
-    return await mdownAsync().get_media(url)
+async def mdown_async(url: str):
+    return await MdownAsync().get_media(url)

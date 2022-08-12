@@ -1,14 +1,15 @@
+from io import BytesIO
 from flask import (
     Flask,
     request,
-    render_template,
-    Response
+    render_template
 )
+from flask.wrappers import Response
 from typing import List
 from . import services
 from .snaptik import Snaptik
-from .scrapper import info_post
-from .utils import info_videotiktok
+from .scrapper import VideoInfo
+from .utils import Download
 import json
 import os
 
@@ -40,17 +41,18 @@ def auto():
             )
         for name, service in serv.items():
             try:
-                b: List[info_videotiktok] = service(request.args.get('url'))
+                b: List[Download] = service(request.args.get('url'))
                 if request.args.get('type') in ['direct', 'embed']:
                     for video in filter(
                         lambda v: v.watermark and v.type == 'video',
                         b
                     ):
                         fvid = video.download()
-                        return Response(
-                            fvid.getvalue(),
-                            content_type='video/mp4'
-                        )
+                        if isinstance(fvid, BytesIO):
+                            return Response(
+                                fvid.getvalue(),
+                                content_type='video/mp4'
+                            )
                 else:
                     return Response(
                         json.dumps(
@@ -96,7 +98,7 @@ def snapt(path):
                     {'msg': 'url parameter required'},
                     indent=4
                 )
-            resp = info_post(request.args['url'])
+            resp = VideoInfo.get_info(request.args['url'])
             return Response(
                     json.dumps(
                         resp.aweme,
@@ -122,10 +124,12 @@ def snapt(path):
             if request.args.get('type') in ['embed', 'direct']:
                 for i in res:
                     if i.type == 'video':
-                        return Response(
-                            i.download().getvalue(),
-                            content_type='video/mp4'
-                        )
+                        fvid = i.download()
+                        if isinstance(fvid, BytesIO):
+                            return Response(
+                                fvid.getvalue(),
+                                content_type='video/mp4'
+                            )
             return Response(
                 json.dumps(
                     [

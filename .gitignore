@@ -4,3 +4,4 @@ build
 *.egg-info
 env/
 __pycache__*
+cookie.txt

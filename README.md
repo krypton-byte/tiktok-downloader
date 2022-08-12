@@ -35,7 +35,7 @@
 <summary>Snaptik</summary>
 
 ```python
->>> from tiktok_downloader import Snaptik
+>>> from tiktok_downloader import snaptik
 >>> d=Snaptik('https://vt.tiktok.com/xxxxxx/')
 >>> d
 [<[type: "video" watermark: False]>]
@@ -47,8 +47,8 @@
 <summary>Musically Down</summary>
 
 ```python
->>> from tiktok_downloader import Mdown
->>> d=Mdown('https://vt.tiktok.com/xxxxxx/')
+>>> from tiktok_downloader import mdown
+>>> d=mdown('https://vt.tiktok.com/xxxxxx/')
 >>> d
 [<[type: "video" watermark: False]>]
 >>> d[0].download('video.mp4')
@@ -59,8 +59,8 @@
 <summary>Tikdown</summary>
 
 ```python
->>> from tiktok_downloader import TikDown
->>> d=TikDown('https://vt.tiktok.com/xxxxxx/')
+>>> from tiktok_downloader import tikdown
+>>> d=tikdown('https://vt.tiktok.com/xxxxxx/')
 >>> d
 [<[type: "video" watermark: False]>]
 >>> d[0].download('video.mp4')
@@ -83,8 +83,8 @@
 <summary>Tiktok</summary>
 
 ```python
->>> from tiktok_downloader import info_post
->>> d=info_post.service('https://vt.tiktok.com/xxxxxx/')
+>>> from tiktok_downloader import VideoInfo
+>>> d=VideoInfo.service('https://vt.tiktok.com/xxxxxx/')
 >>> d
 [<[type: "video" watermark: False]>]
 >>> d[0].download('video.mp4')
@@ -95,8 +95,8 @@
 <summary>Get Info</summary>
 
 ```python
->>> from tiktok_downloader import info_post
->>> info_post('https://vt.tiktok.com/xxxxxx/')
+>>> from tiktok_downloader import VideoInfo
+>>> VideoInfo.get_info('https://vt.tiktok.com/xxxxxx/')
 ```
 </details>
 

@@ -2,7 +2,7 @@ from typing import Generator
 from httpx import AsyncClient
 from requests.models import InvalidURL
 from .decoder import decoder
-from .utils import info_videotiktok, info_videotiktokAsync
+from .utils import Download, DownloadAsync
 from ast import literal_eval
 import re
 from base64 import b64decode
@@ -20,7 +20,7 @@ def decodeJWT(resp: str) -> Generator[dict[str, str], None, None]:
                     'token=(.*?)&', resp)] if x]))
 
 
-class tikmate(requests.Session):
+class Tikmate(requests.Session):
     BASE_URL = 'https://tikmate.online/'
 
     def __init__(self) -> None:
@@ -31,7 +31,7 @@ class tikmate(requests.Session):
             'Chrome/86.0.4240.111 Safari/537.36'
         }
 
-    def get_media(self, url: str) -> list[info_videotiktok]:
+    def get_media(self, url: str) -> list[Download]:
         media = self.post(
             self.BASE_URL+'abc.php',
             data={'url': url, **dict(re.findall(
@@ -60,7 +60,7 @@ class tikmate(requests.Session):
         tt = re.findall(r'\(\".*?,.*?,.*?,.*?,.*?.*?\)', media.text)
         decode = decodeJWT(decoder(*literal_eval(tt[0])))
         return [
-            info_videotiktok(
+            Download(
                 x['url'],
                 self,
                 type=(['video', 'music'][x['filename'].endswith(
@@ -80,7 +80,7 @@ class tikmateAsync(AsyncClient):
             "Chrome/94.0.4606.81 Safari/537.36"
         }
 
-    async def get_media(self, url: str) -> list[info_videotiktokAsync]:
+    async def get_media(self, url: str) -> list[DownloadAsync]:
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 self.BASE_URL+'abc.php',
@@ -107,7 +107,7 @@ class tikmateAsync(AsyncClient):
                 tt = re.findall(r'\(\".*?,.*?,.*?,.*?,.*?.*?\)', text)
                 decode = decodeJWT(decoder(*literal_eval(tt[0])))
                 return [
-                    info_videotiktokAsync(
+                    DownloadAsync(
                         x['url'],
                         self,
                         type=(['video', 'music'][x['filename'].endswith(
@@ -115,9 +115,9 @@ class tikmateAsync(AsyncClient):
                 ]
 
 
-def Tikmate(url: str):
-    return tikmate().get_media(url)
+def tikmate(url: str):
+    return Tikmate().get_media(url)
 
 
-async def TikmateAsync(url: str):
+async def tikmate_async(url: str):
     return await tikmateAsync().get_media(url)

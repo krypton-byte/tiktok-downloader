@@ -1,7 +1,7 @@
 from httpx import AsyncClient
 from requests import Session
 import re
-from .utils import info_videotiktok, info_videotiktokAsync
+from .utils import Download, DownloadAsync
 
 
 class TTDownloader(Session):
@@ -27,7 +27,7 @@ class TTDownloader(Session):
         }
         self.url = url
 
-    def get_media(self) -> list[info_videotiktok]:
+    def get_media(self) -> list[Download]:
         indexsource = self.get(self.BASE_URL)
         token = re.findall(r'value=\"([0-9a-z]+)\"', indexsource.text)
         result = self.post(
@@ -38,9 +38,9 @@ class TTDownloader(Session):
             r'(https?://.*?.php\?v\=.*?)\"', result.text
         )
         return [
-            info_videotiktok(nowm, self, 'video'),
-            info_videotiktok(wm, self, 'video', True),
-            info_videotiktok(audio, self, 'music')
+            Download(nowm, self, 'video'),
+            Download(wm, self, 'video', True),
+            Download(audio, self, 'music')
         ]
 
 
@@ -67,7 +67,7 @@ class TTDownloaderAsync(AsyncClient):
         }
         self.url = url
 
-    async def get_media(self) -> list[info_videotiktokAsync]:
+    async def get_media(self) -> list[DownloadAsync]:
         indexsource = await self.get(self.BASE_URL)
         token = re.findall(r'value=\"([0-9a-z]+)\"', indexsource.text)
         result = await self.post(
@@ -78,13 +78,13 @@ class TTDownloaderAsync(AsyncClient):
             r'(https?://.*?.php\?v\=.*?)\"', result.text
         )
         return [
-            info_videotiktokAsync(nowm, self, 'video'),
-            info_videotiktokAsync(wm, self, 'video', True),
-            info_videotiktokAsync(audio, self, 'music')
+            DownloadAsync(nowm, self, 'video'),
+            DownloadAsync(wm, self, 'video', True),
+            DownloadAsync(audio, self, 'music')
         ]
 
 
-def ttdownloader(url: str) -> list[info_videotiktok]:
+def ttdownloader(url: str) -> list[Download]:
     return TTDownloader(url).get_media()
 
 

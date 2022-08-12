@@ -8,7 +8,7 @@ from io import BufferedWriter
 simplefilter('ignore')
 
 
-class DownloadCB:
+class DownloadCallback:
     def __init__(self) -> None:
         self.finished = False
 
@@ -16,7 +16,7 @@ class DownloadCB:
         self,
         client: httpx.AsyncClient,
         response: httpx.Response,
-        info: info_videotiktokAsync
+        info: DownloadAsync
     ):
         raise NotImplementedError()
 
@@ -31,7 +31,7 @@ class DownloadCB:
         raise NotImplementedError()
 
 
-class info_videotiktokAsync:
+class DownloadAsync:
 
     def __init__(
         self,
@@ -55,11 +55,11 @@ class info_videotiktokAsync:
 
     async def download(
         self,
-        out: Optional[Union[str, BufferedWriter, DownloadCB]] = None,
+        out: Optional[Union[str, BufferedWriter, DownloadCallback]] = None,
         chunk_size=1024
-    ) -> Union[None, BytesIO, BufferedWriter, DownloadCB]:
+    ) -> Union[None, BytesIO, BufferedWriter, DownloadCallback]:
         async with self.Session.stream('GET', self.json) as request:
-            if isinstance(out, DownloadCB):
+            if isinstance(out, DownloadCallback):
                 await out.on_open(self.Session, request, self)
             stream = out if isinstance(
                 out,
@@ -67,20 +67,20 @@ class info_videotiktokAsync:
                     open(out, 'wb') if isinstance(
                         out,
                         str) else BytesIO())
-            if isinstance(out, DownloadCB):
+            if isinstance(out, DownloadCallback):
                 async for i in request.aiter_bytes(chunk_size):
                     await out.on_progress(i)
             else:
                 async for i in request.aiter_bytes(chunk_size):
                     stream.write(i)
-            if isinstance(out, DownloadCB):
+            if isinstance(out, DownloadCallback):
                 out.finished = True
             return None if isinstance(
                 out, (
                     str,
                     BufferedWriter
                     )) else out if isinstance(
-                        out, DownloadCB) else stream
+                        out, DownloadCallback) else stream
 
     def __str__(self) -> str:
         f = (
@@ -92,7 +92,7 @@ watermark: {self.watermark}]>') or ']>'
         return self.__str__()
 
 
-class info_videotiktok:
+class Download:
 
     def __init__(
         self,

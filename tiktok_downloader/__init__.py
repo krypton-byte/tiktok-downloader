@@ -1,28 +1,29 @@
 from .snaptik import snaptik, Snaptik
-from .ssstik import Ssstik
-from .scrapper import info_post
+from .ssstik import ssstik
+from .scrapper import VideoInfo
 from .tikmate import tikmate, Tikmate
 from .mdown import mdown, Mdown
 from .Except import InvalidUrl
-from .ttdownloader import ttdownloader
-from .tikdown import TikDown
+from .ttdownloader import ttdownloader, TTDownloader
+from .tikdown import tikdown, Tikdown
 
 __all__ = [
     'snaptik',
     'ssstik',
-    'info_post',
+    'VideoInfo',
     'tikmate',
     'mdown',
     'InvalidUrl',
     'ttdownloader',
-    'TikDown'
+    'Tikown',
+    'TTDownloader'
 ]
 services = {
-    'snaptik': Snaptik,
-    'ssstik': Ssstik,
-    'tikmate': Tikmate,
-    'mdown': Mdown,
+    'snaptik': snaptik,
+    'ssstik': ssstik,
+    'tikmate': tikmate,
+    'mdown': mdown,
     'ttdownloader': ttdownloader,
-    'tikdown': TikDown,
-    'tiktok': info_post.service
+    'tikdown': tikdown,
+    'tiktok': VideoInfo.service
 }

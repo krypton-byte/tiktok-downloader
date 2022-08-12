@@ -4,7 +4,7 @@ import os
 import sys
 import requests
 from . import services
-from .scrapper import info_post
+from .scrapper import VideoInfo
 from sys import stderr
 from rich import print as print_
 from rich.panel import Panel
@@ -66,7 +66,7 @@ parse = arg.parse_args()
 
 
 def info(url: str, js: Optional[bool] = False):
-    infojson = info_post(url)
+    infojson = VideoInfo(url)
     if js:
         print(json.dumps({
             "id": infojson.id,
@@ -116,16 +116,16 @@ elif parse.url:
                     ok[0].download(parse.save, bar=True)
                 else:
                     os.system("python3 -m tiktok_downloader --help")
-            except Exception as e:
-                print(e)
-                stderr.write('Post Not Found\n')
-                stderr.flush()
-                sys.exit(1)
             except requests.exceptions.ConnectionError:
                 stderr.write('[x] offline\n')
                 stderr.flush()
                 sys.exit(1)
             except (KeyError, AttributeError):
+                stderr.write('Post Not Found\n')
+                stderr.flush()
+                sys.exit(1)
+            except Exception as e:
+                print(e)
                 stderr.write('Post Not Found\n')
                 stderr.flush()
                 sys.exit(1)

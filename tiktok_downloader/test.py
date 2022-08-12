@@ -1,5 +1,5 @@
 import unittest
-from .scrapper import info_post
+from .scrapper import VideoInfo
 from .snaptik import snaptik
 from .tikmate import tikmate
 from .mdown import mdown
@@ -11,16 +11,16 @@ class TikTok(unittest.TestCase):
                 'video/7020708969563917595')
 
     def test_snaptk(self):
-        self.assertTrue(bool(snaptik(self.base_url).get_media()))
+        self.assertTrue(bool(snaptik(self.base_url)))
 
     def test_info(self):
-        self.assertTrue(bool(info_post(self.base_url)))
+        self.assertTrue(bool(VideoInfo.get_info(self.base_url)))
 
     def tikmat(self):
-        self.assertTrue(bool(tikmate().get_media(self.base_url)))
+        self.assertTrue(bool(tikmate(self.base_url)))
 
-    def mdown(self):
-        self.assertTrue(bool(mdown().get_media(self.base_url)))
+    def mdown_(self):
+        self.assertTrue(bool(mdown(self.base_url)))
 
 
 if __name__ == '__main__':

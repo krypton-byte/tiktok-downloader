@@ -1,17 +1,18 @@
 from __future__ import annotations
+from httpx import AsyncClient
 from requests import Session, get
 from re import findall
 from typing import Callable, Optional, Union
 from io import BufferedWriter, BytesIO
 from datetime import datetime
+import requests
 from .Except import InvalidUrl
-from .utils import info_videotiktok
+from .utils import Download, DownloadAsync
 import re
 
-
 def extract_id(
-    initf: Callable[[info_post, str], None]
-) -> Callable[[info_post, str], None]:
+    initf: Callable[[VideoInfo, str], VideoInfo]
+) -> Callable[[VideoInfo, str], VideoInfo]:
     subdo_redirect = ['vt', 'vm']
 
     def regex(url: str) -> str:
@@ -19,13 +20,13 @@ def extract_id(
             raise InvalidUrl()
         return findall(r'[0-9]{19}', url)[0]
 
-    def apply(cls: info_post, url: str):
+    def apply(cls: VideoInfo, url: str) -> VideoInfo:
         subdo = re.findall(r'://(\w+)\.', url)
         if subdo and subdo[0] in subdo_redirect:
             url = get(
                 url,
                 allow_redirects=False).text
-        initf(cls, regex(url))
+        return initf(cls, regex(url))
     return apply
 
 
@@ -44,15 +45,74 @@ class Author:
     def __repr__(self):
         return f"<[ @{self.username} ]>"
 
-
-class info_post(Session):
-    @extract_id
-    def __init__(self, id: str):
+class VideoInfoAsync(AsyncClient):
+    def __init__(self, js: dict, id: str):
         super().__init__()
-        self.id = findall(r'[0-9]{19}', id)[0]
-        self.aweme = self.get(
+        self.id = id
+        self.aweme = js
+        self.height = (
+            js['aweme_detail']['video']
+            ['download_addr']['height'])
+        self.width = (
+            js['aweme_detail']['video']
+            ['download_addr']['width'])
+        self.size = (
+            js['aweme_detail']
+            ['video']['download_addr']['data_size'])
+        self.desc = js['aweme_detail']['desc']
+        self.cover = (
+            js['aweme_detail']
+            ['video']['origin_cover']['url_list'][0])
+        self.create_time = datetime.fromtimestamp(
+            js['aweme_detail']['create_time'])
+        self.author = Author(js['aweme_detail']['author'])
+        self.music_title = js['aweme_detail']['music']['title']
+        self.music_author = js['aweme_detail']['music']['author']
+        self.music_duration = js['aweme_detail']['music']['duration']
+        self.duration = int(
+            js['aweme_detail']['video']['duration']/1000)
+    
+    @classmethod
+    async def url_to_id(cls, url: str, client: AsyncClient):
+        url_ = (await client.get(url, follow_redirects=True)).url.__str__()
+        ids = findall(r'[0-9]{19}', url_)
+        if ids:
+            return ids[0]
+        raise InvalidUrl()
+    @classmethod
+    async def get_info(cls, url: str):
+        client = AsyncClient()
+        id = await cls.url_to_id(url, client)
+        return cls((await client.get(
             'https://api.tiktokv.com/aweme/v1/aweme/detail/',
-            params={'aweme_id': self.id}).json()
+            params={'aweme_id': id})).json(), id)
+
+    def downloadLink(self, watermark: bool = False) -> str:
+        return self.aweme['aweme_detail']['video'][
+            ['play_addr', 'download_addr'][watermark]
+        ]['url_list'][0]
+
+    async def utils(self) -> list[DownloadAsync]:
+        return [
+            DownloadAsync(
+                self.downloadLink(False), self),
+            DownloadAsync(
+                self.downloadLink(True), self, watermark=True),
+            DownloadAsync(
+                self.aweme['aweme_detail']['music']['play_url']['uri'],
+                self,
+                "music"
+            )
+        ]
+
+    def __repr__(self):
+        return f'<[{self.id} {self.duration}s]>'
+
+class VideoInfo(Session):
+    def __init__(self, js: dict, id: str):
+        super().__init__()
+        self.id = id
+        self.aweme = js
         self.height = (
             self.aweme['aweme_detail']['video']
             ['download_addr']['height'])
@@ -75,13 +135,19 @@ class info_post(Session):
         self.duration = int(
             self.aweme['aweme_detail']['video']['duration']/1000)
 
-    def utils(self) -> list[info_videotiktok]:
+    @classmethod
+    @extract_id
+    def get_info(cls, id: str) -> VideoInfo:
+        return cls((requests.get(
+            'https://api.tiktokv.com/aweme/v1/aweme/detail/',
+            params={'aweme_id': id})).json(), id)
+    def utils(self) -> list[Download]:
         return [
-            info_videotiktok(
+            Download(
                 self.downloadLink(False), self),
-            info_videotiktok(
+            Download(
                 self.downloadLink(True), self, watermark=True),
-            info_videotiktok(
+            Download(
                 self.aweme['aweme_detail']['music']['play_url']['uri'],
                 self,
                 "music"
@@ -89,8 +155,8 @@ class info_post(Session):
         ]
 
     @classmethod
-    def service(cls, url: str) -> list[info_videotiktok]:
-        return cls(url).utils()
+    def service(cls, url: str) -> list[Download]:
+        return cls.get_info(url).utils()
 
     def downloadLink(self, watermark: bool = False) -> str:
         return self.aweme['aweme_detail']['video'][

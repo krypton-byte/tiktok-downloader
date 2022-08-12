@@ -1,14 +1,14 @@
 from httpx import AsyncClient
 from sys import stderr
 from ast import literal_eval
-from .utils import info_videotiktok, info_videotiktokAsync
+from .utils import Download, DownloadAsync
 from .Except import InvalidUrl
 from requests import Session
 from re import findall
 from .decoder import decoder
 
 
-class snaptik(Session):
+class Snaptik(Session):
     '''
     :param tiktok_url:
     ```python
@@ -27,7 +27,7 @@ class snaptik(Session):
             }
         self.tiktok_url = tiktok_url
 
-    def get_media(self) -> list[info_videotiktok]:
+    def get_media(self) -> list[Download]:
         '''
         ```python
         >>> <snaptik object>.get_media()
@@ -56,7 +56,7 @@ class snaptik(Session):
 
         stderr.flush()
         return [
-            info_videotiktok(
+            Download(
                 i,
                 self
             )
@@ -73,7 +73,7 @@ class snaptik(Session):
         yield from self.get_media()
 
 
-class snaptikAsync(AsyncClient):
+class SnaptikAsync(AsyncClient):
     '''
     :param tiktok_url:
     ```python
@@ -92,7 +92,7 @@ class snaptikAsync(AsyncClient):
             }
         self.tiktok_url = tiktok_url
 
-    async def get_media(self) -> list[info_videotiktokAsync]:
+    async def get_media(self) -> list[DownloadAsync]:
         '''
         ```python
         >>> <snaptik object>.get_media()
@@ -121,7 +121,7 @@ class snaptikAsync(AsyncClient):
 
         stderr.flush()
         return [
-            info_videotiktokAsync(
+            DownloadAsync(
                 i,
                 self
             )
@@ -138,9 +138,9 @@ class snaptikAsync(AsyncClient):
         return await self.get_media()
 
 
-def Snaptik(url: str):
-    return snaptik(url).get_media()
+def snaptik(url: str):
+    return Snaptik(url).get_media()
 
 
-async def SnaptikAsync(url: str):
-    return await snaptikAsync(url).get_media()
+async def snaptik_async(url: str):
+    return await SnaptikAsync(url).get_media()
