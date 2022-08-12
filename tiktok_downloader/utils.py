@@ -75,6 +75,7 @@ class DownloadAsync:
                     stream.write(i)
             if isinstance(out, DownloadCallback):
                 out.finished = True
+                await out.on_finish(self.Session, request)
             return None if isinstance(
                 out, (
                     str,
