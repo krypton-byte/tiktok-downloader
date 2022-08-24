@@ -6,7 +6,7 @@ from .Except import InvalidUrl
 from requests import Session
 from re import findall
 from .decoder import decoder
-
+import cloudscraper
 
 class Snaptik(Session):
     '''
@@ -34,7 +34,7 @@ class Snaptik(Session):
         [<[type:video]>, <[type:video]>]
         ```
         '''
-        resp = self.get(
+        resp = cloudscraper.create_scraper().get(
             'https://snaptik.app/abc.php',
             params={
                 'url': self.tiktok_url,
@@ -42,7 +42,7 @@ class Snaptik(Session):
                 **dict(
                     findall(
                         'name="(token)" value="(.*?)"',
-                        self.get('https://snaptik.app/en').text))},
+                        self.get('https://snaptik.app/en').text))}
         )
         if 'error_api_web;' in resp.text or 'Error:' in resp.text:
             raise InvalidUrl()
