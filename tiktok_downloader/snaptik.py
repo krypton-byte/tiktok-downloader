@@ -8,6 +8,7 @@ from re import findall
 from .decoder import decoder
 import cloudscraper
 
+
 class Snaptik(Session):
     '''
     :param tiktok_url:
