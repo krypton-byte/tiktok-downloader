@@ -18,6 +18,7 @@ __all__ = [
     'Mdown',
     'InvalidUrl',
     'ttdownloader',
+    'tikdown',
     'Tikdown',
     'TTDownloader'
 ]

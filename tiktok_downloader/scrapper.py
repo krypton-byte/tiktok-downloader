@@ -145,6 +145,7 @@ class VideoInfo(Session):
     @classmethod
     @extract_id
     def get_info(cls, id: str) -> VideoInfo:
+        print('id: ', id)
         return cls((requests.get(
             'https://api.tiktokv.com/aweme/v1/aweme/detail/',
             params={'aweme_id': id})).json(), id)

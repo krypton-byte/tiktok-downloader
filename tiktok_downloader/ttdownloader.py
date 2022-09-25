@@ -31,7 +31,7 @@ class TTDownloader(Session):
         indexsource = self.get(self.BASE_URL)
         token = re.findall(r'value=\"([0-9a-z]+)\"', indexsource.text)
         result = self.post(
-            self.BASE_URL+'query/',
+            self.BASE_URL+'search/',
             data={'url': self.url, 'format': '', 'token': token[0]}
         )
         nowm, wm, audio = re.findall(
