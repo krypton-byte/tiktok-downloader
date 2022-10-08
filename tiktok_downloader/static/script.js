@@ -29,25 +29,51 @@
         }).then(async function (response){
           const data = await response.json();
           data.msg && Swal.fire({ icon: 'error', title: 'Oops...', text: data.msg, showConfirmButton: false})
-          $(".emptydiv").empty().append(`
+          if(data.legacy){
+            $(".emptydiv").empty().append(`
+                <div class="row justify-content-center" id="downgrup" style="padding-bottom: 100px;">
+                  <div class="card" style="width: 20 rem;background-color:${localStorage.mode === 'black'?'black; border-color: #0D6EFD':'white'}">
+                    <video class="card-img-top" alt="..." poster="${data.aweme_detail.video.origin_cover.url_list[0]}" style="padding-top:7px;" controls>
+                      <source src="${data.aweme_detail.video.play_addr.url_list[0]}" type="video/mp4">
+                    </video>
+                    
+                    <div class="card-body">
+                      <h5 class="card-title"><a href="https://www.tiktok.com/@${data.aweme_detail.author.unique_id}">${data.aweme_detail.author.unique_id}</a></h5>
+                      <p class="card-text ${localStorage.mode === 'black'?'text-white':'text-black'}">${data.aweme_detail.desc}</p>
+                    </div>
+                    ${data.aweme_detail.video.play_addr.url_list.map(function(x){
+                      return '<a href="'+x+'" target="_blank" class="btn btn-primary"> Video </a>&nbsp;';
+                    }).join('')}
+                    <a href="${data.aweme_detail.music.play_url.uri}" target="_blank" class="btn btn-primary mb-3"> Music </a>
+                  </div>
+              </div>
+            `)
+            $("body").removeClass("loading");
+          }else{
+            fetch('mdown?'+(new URLSearchParams({url: document.getElementById('tiktokurl').value})), {
+              method: 'GET'
+            }).then(async (resp) => {
+              const dj = await resp.json()
+              $(".emptydiv").empty().append(`
               <div class="row justify-content-center" id="downgrup" style="padding-bottom: 100px;">
                 <div class="card" style="width: 20 rem;background-color:${localStorage.mode === 'black'?'black; border-color: #0D6EFD':'white'}">
-                  <video class="card-img-top" alt="..." poster="${data.aweme_detail.video.origin_cover.url_list[0]}" style="padding-top:7px;" controls>
-                    <source src="${data.aweme_detail.video.play_addr.url_list[0]}" type="video/mp4">
+                  <video class="card-img-top" alt="..." poster="${data.cover}" style="padding-top:7px;" controls>
+                    <source src="${dj[0].url}" type="video/mp4">
                   </video>
                   
                   <div class="card-body">
-                    <h5 class="card-title"><a href="https://www.tiktok.com/@${data.aweme_detail.author.unique_id}">${data.aweme_detail.author.unique_id}</a></h5>
-                    <p class="card-text ${localStorage.mode === 'black'?'text-white':'text-black'}">${data.aweme_detail.desc}</p>
+                    <h5 class="card-title"><a href="https://www.tiktok.com/@${data.author}">${data.author}</a></h5>
+                    <p class="card-text ${localStorage.mode === 'black'?'text-white':'text-black'}">${data.caption}</p>
                   </div>
-                  ${data.aweme_detail.video.play_addr.url_list.map(function(x){
+                  ${dj.slice(1).map(function(x){
                     return '<a href="'+x+'" target="_blank" class="btn btn-primary"> Video </a>&nbsp;';
                   }).join('')}
-                  <a href="${data.aweme_detail.music.play_url.uri}" target="_blank" class="btn btn-primary mb-3"> Music </a>
                 </div>
             </div>
           `)
           $("body").removeClass("loading");
+            })
+          }
         }).catch(function (err){
           $("body").removeClass("loading");
         })

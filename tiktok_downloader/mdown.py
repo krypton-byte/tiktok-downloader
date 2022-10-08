@@ -54,6 +54,7 @@ class Mdown(requests.Session):
                 res.text,
                 'html.parser'
             ).find_all('a', attrs={'target': '_blank'})
+            if i['href'].strip('/').count('/') > 2
         ]
 
 

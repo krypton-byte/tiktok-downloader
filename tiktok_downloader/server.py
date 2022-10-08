@@ -6,6 +6,8 @@ from flask import (
 )
 from flask.wrappers import Response
 from typing import List
+
+from tiktok_downloader.scrapper_v2 import VideoInfoV2
 from . import services
 from .snaptik import Snaptik
 from .scrapper import VideoInfo
@@ -98,14 +100,23 @@ def snapt(path):
                     {'msg': 'url parameter required'},
                     indent=4
                 )
-            resp = VideoInfo.get_info(request.args['url'])
-            return Response(
-                    json.dumps(
-                        resp.aweme,
-                        indent=4
-                    ),
-                    content_type='application/json'
-                )
+            if request.args.get('legacy'):
+                resp = VideoInfo.get_info(request.args['url'])
+                return Response(
+                        json.dumps(
+                            {'legacy': True, **resp.aweme},
+                            indent=4
+                        ),
+                        content_type='application/json'
+                    )
+            else:
+                resp = VideoInfoV2.get_info(request.args['url'])
+                return Response(json.dumps({
+                    'id': resp.aweme_id,
+                    'author': resp.username,
+                    'cover': resp.cover,
+                    'caption': resp.caption
+                }))
         except Exception as e:
             print(e)
             return Response(json.dumps({
