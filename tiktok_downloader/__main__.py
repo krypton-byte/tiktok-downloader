@@ -19,8 +19,8 @@ arg = argparse.ArgumentParser(
 # Services
 servgroup = arg.add_argument_group('List Of Services')
 serg = servgroup.add_mutually_exclusive_group()
-for key in services.keys():
-    serg.add_argument(f'--{key}', action='store_true')
+for key, value in services.items():
+    serg.add_argument(f'--{key}', dest='service', const=value, action='store_const')
 
 # Web Configuration
 servconf = arg.add_argument_group('Web Configuration')
@@ -92,43 +92,40 @@ if parse.server:
     from .server import app
     app.run(host=parse.host, port=parse.port, debug=parse.debug)
 elif parse.url:
-    for key, val in services.items():
-        if getattr(parse, key):
-            service = val
-            try:
-                ok = service(parse.url)
-                if parse.json or not parse.save:
-                    print(
-                        json.dumps(
-                            [
-                                {
-                                    'type': i.type,
-                                    'url': i.json,
-                                    'watermark': i.watermark
-                                } for i in ok
-                            ],
-                            indent=4
-                        )
-                    )
-                elif parse.save:
-                    if parse.info:
-                        info(parse.url, js=parse.json)
-                    ok[0].download(parse.save, bar=True)
-                else:
-                    os.system("python3 -m tiktok_downloader --help")
-            except requests.exceptions.ConnectionError:
-                stderr.write('[x] offline\n')
-                stderr.flush()
-                sys.exit(1)
-            except (KeyError, AttributeError):
-                stderr.write('Post Not Found\n')
-                stderr.flush()
-                sys.exit(1)
-            except Exception as e:
-                print(e)
-                stderr.write('Post Not Found\n')
-                stderr.flush()
-                sys.exit(1)
+    try:
+        ok = parse.service(parse.url)
+        if parse.json or not parse.save:
+            print(
+                json.dumps(
+                    [
+                        {
+                            'type': i.type,
+                            'url': i.json,
+                            'watermark': i.watermark
+                        } for i in ok
+                    ],
+                    indent=4
+                )
+            )
+        elif parse.save:
+            if parse.info:
+                info(parse.url, js=parse.json)
+            ok[0].download(parse.save, bar=True)
+        else:
+            os.system("python3 -m tiktok_downloader --help")
+    except requests.exceptions.ConnectionError:
+        stderr.write('[x] offline\n')
+        stderr.flush()
+        sys.exit(1)
+    except (KeyError, AttributeError):
+        stderr.write('Post Not Found\n')
+        stderr.flush()
+        sys.exit(1)
+    except Exception as e:
+        print(e)
+        stderr.write('Post Not Found\n')
+        stderr.flush()
+        sys.exit(1)
 elif parse.info and parse.url:
     info(parse.url, js=False)
 else:

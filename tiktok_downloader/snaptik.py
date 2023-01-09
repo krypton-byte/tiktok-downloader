@@ -36,7 +36,7 @@ class Snaptik(Session):
         ```
         '''
         resp = cloudscraper.create_scraper().get(
-            'https://snaptik.app/abc.php',
+            'https://snaptik.app/abc2.php',
             params={
                 'url': self.tiktok_url,
                 'lang': 'en',
@@ -60,14 +60,7 @@ class Snaptik(Session):
             Download(
                 i,
                 self
-            )
-            for i in set(['https://snaptik.app'+x.strip('\\') for x in findall(
-                r'(/file.php?.*?)\"',
-                dec
-            )] + [i.strip('\\') for i in findall(
-                r'\"(https?://snapxcdn.*?)\"',
-                dec
-            )])
+            ) for i in findall(r'<a href=\\"(https?://[\w\./\-&?=]+)', dec)
         ]
 
     def __iter__(self):

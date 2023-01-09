@@ -11,15 +11,12 @@ import json
 import aiohttp
 
 
+
 def decodeJWT(resp: str) -> Generator[dict[str, str], None, None]:
-    reg = re.compile(b'(.*?})')
-    yield from (
-        json.loads(d) for d in set([x[0].decode() for x in [
-            reg.findall(b64decode(
-                i.split('.')[1] + '==========')) for i in re.findall(
-                    'token=(.*?)&', resp)] if x]))
-
-
+    urls = re.findall('https?://snap[\w./?=.&\-]+', resp)
+    for i in urls:
+        token: str = re.search(r'token=(.*?)&', i).group(0)
+        yield {'filename':'tiktok.'+['mp4','mp3'][b'.mp3' in b64decode(token.split('.')[1] + '==========')], 'url': i}
 class Tikmate(requests.Session):
     BASE_URL = 'https://tikmate.online/'
 

@@ -2,7 +2,8 @@
 # Decryptor For Snaptik/Tikmate Obfuscate
 
 from typing import Union
-
+from ast import literal_eval
+from re import findall
 alpha = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/"
 
 
@@ -29,6 +30,13 @@ def main(d, e, f):
         j = int((j - (j % f)) / f)
     return int(k) or 0
 
+def from_string(text: str):
+    return decoder(*literal_eval(
+            findall(
+                r'\(\".*?,.*?,.*?,.*?,.*?.*?\)',
+                text
+            )[0]
+        ))
 
 def reduces(function, iterable, initializer=None) -> int:
     """
