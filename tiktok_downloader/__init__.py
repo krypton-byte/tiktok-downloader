@@ -6,6 +6,7 @@ from .mdown import mdown, Mdown
 from .Except import InvalidUrl
 from .ttdownloader import ttdownloader, TTDownloader
 from .tikdown import tikdown, Tikdown
+from .tikwm import tikwm, TikWM
 
 __all__ = [
     'snaptik',
@@ -20,7 +21,9 @@ __all__ = [
     'ttdownloader',
     'tikdown',
     'Tikdown',
-    'TTDownloader'
+    'TTDownloader',
+    'tikwm',
+    'TikWM'
 ]
 services = {
     'snaptik': snaptik,
@@ -29,5 +32,6 @@ services = {
     'mdown': mdown,
     'ttdownloader': ttdownloader,
     'tikdown': tikdown,
-    'tiktok': VideoInfo.service
+    'tiktok': VideoInfo.service,
+    'tikwm': tikwm
 }

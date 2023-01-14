@@ -80,6 +80,18 @@
 </details>
 
 <details>
+<summary>Tikwm</summary>
+
+```python
+>>> from tiktok_downloader import tikwm
+>>> d=tikwm('https://vt.tiktok.com/xxxxxx/')
+>>> d
+[<[type: "video" watermark: False]>]
+>>> d[0].download('video.mp4')
+```
+</details>
+
+<details>
 <summary>Tiktok</summary>
 
 ```python
@@ -103,7 +115,7 @@
 # Command line
 
 ```
-usage: python3 -m tiktok_downloader [-h] [--snaptik | --ssstik | --tikmate | --mdown | --ttdownloader | --tikdown | --tiktok] [--host HOST] [--debug] [--port PORT] (--server | --url URL) [--info] [--json | --save SAVE]
+usage: python3 -m tiktok_downloader [-h] [--snaptik | --ssstik | --tikmate | --mdown | --ttdownloader | --tikwm | --tikdown | --tiktok] [--host HOST] [--debug] [--port PORT] (--server | --url URL) [--info] [--json | --save SAVE]
 
 Tiktok Downloader [CLI]
 
@@ -117,6 +129,7 @@ List Of Services:
   --mdown
   --ttdownloader
   --tikdown
+  --tikwm
   --tiktok
 
 Web Configuration:
@@ -183,15 +196,16 @@ $ wget -O result.mp4 $(curl -sG http://127.0.0.1:8000/snaptik -d url=https://vm.
 http://127.0.0.1:8000/snaptik?url=https://vm.tiktok.com/xxxxxxxx/&type=embed
 ```
 ### Endpoint 
-| Name | Endpoint | Status|
-|----|---------|--------|
-| <a href="https://snaptik.app">Snaptik</a> | /snaptik | ✓
-| <a href="https://tikmate.online">Tikmate</a> | /tikmate |✓
-| <a href="https://musicaldown.com/">MusicalDown | /mdown|✓
-| <a href="https://ssstik.io">ssstik</a> | /ssstik | ✓
+| Name                                                 | Endpoint      | Status|
+|------------------------------------------------------|---------------|--------|
+| <a href="https://snaptik.app">Snaptik</a>            | /snaptik      | ✓
+| <a href="https://tikmate.online">Tikmate</a>         | /tikmate      |✓
+| <a href="https://musicaldown.com/">MusicalDown       | /mdown        |✓
+| <a href="https://ssstik.io">ssstik</a>               | /ssstik       | ✓
 | <a href="https://ttdownloader.com/">ttdownloader</a> | /ttdownloader | ✓
-| <a href="https://tikdown.org/">tikdown</a> | /tikdown | x
-| <a href="https://tiktok.com/">tiktok</a> | /tiktok | ✓
+| <a href="https://www.tikwm.com/">tikwm</a>           | /tikwm        | ✓
+| <a href="https://tikdown.org/">tikdown</a>           | /tikdown      | x
+| <a href="https://tiktok.com/">tiktok</a>             | /tiktok       | ✓
 # Donasi
 <p align="center"><img src="https://svgur.com/i/Vtt.svg">
 
