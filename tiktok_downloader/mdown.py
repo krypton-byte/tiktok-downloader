@@ -69,8 +69,9 @@ class MdownAsync(AsyncClient):
         }
 
     async def get_media(self, url: str):
-        bs = BeautifulSoup((
-            await self.get(self.BASE_URL + 'en/')).text, 'html.parser')
+        html = (await self.get(self.BASE_URL, follow_redirects=True))
+        bs = BeautifulSoup(
+            html.text, 'html.parser')
         form = {
             i['name']: i['value'] for i in bs.find_all(
                 'input',

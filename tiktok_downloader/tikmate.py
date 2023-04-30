@@ -65,7 +65,7 @@ class Tikmate(requests.Session):
         ]
 
 
-class tikmateAsync(AsyncClient):
+class TikmateAsync(AsyncClient):
     BASE_URL = 'https://tikmate.online/'
 
     def __init__(self) -> None:

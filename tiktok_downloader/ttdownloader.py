@@ -68,11 +68,12 @@ class TTDownloaderAsync(AsyncClient):
         self.url = url
 
     async def get_media(self) -> list[DownloadAsync]:
-        indexsource = await self.get(self.BASE_URL)
+        indexsource = await self.get(self.BASE_URL, follow_redirects=True)
         token = re.findall(r'value=\"([0-9a-z]+)\"', indexsource.text)
         result = await self.post(
-            self.BASE_URL+'query/',
-            data={'url': self.url, 'format': '', 'token': token[0]}
+            self.BASE_URL+'search/',
+            data={'url': self.url, 'format': '', 'token': token[0]},
+            follow_redirects=True
         )
         nowm, wm, audio = re.findall(
             r'(https?://.*?.php\?v\=.*?)\"', result.text

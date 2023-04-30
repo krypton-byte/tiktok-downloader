@@ -7,14 +7,12 @@ from base64 import b64decode
 
 class SsstikIO(Session):
     def get_media(self, url: str) -> list[Download]:
-        self.get('https://ssstik.io')
+        ses = self.get('https://ssstik.io')
         resp = self.post(
             'https://ssstik.io/abc?url=dl', data={
                 'id': url,
-                'locale': 'id',
-                'gc': 0,
-                'tt': 0,
-                'ts': 0
+                'locale': 'en',
+                'tt': re.findall(r'tt:\'([\w\d]+)\'', ses.text)[0],
             },
             headers={
                 'hx-current-url': 'https://ssstik.io/id',
@@ -47,14 +45,12 @@ class SsstikIO(Session):
 
 class SsstikAIO(AsyncClient):
     async def get_media(self, url: str):
-        await self.get('https://ssstik.io')
+        ses = await self.get('https://ssstik.io', follow_redirects=True)
         resp = await self.post(
             'https://ssstik.io/abc?url=dl', data={
                 'id': url,
                 'locale': 'id',
-                'gc': 0,
-                'tt': 0,
-                'ts': 0
+                'tt': re.findall(r'tt:\'([\w\d]+)\'', ses.text)[0],
             },
             headers={
                 'hx-current-url': 'https://ssstik.io/id',

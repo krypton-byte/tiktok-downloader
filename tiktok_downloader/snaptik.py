@@ -94,7 +94,7 @@ class SnaptikAsync(AsyncClient):
         ```
         '''
         resp = await self.get(
-            'https://snaptik.app/abc.php',
+            'https://snaptik.app/abc2.php',
             params={
                 'url': self.tiktok_url,
                 'lang': 'en',
