@@ -36,7 +36,7 @@
 
 ```python
 >>> from tiktok_downloader import snaptik
->>> d=Snaptik('https://vt.tiktok.com/xxxxxx/')
+>>> d=snaptik('https://vt.tiktok.com/xxxxxx/')
 >>> d
 [<[type: "video" watermark: False]>]
 >>> d[0].download('video.mp4')
@@ -72,7 +72,7 @@
 
 ```python
 >>> from tiktok_downloader import ttdownloader
->>> d=ttdownloader'https://vt.tiktok.com/xxxxxx/')
+>>> d=ttdownloader('https://vt.tiktok.com/xxxxxx/')
 >>> d
 [<[type: "video" watermark: False]>]
 >>> d[0].download('video.mp4')
