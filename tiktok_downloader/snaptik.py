@@ -22,10 +22,10 @@ class Snaptik(Session):
     def __init__(self, tiktok_url: str) -> None:
         super().__init__()
         self.headers: dict[str, str] = {
-                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
-                'AppleWebKit/537.36 (KHTML, like Gecko) '
-                'Chrome/86.0.4240.111 Safari/537.36'
-            }
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
+                          'AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/86.0.4240.111 Safari/537.36'
+        }
         self.tiktok_url = tiktok_url
 
     def get_media(self) -> list[Download]:
@@ -56,11 +56,30 @@ class Snaptik(Session):
         ))
 
         stderr.flush()
+
+        current_url = urlparse(resp.url).scheme + "://" + urlparse(resp.url).netloc
+        links_list = [
+                i for i in findall(r'<a href=\\"(https?://[\w\./\-&?=]+)', dec)
+            ] + [
+                current_url + i.strip('\\') for i in findall(r'(/file.php?.*?)\"', dec)
+            ]
+
+        # If our video is slideshow - download link will have "?type=dl", so let's move it to the 1 place
+        index_to_move = None
+        for index, link in enumerate(links_list):
+            if "?type=dl" in link:
+                index_to_move = index
+                break
+
+        # Move the link to the first position (0 index) if found
+        if index_to_move is not None:
+            links_list.insert(0, links_list.pop(index_to_move))
+
         return [
             Download(
                 i,
                 self
-            ) for i in findall(r'<a href=\\"(https?://[\w\./\-&?=]+)', dec)
+            ) for i in links_list
         ]
 
     def __iter__(self):
@@ -80,10 +99,10 @@ class SnaptikAsync(AsyncClient):
     def __init__(self, tiktok_url: str) -> None:
         super().__init__()
         self.headers: dict[str, str] = {
-                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
-                'AppleWebKit/537.36 (KHTML, like Gecko) '
-                'Chrome/86.0.4240.111 Safari/537.36'
-            }
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
+                          'AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/86.0.4240.111 Safari/537.36'
+        }
         self.tiktok_url = tiktok_url
 
     async def get_media(self) -> list[DownloadAsync]:
@@ -119,7 +138,7 @@ class SnaptikAsync(AsyncClient):
                 i,
                 self
             )
-            for i in set(['https://snaptik.app'+x.strip('\\') for x in findall(
+            for i in set(['https://snaptik.app' + x.strip('\\') for x in findall(
                 r'(/file.php?.*?)\"',
                 dec
             )] + [i.strip('\\') for i in findall(
