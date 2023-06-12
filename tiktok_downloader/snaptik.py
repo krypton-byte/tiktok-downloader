@@ -7,6 +7,7 @@ from requests import Session
 from re import findall
 from .decoder import decoder
 import cloudscraper
+from urllib.parse import urlparse
 
 
 class Snaptik(Session):
