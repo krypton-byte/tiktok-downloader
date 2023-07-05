@@ -41,7 +41,7 @@ class TikWMAsync(AsyncClient):
     BASE_URL = 'https://www.tikwm.com'
 
     def __init__(self, url: str) -> None:
-        super().__init__()
+        super().__init__(follow_redirects=True)
         self.url = url
 
     async def get_media(self) -> list[DownloadAsync]:
