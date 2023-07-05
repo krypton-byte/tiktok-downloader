@@ -5,6 +5,7 @@ from .ssstik import SsstikAIO, ssstik_async
 from .tikdown import TikdownAsync, tikdown_async
 from .tikmate import TikmateAsync, tikmate_async
 from .ttdownloader import TTDownloaderAsync, ttdownloader_async
+from .tikwm import TikWMAsync, tikwm_async
 
 
 __all__ = [
@@ -20,5 +21,7 @@ __all__ = [
     'TikmateAsync',
     'tikmate_async',
     'TTDownloaderAsync',
-    'ttdownloader_async'
+    'ttdownloader_async',
+    "TikWMAsync",
+    "tikwm_async"
 ]
