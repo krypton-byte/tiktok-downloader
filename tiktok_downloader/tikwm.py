@@ -39,6 +39,7 @@ class TikWM(Session):
 
 class TikWMAsync(AsyncClient):
     BASE_URL = 'https://www.tikwm.com'
+    follow_redirects = True
 
     def __init__(self, url: str) -> None:
         super().__init__()

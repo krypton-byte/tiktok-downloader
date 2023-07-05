@@ -117,4 +117,4 @@ def tikmate(url: str):
 
 
 async def tikmate_async(url: str):
-    return await tikmateAsync().get_media(url)
+    return await TikmateAsync().get_media(url)
