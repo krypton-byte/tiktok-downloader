@@ -6,3 +6,5 @@ tqdm
 rich
 httpx
 aiohttp
+moviepy
+pyjsparser

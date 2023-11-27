@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "tiktok-downloader"
+version = "0.1.0"
+description = "tiktok downloader"
+authors = ["krypton-byte <rosid6434@gmail.com>"]
+license = "GPL-3.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+bs4 = "^0.0.1"
+flask = "^3.0.0"
+cloudscraper = "^1.2.71"
+requests = "^2.31.0"
+tqdm = "^4.66.1"
+rich = "^13.7.0"
+httpx = "^0.25.2"
+aiohttp = "^3.9.1"
+moviepy = "^1.0.3"
+js2py = "^0.74"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
