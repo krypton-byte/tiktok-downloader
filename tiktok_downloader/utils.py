@@ -27,7 +27,6 @@ from concurrent.futures import ThreadPoolExecutor
 simplefilter("ignore")
 
 def extension_to_type(filename: str):
-    print(filename)
     if re.search(r'\.mp3$', filename):
         return Type.AUDIO
     elif re.search(r'\.jpg$', filename):
