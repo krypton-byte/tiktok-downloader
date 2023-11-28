@@ -99,8 +99,9 @@ elif parse.url:
                 json.dumps(
                     [
                         {
-                            'type': i.type,
+                            'type': i.type.value,
                             'url': i.json,
+                            "render": bool(i.render),
                             'watermark': i.watermark
                         } for i in ok
                     ],
@@ -110,7 +111,10 @@ elif parse.url:
         elif parse.save:
             if parse.info:
                 info(parse.url, js=parse.json)
-            ok[0].download(parse.save, bar=True)
+            if ok[0].render:
+                ok[0].get_render().download(parse.save, bar=True)
+            else:
+                ok[0].download(parse.save, bar=True)
         else:
             os.system("python3 -m tiktok_downloader --help")
     except requests.exceptions.ConnectionError:
