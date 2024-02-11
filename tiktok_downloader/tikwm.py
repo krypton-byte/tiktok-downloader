@@ -1,7 +1,7 @@
 from httpx import AsyncClient
 from requests import Session
 from requests.models import InvalidURL
-from .utils import Download, DownloadAsync
+from .utils import Download, DownloadAsync, Type
 
 
 class TikWM(Session):
@@ -19,18 +19,18 @@ class TikWM(Session):
                 Download(
                     self.BASE_URL + res['data'].get('hdplay', res['data']['play']),
                     self,
-                    'video'
+                    Type.VIDEO
                 ),
                 Download(
                     self.BASE_URL + res['data']['wmplay'],
                     self,
                     'video',
-                    True
+                    Type.VIDEO
                 ),
                 Download(
                     self.BASE_URL + res['data']['music'],
                     self,
-                    'music'
+                    Type.AUDIO
                 )
             ]
         else:
@@ -52,18 +52,18 @@ class TikWMAsync(AsyncClient):
                 DownloadAsync(
                     self.BASE_URL + res['data'].get('hdplay', res['data']['play']),
                     self,
-                    'video'
+                    Type.VIDEO
                 ),
                 DownloadAsync(
                     self.BASE_URL + res['data']['wmplay'],
                     self,
-                    'video',
+                    Type.VIDEO,
                     True
                 ),
                 DownloadAsync(
                     self.BASE_URL + res['data']['music'],
                     self,
-                    'music'
+                    Type.AUDIO
                 )
             ]
         else:
