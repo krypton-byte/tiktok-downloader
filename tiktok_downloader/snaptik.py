@@ -1,4 +1,6 @@
 import re
+from unittest import result
+
 from bs4 import BeautifulSoup
 from httpx import AsyncClient
 from sys import stderr
@@ -27,18 +29,20 @@ class Snaptik(Session):
         super().__init__()
         self.headers: dict[str, str] = {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/86.0.4240.111 Safari/537.36"
+                          "AppleWebKit/537.36 (KHTML, like Gecko) "
+                          "Chrome/86.0.4240.111 Safari/537.36"
         }
         self.tiktok_url = tiktok_url
 
     def render(self, token, interval: int = 1):
-        result = self.get('https://snaptik.app/render.php', params={'token': token}).json()
+        result = self.get('https://snaptik.app/render.php',
+                          params={'token': token}).json()
         while True:
-            resp = self.get("https://snaptik.app/task.php", params={'token': result['task_id']}).json()
+            resp = self.get("https://snaptik.app/task.php",
+                            params={'token': result['task_id']}).json()
             if resp['progress'] == 100:
-                return Download(resp['download_url'], self, Type.VIDEO) 
-            
+                return Download(resp['download_url'], self, Type.VIDEO)
+
     def get_media(self) -> list[Download]:
         """
         ```python
@@ -62,28 +66,35 @@ class Snaptik(Session):
         )
         if "error_api_web;" in resp.text or "Error:" in resp.text:
             raise InvalidUrl()
+
         stderr.flush()
         dec = decoder(
-            *literal_eval(findall(r"\(\".*?,.*?,.*?,.*?,.*?.*?\)", resp.text)[0])
+            *literal_eval(
+                findall(r"\(\".*?,.*?,.*?,.*?,.*?.*?\)", resp.text)[0])
         )
         dec = pyjsparser.parse(re.sub(r"(async|await)", "", dec))["body"][0][
             "consequent"
         ]["body"][0]["consequent"]["body"][1]["expression"]["right"]["value"]
         bs = BeautifulSoup(dec)
-        for vl in  bs.find_all("div", attrs={"class","video-links"}):
+        for vl in bs.find_all("div", attrs={"class", "video-links"}):
             for a in vl.find_all("a"):
-                result.append(Download(a["href"] if a['href'].startswith('http') else 'https://snaptik.app' + a['href'], self, Type.VIDEO))
+                result.append(Download(a["href"] if a['href'].startswith(
+                    'http') else 'https://snaptik.app' + a['href'], self,
+                                       Type.VIDEO))
             for button in vl.find_all("button"):
                 try:
-                    result.append(Download(button['data-backup'], self, Type.VIDEO))
+                    result.append(
+                        Download(button['data-backup'], self, Type.VIDEO))
                 except KeyError:
-                    result.append(Download('', self, Type.VIDEO, render=lambda invertal: self.render(button['data-token'])))
+                    result.append(Download('', self, Type.VIDEO,
+                                           render=lambda invertal: self.render(
+                                               button['data-token'])))
         result.extend(
             [
                 Download(obj["href"], self, Type.IMAGE)
                 for obj in bs.find_all(
-                    "a", attrs={"data-event": "download_albumPhoto_photo"}
-                )
+                "a", attrs={"data-event": "download_albumPhoto_photo"}
+            )
             ]
         )
         return result
@@ -106,10 +117,19 @@ class SnaptikAsync(AsyncClient):
         super().__init__()
         self.headers: dict[str, str] = {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/86.0.4240.111 Safari/537.36"
+                          "AppleWebKit/537.36 (KHTML, like Gecko) "
+                          "Chrome/86.0.4240.111 Safari/537.36"
         }
         self.tiktok_url = tiktok_url
+
+    async def render(self, token, interval: int = 1):
+        result = (await self.get('https://snaptik.app/render.php',
+                                 params={'token': token})).json()
+        while True:
+            resp = (await self.get("https://snaptik.app/task.php",
+                                   params={'token': result['task_id']})).json()
+            if resp['progress'] == 100:
+                return DownloadAsync(resp['download_url'], self, Type.VIDEO)
 
     async def get_media(self) -> list[DownloadAsync]:
         """
@@ -118,6 +138,7 @@ class SnaptikAsync(AsyncClient):
         [<[type:video]>, <[type:video]>]
         ```
         """
+        result = []
         resp = await self.get(
             "https://snaptik.app/abc2.php",
             params={
@@ -135,20 +156,36 @@ class SnaptikAsync(AsyncClient):
             raise InvalidUrl()
         stderr.flush()
         dec = decoder(
-            *literal_eval(findall(r"\(\".*?,.*?,.*?,.*?,.*?.*?\)", resp.text)[0])
+            *literal_eval(
+                findall(r"\(\".*?,.*?,.*?,.*?,.*?.*?\)", resp.text)[0])
         )
-
-        stderr.flush()
-        return [
-            DownloadAsync(i, self)
-            for i in set(
-                [
-                    "https://snaptik.app" + x.strip("\\")
-                    for x in findall(r"(/file.php?.*?)\"", dec)
-                ]
-                + [i.strip("\\") for i in findall(r"\"(https?://snapxcdn.*?)\"", dec)]
+        dec = pyjsparser.parse(re.sub(r"(async|await)", "", dec))["body"][0][
+            "consequent"
+        ]["body"][0]["consequent"]["body"][1]["expression"]["right"]["value"]
+        bs = BeautifulSoup(dec)
+        for vl in bs.find_all("div", attrs={"class", "video-links"}):
+            for a in vl.find_all("a"):
+                result.append(DownloadAsync(a["href"] if a['href'].startswith(
+                    'http') else 'https://snaptik.app' + a['href'], self,
+                                            Type.VIDEO))
+            for button in vl.find_all("button"):
+                try:
+                    result.append(
+                        DownloadAsync(button['data-backup'], self, Type.VIDEO))
+                except KeyError:
+                    result.append(DownloadAsync(
+                        '', self, Type.VIDEO,
+                        render=lambda invertal:
+                        self.render(button['data-token'])))
+        result.extend(
+            [
+                DownloadAsync(obj["href"], self, Type.IMAGE)
+                for obj in bs.find_all(
+                "a", attrs={"data-event": "download_albumPhoto_photo"}
             )
-        ]
+            ]
+        )
+        return result
 
     async def __aiter__(self):
         return await self.get_media()
