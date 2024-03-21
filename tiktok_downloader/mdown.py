@@ -10,9 +10,9 @@ class Mdown(requests.Session):
 
     def __init__(self) -> None:
         super().__init__()
-        self.headers: dict[str, str] = {
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"
+        self.headers = {
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            ' (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299'
         }
 
     def get_media(self, url: str):
@@ -64,8 +64,8 @@ class MdownAsync(AsyncClient):
     def __init__(self) -> None:
         super().__init__()
         self.headers = {
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            ' (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299'
         }
 
     async def get_media(self, url: str):
