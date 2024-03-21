@@ -26,6 +26,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 simplefilter("ignore")
 
+
 def extension_to_type(filename: str):
     if re.search(r'\.mp3$', filename):
         return Type.AUDIO
@@ -34,6 +35,7 @@ def extension_to_type(filename: str):
     elif re.search(r'\.mp4$', filename):
         return Type.VIDEO
     raise ValueError()
+
 
 class Type(Enum):
     IMAGE = "IMAGE"
@@ -47,19 +49,22 @@ class DownloadCallback:
         self.finished = False
 
     async def on_open(
-        self, client: httpx.AsyncClient, response: httpx.Response, info: DownloadAsync
+            self, client: httpx.AsyncClient, response: httpx.Response,
+            info: DownloadAsync
     ):
         raise NotImplementedError()
 
     async def on_progress(self, binaries: bytes):
         raise NotImplementedError()
 
-    async def on_finish(self, client: httpx.AsyncClient, response: httpx.Response):
+    async def on_finish(self, client: httpx.AsyncClient,
+                        response: httpx.Response):
         raise NotImplementedError()
 
 
 def render_from_images(
-    images: List[str | BytesIO], audio_file: str, outfile: str, fps: int = 30, *args, **kwargs
+        images: List[str | BytesIO], audio_file: str, outfile: str,
+        fps: int = 30, *args, **kwargs
 ):
     img_pil = []
     max_height = 0
@@ -94,38 +99,42 @@ class RenderImageToSlidshow:
         if not self.list_image:
             raise NoImageToSlideshow()
 
-    def render(self, outfile: str,worker: int = 2):
+    def render(self, outfile: str, worker: int = 2):
         with ThreadPoolExecutor(max_workers=worker) as thread:
-            result = list(thread.map(lambda x: x.download(BytesIO()), self.list_image))
+            result = list(
+                thread.map(lambda x: x.download(BytesIO()), self.list_image))
             with tempfile.TemporaryFile(mode='wb', delete=True) as file:
                 self.audio.download(file)
                 file.close()
                 render_from_images(result, file.name, outfile=outfile)
 
-                
-    async def render_async(self, image,executor: Optional[ThreadPoolExecutor] = None):
+    async def render_async(self, image,
+                           executor: Optional[ThreadPoolExecutor] = None):
         new_loop = asyncio.new_event_loop()
         result = []
-        futures =[]
+        futures = []
         for d in self.list_image:
             result.append(BytesIO())
             futures.append(d.download(result[-1]))
         await asyncio.gather(*futures)
         with tempfile.TemporaryFile(mode="wb", delete=True) as file:
             self.audio.download(file)
-            return await new_loop.run_in_executor(executor, render_from_images, (result, file.name))
+            return await new_loop.run_in_executor(executor, render_from_images,
+                                                  (result, file.name))
 
 
 class DownloadAsync:
     def __init__(
-        self,
-        url: str,
-        Session: httpx.AsyncClient,
-        type=Type.VIDEO,
-        watermark: bool = False,
+            self,
+            url: str,
+            Session: httpx.AsyncClient,
+            type=Type.VIDEO,
+            render: Optional[Coroutine] = None,
+            watermark: bool = False,
     ) -> None:
         self.json = url
         self.type = type
+        self.render = render
         self.Session = Session
         self.watermark = watermark
 
@@ -136,10 +145,14 @@ class DownloadAsync:
             ]
         )
 
+    async def get_render(self, interval: int = 1) -> Download | None:
+        if self.render:
+            return await self.render(interval)
+
     async def download(
-        self,
-        out: Optional[Union[str, BufferedWriter, DownloadCallback]] = None,
-        chunk_size=1024 * 1024,
+            self,
+            out: Optional[Union[str, BufferedWriter, DownloadCallback]] = None,
+            chunk_size=1024 * 1024,
     ) -> Union[None, BytesIO, BufferedWriter, DownloadCallback]:
         async with self.Session.stream("GET", self.json) as request:
             if isinstance(out, DownloadCallback):
@@ -177,24 +190,28 @@ class DownloadAsync:
 
 class Download:
     def __init__(
-        self, url: str, Session: Session, type=Type.VIDEO, render: Optional[Callable] = None, watermark: bool = False
+            self, url: str, Session: Session, type=Type.VIDEO,
+            render: Optional[Callable] = None, watermark: bool = False
     ) -> None:
         self.json = url
         self.type = type
         self.render = render
         self.Session = Session
         self.watermark = watermark
+
     def get_render(self, interval: int = 1) -> Download | None:
         if self.render:
             return self.render(interval)
+
     def get_size(self) -> int:
-        return int(self.Session.get(self.json, stream=True).headers["Content-Length"])
+        return int(
+            self.Session.get(self.json, stream=True).headers["Content-Length"])
 
     def download(
-        self,
-        out: Optional[Union[str, BufferedWriter]] = None,
-        chunk_size=1024,
-        bar=False,
+            self,
+            out: Optional[Union[str, BufferedWriter]] = None,
+            chunk_size=1024,
+            bar=False,
     ) -> Union[None, BytesIO, BufferedWriter]:
         request = self.Session.get(self.json, stream=True)
         stream = (
@@ -207,7 +224,7 @@ class Download:
         return None if isinstance(out, (str, BufferedWriter)) else stream
 
     def __str__(self) -> str:
-        return f'<[type: "{self.type}" watermark: "{self.watermark}" render: "{bool(self.render)}">' 
+        return f'<[type: "{self.type}" watermark: "{self.watermark}" render: "{bool(self.render)}">'
 
     def __repr__(self) -> str:
         return self.__str__()
